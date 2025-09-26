@@ -1759,7 +1759,7 @@ for (let j = 0; j < 3; j++) {
 
 ### 16. What are closures and why are they important?
 
-A **closure** is a function that has access to variables from its outer (enclosing) scope even after the outer function has finished executing.
+A closure is the combination of a function bundled together (enclosed) with references to its surrounding state (the lexical environment). In other words, a closure gives a function access to its outer scope. In JavaScript, closures are created every time a function is created, at function creation time.
 
 **Basic Example:**
 ```javascript
@@ -2628,23 +2628,2822 @@ const Module = (function() {
 [⬆️ Back to Top](#table-of-contents)
 
 ## Objects and Arrays
-20. How do you create and manipulate objects in JavaScript?
-21. What are the most common array methods?
-22. What is the difference between shallow copy and deep copy?
-23. How do you clone an object in JavaScript?
-24. What is destructuring assignment?
-25. What is the spread operator and rest parameters?
+
+### 20. How do you create and manipulate objects in JavaScript?
+
+JavaScript provides multiple ways to create and manipulate objects:
+
+**Object Creation Methods:**
+
+**1. Object Literal (Most Common):**
+```javascript
+const person = {
+    name: 'John',
+    age: 30,
+    greet() { return `Hello, I'm ${this.name}`; }
+};
+
+// Computed property names
+const prop = 'dynamicProperty';
+const obj = {
+    [prop]: 'dynamic value',
+    [`${prop}2`]: 'another value'
+};
+```
+
+**2. Object Constructor:**
+```javascript
+const person = new Object();
+person.name = 'John';
+person.age = 30;
+
+// Constructor function
+function Person(name, age) {
+    this.name = name;
+    this.age = age;
+}
+const john = new Person('John', 30);
+```
+
+**3. Object.create():**
+```javascript
+const personPrototype = {
+    greet() { return `Hello, I'm ${this.name}`; }
+};
+
+const person = Object.create(personPrototype);
+person.name = 'John';
+```
+
+**Object Manipulation:**
+
+**Adding/Modifying Properties:**
+```javascript
+const obj = {};
+
+// Dot and bracket notation
+obj.name = 'John';
+obj['age'] = 30;
+
+// Object.assign
+Object.assign(obj, { city: 'NYC', country: 'USA' });
+
+// Spread operator
+const updated = { ...obj, age: 31, job: 'Developer' };
+```
+
+**Property Access:**
+```javascript
+// Safe access with optional chaining
+console.log(person.address?.street);
+
+// Default values
+const city = person.city || 'Unknown';
+const country = person.country ?? 'Unknown';
+```
+
+**Object Iteration:**
+```javascript
+const person = { name: 'John', age: 30 };
+
+// Object.keys(), Object.values(), Object.entries()
+Object.keys(person).forEach(key => console.log(key));
+Object.values(person).forEach(value => console.log(value));
+Object.entries(person).forEach(([key, value]) => {
+    console.log(`${key}: ${value}`);
+});
+```
+
+**Related Questions:** [Destructuring](#24-what-is-destructuring-assignment), [Spread Operator](#25-what-is-the-spread-operator-and-rest-parameters)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 21. What are the most common array methods?
+
+JavaScript arrays come with many built-in methods for manipulation and iteration:
+
+**Mutating Methods (Modify Original Array):**
+
+**Adding/Removing Elements:**
+```javascript
+const fruits = ['apple', 'banana'];
+
+// push/pop - end of array
+fruits.push('orange'); // ['apple', 'banana', 'orange']
+const last = fruits.pop(); // 'orange'
+
+// unshift/shift - beginning of array  
+fruits.unshift('mango'); // ['mango', 'apple', 'banana']
+const first = fruits.shift(); // 'mango'
+
+// splice - remove/insert anywhere
+fruits.splice(1, 1, 'grape', 'kiwi'); // Remove 1, add 2 at index 1
+```
+
+**Non-Mutating Methods:**
+
+**Transformation:**
+```javascript
+const numbers = [1, 2, 3, 4, 5];
+
+// map - transform each element
+const doubled = numbers.map(x => x * 2); // [2, 4, 6, 8, 10]
+
+// filter - select elements
+const evens = numbers.filter(x => x % 2 === 0); // [2, 4]
+
+// reduce - aggregate to single value
+const sum = numbers.reduce((acc, curr) => acc + curr, 0); // 15
+```
+
+**Search Methods:**
+```javascript
+const fruits = ['apple', 'banana', 'orange'];
+
+// find/findIndex - first match
+const found = fruits.find(f => f.startsWith('b')); // 'banana'
+const index = fruits.findIndex(f => f.startsWith('b')); // 1
+
+// includes - check existence
+console.log(fruits.includes('apple')); // true
+
+// indexOf/lastIndexOf - get index
+console.log(fruits.indexOf('banana')); // 1
+```
+
+**Testing Methods:**
+```javascript
+const numbers = [2, 4, 6, 8];
+
+// every - all elements pass test
+console.log(numbers.every(x => x % 2 === 0)); // true
+
+// some - at least one passes test
+console.log(numbers.some(x => x > 5)); // true
+```
+
+**Array Utilities:**
+```javascript
+// slice - extract portion
+const slice = numbers.slice(1, 3); // [2, 3] (from index 1 to 3)
+
+// concat - join arrays
+const combined = [1, 2].concat([3, 4]); // [1, 2, 3, 4]
+
+// join - convert to string
+const str = ['Hello', 'World'].join(' '); // 'Hello World'
+
+// flat - flatten nested arrays
+const nested = [1, [2, 3], [4, 5]];
+const flattened = nested.flat(); // [1, 2, 3, 4, 5]
+```
+
+**Practical Examples:**
+```javascript
+// Method chaining
+const result = [1, 2, 3, 4, 5, 6]
+    .filter(x => x % 2 === 0)  // [2, 4, 6]
+    .map(x => x * x)           // [4, 16, 36]
+    .reduce((sum, x) => sum + x, 0); // 56
+
+// Remove duplicates
+const unique = [...new Set([1, 2, 2, 3, 3])]; // [1, 2, 3]
+```
+
+**Related Questions:** [Higher-Order Functions](#12-what-are-higher-order-functions), [Spread Operator](#25-what-is-the-spread-operator-and-rest-parameters)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 22. What is the difference between shallow copy and deep copy?
+
+**Shallow Copy** creates a new object but inserts references to the objects found in the original. **Deep Copy** creates a new object and recursively copies all nested objects.
+
+**Shallow Copy:**
+```javascript
+const original = {
+    name: 'John',
+    age: 30,
+    address: {
+        city: 'New York',
+        country: 'USA'
+    },
+    hobbies: ['reading', 'swimming']
+};
+
+// Shallow copy methods
+const shallow1 = { ...original };
+const shallow2 = Object.assign({}, original);
+const shallow3 = Object.create(original);
+
+// Modifying nested objects affects original
+shallow1.address.city = 'Boston';
+console.log(original.address.city); // 'Boston' - original changed!
+
+shallow1.hobbies.push('cycling');
+console.log(original.hobbies); // ['reading', 'swimming', 'cycling']
+
+// But primitive values are independent
+shallow1.name = 'Jane';
+console.log(original.name); // 'John' - original unchanged
+```
+
+**Deep Copy Methods:**
+
+**1. JSON.parse(JSON.stringify()) - Simple but Limited:**
+```javascript
+const original = {
+    name: 'John',
+    age: 30,
+    address: { city: 'NYC' },
+    hobbies: ['reading']
+};
+
+const deepCopy = JSON.parse(JSON.stringify(original));
+
+deepCopy.address.city = 'Boston';
+console.log(original.address.city); // 'NYC' - original unchanged
+
+// Limitations:
+const problematic = {
+    date: new Date(),
+    func: () => 'hello',
+    undef: undefined,
+    symbol: Symbol('test'),
+    regex: /test/g
+};
+
+const copied = JSON.parse(JSON.stringify(problematic));
+console.log(copied);
+// {
+//   date: "2023-01-01T00:00:00.000Z", // becomes string
+//   // func: missing (functions are ignored)
+//   // undef: missing (undefined is ignored)
+//   // symbol: missing (symbols are ignored)
+//   regex: {} // becomes empty object
+// }
+```
+
+**2. structuredClone() - Modern Native Method (ES2022):**
+```javascript
+const original = {
+    name: 'John',
+    date: new Date(),
+    regex: /test/g,
+    map: new Map([['key', 'value']]),
+    set: new Set([1, 2, 3]),
+    buffer: new ArrayBuffer(8)
+};
+
+const deepCopy = structuredClone(original);
+
+// Works with most built-in types
+deepCopy.date.setFullYear(2024);
+console.log(original.date.getFullYear()); // Original year unchanged
+
+// Limitations: functions, symbols, DOM nodes not supported
+```
+
+**3. Custom Deep Copy Function:**
+```javascript
+function deepCopy(obj, visited = new WeakMap()) {
+    // Handle primitives and null
+    if (obj === null || typeof obj !== 'object') {
+        return obj;
+    }
+    
+    // Handle circular references
+    if (visited.has(obj)) {
+        return visited.get(obj);
+    }
+    
+    // Handle Date
+    if (obj instanceof Date) {
+        return new Date(obj.getTime());
+    }
+    
+    // Handle RegExp
+    if (obj instanceof RegExp) {
+        return new RegExp(obj.source, obj.flags);
+    }
+    
+    // Handle Arrays
+    if (Array.isArray(obj)) {
+        const copy = [];
+        visited.set(obj, copy);
+        for (let i = 0; i < obj.length; i++) {
+            copy[i] = deepCopy(obj[i], visited);
+        }
+        return copy;
+    }
+    
+    // Handle Objects
+    const copy = {};
+    visited.set(obj, copy);
+    
+    for (const key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            copy[key] = deepCopy(obj[key], visited);
+        }
+    }
+    
+    return copy;
+}
+
+// Usage
+const original = {
+    name: 'John',
+    date: new Date(),
+    nested: { value: 42 }
+};
+
+const copy = deepCopy(original);
+copy.nested.value = 100;
+console.log(original.nested.value); // 42 - unchanged
+```
+
+**4. Using Lodash:**
+```javascript
+const _ = require('lodash');
+
+const original = {
+    name: 'John',
+    address: { city: 'NYC' },
+    hobbies: ['reading']
+};
+
+const deepCopy = _.cloneDeep(original);
+deepCopy.address.city = 'Boston';
+console.log(original.address.city); // 'NYC' - unchanged
+```
+
+**Array Copying:**
+```javascript
+const originalArray = [1, [2, 3], { a: 4 }];
+
+// Shallow copy methods
+const shallow1 = [...originalArray];
+const shallow2 = originalArray.slice();
+const shallow3 = Array.from(originalArray);
+
+// Deep copy methods
+const deep1 = JSON.parse(JSON.stringify(originalArray));
+const deep2 = structuredClone(originalArray);
+
+// Test shallow copy
+shallow1[1][0] = 999;
+console.log(originalArray[1][0]); // 999 - original changed
+
+// Test deep copy
+deep1[1][0] = 888;
+console.log(originalArray[1][0]); // Still 999 - original unchanged
+```
+
+**Performance Comparison:**
+```javascript
+const largeObject = {
+    // ... large nested object
+};
+
+console.time('JSON method');
+const copy1 = JSON.parse(JSON.stringify(largeObject));
+console.timeEnd('JSON method');
+
+console.time('structuredClone');
+const copy2 = structuredClone(largeObject);
+console.timeEnd('structuredClone');
+
+console.time('custom deep copy');
+const copy3 = deepCopy(largeObject);
+console.timeEnd('custom deep copy');
+```
+
+**When to Use Each:**
+
+**Shallow Copy:**
+- When you only need to copy the top-level properties
+- When nested objects are immutable
+- For performance reasons with large objects
+- When you want to preserve references to shared objects
+
+**Deep Copy:**
+- When you need complete independence from the original
+- When dealing with nested mutable objects
+- When implementing undo/redo functionality
+- When creating templates or default configurations
+
+**Best Practices:**
+1. Use `structuredClone()` for modern browsers
+2. Use `JSON.parse(JSON.stringify())` for simple objects
+3. Use libraries like Lodash for complex scenarios
+4. Be aware of performance implications with large objects
+5. Consider immutable data structures for frequent copying
+
+**Related Questions:** [Object Cloning](#23-how-do-you-clone-an-object-in-javascript), [Spread Operator](#25-what-is-the-spread-operator-and-rest-parameters)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 23. How do you clone an object in JavaScript?
+
+Object cloning can be **shallow** (copying only the first level) or **deep** (copying all nested levels). Here are the most common methods:
+
+**Shallow Cloning Methods:**
+
+**1. Spread Operator (ES2018) - Recommended:**
+```javascript
+const original = { name: 'John', age: 30, city: 'NYC' };
+const clone = { ...original };
+
+clone.name = 'Jane';
+console.log(original.name); // 'John' - unchanged
+```
+
+**2. Object.assign():**
+```javascript
+const original = { name: 'John', age: 30 };
+const clone = Object.assign({}, original);
+
+// Can also merge multiple objects
+const clone2 = Object.assign({}, original, { country: 'USA' });
+```
+
+**3. Object.create() with Property Descriptors:**
+```javascript
+const original = { name: 'John', age: 30 };
+const clone = Object.create(
+    Object.getPrototypeOf(original),
+    Object.getOwnPropertyDescriptors(original)
+);
+```
+
+**Deep Cloning Methods:**
+
+**1. structuredClone() - Modern Native (ES2022):**
+```javascript
+const original = {
+    name: 'John',
+    address: { city: 'NYC', zip: 10001 },
+    hobbies: ['reading', 'swimming'],
+    date: new Date(),
+    regex: /test/gi
+};
+
+const deepClone = structuredClone(original);
+deepClone.address.city = 'Boston';
+console.log(original.address.city); // 'NYC' - unchanged
+
+// Supports most built-in types
+console.log(deepClone.date instanceof Date); // true
+console.log(deepClone.regex instanceof RegExp); // true
+```
+
+**2. JSON Methods - Simple but Limited:**
+```javascript
+const original = {
+    name: 'John',
+    address: { city: 'NYC' },
+    numbers: [1, 2, 3]
+};
+
+const deepClone = JSON.parse(JSON.stringify(original));
+
+// Limitations - these will be lost or changed:
+const problematic = {
+    func: () => 'hello',        // Functions ignored
+    undef: undefined,           // undefined ignored  
+    symbol: Symbol('test'),     // Symbols ignored
+    date: new Date(),          // Becomes string
+    regex: /test/g,            // Becomes {}
+    infinity: Infinity,        // Becomes null
+    nan: NaN                   // Becomes null
+};
+```
+
+**3. Custom Deep Clone Function:**
+```javascript
+function deepClone(obj, visited = new WeakMap()) {
+    // Handle null and primitives
+    if (obj === null || typeof obj !== 'object') {
+        return obj;
+    }
+    
+    // Handle circular references
+    if (visited.has(obj)) {
+        return visited.get(obj);
+    }
+    
+    // Handle built-in object types
+    if (obj instanceof Date) return new Date(obj);
+    if (obj instanceof RegExp) return new RegExp(obj);
+    if (obj instanceof Map) {
+        const clonedMap = new Map();
+        visited.set(obj, clonedMap);
+        for (const [key, value] of obj) {
+            clonedMap.set(deepClone(key, visited), deepClone(value, visited));
+        }
+        return clonedMap;
+    }
+    if (obj instanceof Set) {
+        const clonedSet = new Set();
+        visited.set(obj, clonedSet);
+        for (const value of obj) {
+            clonedSet.add(deepClone(value, visited));
+        }
+        return clonedSet;
+    }
+    
+    // Handle arrays
+    if (Array.isArray(obj)) {
+        const clonedArray = [];
+        visited.set(obj, clonedArray);
+        for (let i = 0; i < obj.length; i++) {
+            clonedArray[i] = deepClone(obj[i], visited);
+        }
+        return clonedArray;
+    }
+    
+    // Handle plain objects
+    const clonedObj = {};
+    visited.set(obj, clonedObj);
+    
+    for (const key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            clonedObj[key] = deepClone(obj[key], visited);
+        }
+    }
+    
+    return clonedObj;
+}
+```
+
+**Specialized Cloning Scenarios:**
+
+**1. Array Cloning:**
+```javascript
+const originalArray = [1, 2, [3, 4], { a: 5 }];
+
+// Shallow cloning
+const shallow1 = [...originalArray];
+const shallow2 = originalArray.slice();
+const shallow3 = Array.from(originalArray);
+
+// Deep cloning
+const deep1 = structuredClone(originalArray);
+const deep2 = JSON.parse(JSON.stringify(originalArray));
+```
+
+**2. Function Cloning (Advanced):**
+```javascript
+function cloneFunction(fn) {
+    // For named functions
+    if (fn.name) {
+        return eval(`(${fn.toString()})`);
+    }
+    
+    // For anonymous functions
+    return new Function('return ' + fn.toString())();
+}
+
+const original = function multiply(a, b) { return a * b; };
+const cloned = cloneFunction(original);
+console.log(cloned(3, 4)); // 12
+```
+
+**3. Class Instance Cloning:**
+```javascript
+class Person {
+    constructor(name, age) {
+        this.name = name;
+        this.age = age;
+    }
+    
+    greet() {
+        return `Hello, I'm ${this.name}`;
+    }
+}
+
+function cloneInstance(instance) {
+    const cloned = Object.create(Object.getPrototypeOf(instance));
+    return Object.assign(cloned, instance);
+}
+
+const john = new Person('John', 30);
+const johnClone = cloneInstance(john);
+console.log(johnClone.greet()); // "Hello, I'm John"
+```
+
+**Performance Considerations:**
+```javascript
+const testObject = {
+    // Large nested object for testing
+    data: Array.from({length: 1000}, (_, i) => ({
+        id: i,
+        nested: { value: i * 2 }
+    }))
+};
+
+// Benchmark different methods
+console.time('Spread (shallow)');
+const spread = { ...testObject };
+console.timeEnd('Spread (shallow)');
+
+console.time('JSON method');
+const jsonClone = JSON.parse(JSON.stringify(testObject));
+console.timeEnd('JSON method');
+
+console.time('structuredClone');
+const structuredClone = structuredClone(testObject);
+console.timeEnd('structuredClone');
+```
+
+**Library Solutions:**
+```javascript
+// Lodash
+const _ = require('lodash');
+const deepClone = _.cloneDeep(original);
+
+// Ramda
+const R = require('ramda');
+const clone = R.clone(original); // shallow
+const deepClone2 = R.clone(original); // Ramda's clone is actually deep
+```
+
+**Choosing the Right Method:**
+
+| Method | Use Case | Pros | Cons |
+|--------|----------|------|------|
+| `{...obj}` | Simple shallow copy | Fast, readable | Only shallow |
+| `Object.assign()` | Shallow with merge | Can merge objects | Only shallow |
+| `JSON.parse(JSON.stringify())` | Simple deep copy | Works everywhere | Limited types |
+| `structuredClone()` | Modern deep copy | Handles most types | New API |
+| Custom function | Complex requirements | Full control | More code |
+| Libraries | Production apps | Battle-tested | Extra dependency |
+
+**Best Practices:**
+1. Use spread operator for shallow copying
+2. Use `structuredClone()` for deep copying in modern environments
+3. Be aware of the limitations of JSON methods
+4. Consider performance implications for large objects
+5. Handle circular references in custom implementations
+6. Use libraries for complex production scenarios
+
+**Related Questions:** [Shallow vs Deep Copy](#22-what-is-the-difference-between-shallow-copy-and-deep-copy), [Spread Operator](#25-what-is-the-spread-operator-and-rest-parameters)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 24. What is destructuring assignment?
+
+**Destructuring assignment** is a JavaScript expression that makes it possible to unpack values from arrays or properties from objects into distinct variables.
+
+**Array Destructuring:**
+
+**Basic Array Destructuring:**
+```javascript
+const numbers = [1, 2, 3, 4, 5];
+
+// Traditional way
+const first = numbers[0];
+const second = numbers[1];
+
+// Destructuring way
+const [a, b, c] = numbers;
+console.log(a, b, c); // 1, 2, 3
+
+// Skip elements
+const [first, , third] = numbers;
+console.log(first, third); // 1, 3
+
+// Rest elements
+const [head, ...tail] = numbers;
+console.log(head); // 1
+console.log(tail); // [2, 3, 4, 5]
+```
+
+**Object Destructuring:**
+
+**Basic Object Destructuring:**
+```javascript
+const person = {
+    name: 'John',
+    age: 30,
+    city: 'New York',
+    country: 'USA'
+};
+
+// Traditional way
+const name = person.name;
+const age = person.age;
+
+// Destructuring way
+const { name, age, city } = person;
+console.log(name, age, city); // 'John', 30, 'New York'
+
+// Rename variables
+const { name: fullName, age: years } = person;
+console.log(fullName, years); // 'John', 30
+
+// Default values
+const { name, profession = 'Unknown' } = person;
+console.log(profession); // 'Unknown'
+```
+
+**Advanced Destructuring Patterns:**
+
+**1. Nested Destructuring:**
+```javascript
+const user = {
+    id: 1,
+    name: 'John',
+    address: {
+        street: '123 Main St',
+        city: 'New York',
+        coordinates: {
+            lat: 40.7128,
+            lng: -74.0060
+        }
+    },
+    hobbies: ['reading', 'swimming', 'coding']
+};
+
+// Nested object destructuring
+const {
+    name,
+    address: {
+        city,
+        coordinates: { lat, lng }
+    },
+    hobbies: [firstHobby, secondHobby]
+} = user;
+
+console.log(name);        // 'John'
+console.log(city);        // 'New York'
+console.log(lat, lng);    // 40.7128, -74.0060
+console.log(firstHobby);  // 'reading'
+```
+
+**2. Function Parameter Destructuring:**
+```javascript
+// Object parameter destructuring
+function greetUser({ name, age, city = 'Unknown' }) {
+    return `Hello ${name}, you are ${age} years old from ${city}`;
+}
+
+const user = { name: 'John', age: 30 };
+console.log(greetUser(user)); // "Hello John, you are 30 years old from Unknown"
+
+// Array parameter destructuring
+function calculateTotal([price, tax, discount = 0]) {
+    return price + tax - discount;
+}
+
+console.log(calculateTotal([100, 10, 5])); // 105
+
+// Mixed destructuring
+function processOrder({ items: [firstItem], customer: { name } }) {
+    return `Processing ${firstItem} for ${name}`;
+}
+
+const order = {
+    items: ['laptop', 'mouse'],
+    customer: { name: 'John', email: 'john@example.com' }
+};
+
+console.log(processOrder(order)); // "Processing laptop for John"
+```
+
+**3. Swapping Variables:**
+```javascript
+let a = 1;
+let b = 2;
+
+// Traditional swap
+let temp = a;
+a = b;
+b = temp;
+
+// Destructuring swap
+[a, b] = [b, a];
+console.log(a, b); // 2, 1
+
+// Multiple variable swap
+let x = 1, y = 2, z = 3;
+[x, y, z] = [z, x, y];
+console.log(x, y, z); // 3, 1, 2
+```
+
+**4. Extracting Multiple Values from Functions:**
+```javascript
+function getCoordinates() {
+    return [40.7128, -74.0060];
+}
+
+function getUserInfo() {
+    return {
+        name: 'John',
+        age: 30,
+        email: 'john@example.com'
+    };
+}
+
+// Array destructuring from function return
+const [latitude, longitude] = getCoordinates();
+
+// Object destructuring from function return
+const { name, email } = getUserInfo();
+```
+
+**5. Rest Pattern in Destructuring:**
+```javascript
+// Array rest
+const numbers = [1, 2, 3, 4, 5];
+const [first, second, ...rest] = numbers;
+console.log(first);  // 1
+console.log(second); // 2
+console.log(rest);   // [3, 4, 5]
+
+// Object rest
+const person = {
+    name: 'John',
+    age: 30,
+    city: 'NYC',
+    country: 'USA',
+    profession: 'Developer'
+};
+
+const { name, age, ...otherInfo } = person;
+console.log(name, age);    // 'John', 30
+console.log(otherInfo);    // { city: 'NYC', country: 'USA', profession: 'Developer' }
+```
+
+**Practical Use Cases:**
+
+**1. API Response Handling:**
+```javascript
+// Typical API response
+const apiResponse = {
+    data: {
+        users: [
+            { id: 1, name: 'John', email: 'john@example.com' },
+            { id: 2, name: 'Jane', email: 'jane@example.com' }
+        ]
+    },
+    status: 'success',
+    message: 'Data retrieved successfully'
+};
+
+// Extract what you need
+const {
+    data: { users },
+    status,
+    message
+} = apiResponse;
+
+// Process first user
+const [{ name: firstName, email: firstEmail }] = users;
+console.log(firstName, firstEmail); // 'John', 'john@example.com'
+```
+
+**2. Configuration Objects:**
+```javascript
+function createServer(options = {}) {
+    const {
+        port = 3000,
+        host = 'localhost',
+        ssl = false,
+        middleware = [],
+        routes = {}
+    } = options;
+    
+    console.log(`Server starting on ${host}:${port}`);
+    console.log(`SSL: ${ssl ? 'enabled' : 'disabled'}`);
+    
+    return { port, host, ssl, middleware, routes };
+}
+
+// Usage
+const server = createServer({
+    port: 8080,
+    ssl: true
+});
+```
+
+**3. Module Imports:**
+```javascript
+// ES6 modules
+import { useState, useEffect, useCallback } from 'react';
+import { map, filter, reduce } from 'lodash';
+
+// CommonJS
+const { readFile, writeFile } = require('fs').promises;
+const { join, resolve } = require('path');
+```
+
+**4. Event Handling:**
+```javascript
+// DOM event destructuring
+document.addEventListener('click', ({ target, clientX, clientY }) => {
+    console.log(`Clicked on ${target.tagName} at (${clientX}, ${clientY})`);
+});
+
+// Custom event data
+function handleUserAction({ type, payload: { userId, action } }) {
+    console.log(`User ${userId} performed ${action} of type ${type}`);
+}
+
+const eventData = {
+    type: 'USER_ACTION',
+    payload: {
+        userId: 123,
+        action: 'login'
+    }
+};
+
+handleUserAction(eventData);
+```
+
+**5. Array Processing:**
+```javascript
+const users = [
+    ['John', 'Doe', 30],
+    ['Jane', 'Smith', 25],
+    ['Bob', 'Johnson', 35]
+];
+
+// Process each user
+users.forEach(([firstName, lastName, age]) => {
+    console.log(`${firstName} ${lastName} is ${age} years old`);
+});
+
+// Transform data
+const userObjects = users.map(([firstName, lastName, age]) => ({
+    firstName,
+    lastName,
+    age,
+    fullName: `${firstName} ${lastName}`
+}));
+```
+
+**Common Patterns and Tricks:**
+
+**1. Computed Property Names:**
+```javascript
+const key = 'dynamicKey';
+const obj = {
+    [key]: 'value',
+    staticKey: 'static'
+};
+
+const { [key]: dynamicValue, staticKey } = obj;
+console.log(dynamicValue); // 'value'
+```
+
+**2. Conditional Destructuring:**
+```javascript
+const data = { name: 'John', age: 30 };
+
+// Only destructure if object exists
+const { name, age } = data || {};
+
+// With default object
+function processUser(user = {}) {
+    const { name = 'Anonymous', age = 0 } = user;
+    return `${name} (${age})`;
+}
+```
+
+**3. Aliasing with Defaults:**
+```javascript
+const config = {
+    api: {
+        baseUrl: 'https://api.example.com'
+    }
+};
+
+const {
+    api: { baseUrl: apiUrl = 'http://localhost:3000' } = {},
+    timeout = 5000
+} = config;
+
+console.log(apiUrl);  // 'https://api.example.com'
+console.log(timeout); // 5000
+```
+
+**Best Practices:**
+1. Use destructuring for cleaner, more readable code
+2. Provide default values to prevent undefined errors
+3. Use meaningful variable names when aliasing
+4. Don't over-nest destructuring (keep it readable)
+5. Use rest patterns to collect remaining properties
+6. Combine with other ES6+ features for powerful patterns
+
+**Related Questions:** [Spread Operator](#25-what-is-the-spread-operator-and-rest-parameters), [Object Manipulation](#20-how-do-you-create-and-manipulate-objects-in-javascript)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 25. What is the spread operator and rest parameters?
+
+The **spread operator (`...`)** and **rest parameters** use the same syntax but serve opposite purposes: spread expands elements, while rest collects them.
+
+**Spread Operator:**
+
+**1. Array Spreading:**
+```javascript
+const arr1 = [1, 2, 3];
+const arr2 = [4, 5, 6];
+
+// Combine arrays
+const combined = [...arr1, ...arr2];
+console.log(combined); // [1, 2, 3, 4, 5, 6]
+
+// Insert elements
+const inserted = [...arr1, 'middle', ...arr2];
+console.log(inserted); // [1, 2, 3, 'middle', 4, 5, 6]
+
+// Copy array (shallow)
+const copy = [...arr1];
+copy.push(4);
+console.log(arr1); // [1, 2, 3] - original unchanged
+
+// Convert string to array
+const letters = [...'hello'];
+console.log(letters); // ['h', 'e', 'l', 'l', 'o']
+
+// Find max/min
+const numbers = [1, 5, 3, 9, 2];
+const max = Math.max(...numbers);
+const min = Math.min(...numbers);
+console.log(max, min); // 9, 1
+```
+
+**2. Object Spreading:**
+```javascript
+const obj1 = { a: 1, b: 2 };
+const obj2 = { c: 3, d: 4 };
+
+// Combine objects
+const combined = { ...obj1, ...obj2 };
+console.log(combined); // { a: 1, b: 2, c: 3, d: 4 }
+
+// Override properties
+const overridden = { ...obj1, b: 'new value', e: 5 };
+console.log(overridden); // { a: 1, b: 'new value', e: 5 }
+
+// Copy object (shallow)
+const copy = { ...obj1 };
+copy.a = 10;
+console.log(obj1.a); // 1 - original unchanged
+
+// Conditional properties
+const includeOptional = true;
+const result = {
+    required: 'value',
+    ...(includeOptional && { optional: 'included' })
+};
+console.log(result); // { required: 'value', optional: 'included' }
+```
+
+**3. Function Call Spreading:**
+```javascript
+function sum(a, b, c) {
+    return a + b + c;
+}
+
+const numbers = [1, 2, 3];
+
+// Traditional way
+const result1 = sum.apply(null, numbers);
+
+// Spread way
+const result2 = sum(...numbers);
+console.log(result2); // 6
+
+// With mixed arguments
+const result3 = sum(...numbers.slice(0, 2), 10);
+console.log(result3); // 1 + 2 + 10 = 13
+```
+
+**Rest Parameters:**
+
+**1. Function Rest Parameters:**
+```javascript
+// Collect remaining parameters
+function sum(...numbers) {
+    return numbers.reduce((total, num) => total + num, 0);
+}
+
+console.log(sum(1, 2, 3, 4, 5)); // 15
+console.log(sum(10, 20));         // 30
+console.log(sum());               // 0
+
+// Mixed parameters
+function greet(greeting, ...names) {
+    return `${greeting} ${names.join(', ')}!`;
+}
+
+console.log(greet('Hello', 'John', 'Jane', 'Bob')); 
+// "Hello John, Jane, Bob!"
+
+// Rest must be last parameter
+function invalidFunction(...rest, last) {} // SyntaxError
+```
+
+**2. Array Rest in Destructuring:**
+```javascript
+const numbers = [1, 2, 3, 4, 5];
+
+// Collect remaining elements
+const [first, second, ...rest] = numbers;
+console.log(first);  // 1
+console.log(second); // 2
+console.log(rest);   // [3, 4, 5]
+
+// Skip elements
+const [, , ...remaining] = numbers;
+console.log(remaining); // [3, 4, 5]
+
+// Empty rest
+const [a, b, c, d, e, ...empty] = numbers;
+console.log(empty); // []
+```
+
+**3. Object Rest in Destructuring:**
+```javascript
+const person = {
+    name: 'John',
+    age: 30,
+    city: 'NYC',
+    country: 'USA',
+    profession: 'Developer'
+};
+
+// Collect remaining properties
+const { name, age, ...otherInfo } = person;
+console.log(name, age);    // 'John', 30
+console.log(otherInfo);    // { city: 'NYC', country: 'USA', profession: 'Developer' }
+
+// Exclude specific properties
+const { profession, ...personalInfo } = person;
+console.log(personalInfo); // { name: 'John', age: 30, city: 'NYC', country: 'USA' }
+```
+
+**Practical Applications:**
+
+**1. Function Overloading Pattern:**
+```javascript
+function createUser(name, ...options) {
+    const [age, email, role = 'user'] = options;
+    
+    return {
+        name,
+        age: age || null,
+        email: email || null,
+        role
+    };
+}
+
+// Different ways to call
+console.log(createUser('John'));                    // Basic user
+console.log(createUser('Jane', 25));                // With age
+console.log(createUser('Bob', 30, 'bob@example.com')); // With age and email
+console.log(createUser('Alice', 28, 'alice@example.com', 'admin')); // Full info
+```
+
+**2. Array Manipulation:**
+```javascript
+const originalArray = [1, 2, 3];
+
+// Add elements immutably
+const addToStart = [0, ...originalArray];
+const addToEnd = [...originalArray, 4];
+const addToMiddle = [...originalArray.slice(0, 2), 2.5, ...originalArray.slice(2)];
+
+console.log(addToStart);  // [0, 1, 2, 3]
+console.log(addToEnd);    // [1, 2, 3, 4]
+console.log(addToMiddle); // [1, 2, 2.5, 3]
+
+// Remove duplicates
+const withDuplicates = [1, 2, 2, 3, 3, 4];
+const unique = [...new Set(withDuplicates)];
+console.log(unique); // [1, 2, 3, 4]
+
+// Flatten one level
+const nested = [[1, 2], [3, 4], [5, 6]];
+const flattened = [].concat(...nested);
+console.log(flattened); // [1, 2, 3, 4, 5, 6]
+```
+
+**3. Object Updates (Immutable):**
+```javascript
+const user = {
+    id: 1,
+    name: 'John',
+    settings: {
+        theme: 'dark',
+        notifications: true
+    }
+};
+
+// Update top-level property
+const updatedUser = {
+    ...user,
+    name: 'John Doe',
+    lastLogin: new Date()
+};
+
+// Update nested property (careful - need deep spread)
+const updatedSettings = {
+    ...user,
+    settings: {
+        ...user.settings,
+        theme: 'light'
+    }
+};
+
+// Remove property
+const { settings, ...userWithoutSettings } = user;
+console.log(userWithoutSettings); // { id: 1, name: 'John' }
+```
+
+**4. Component Props (React-style):**
+```javascript
+function Button({ children, className, ...otherProps }) {
+    return {
+        type: 'button',
+        className: `btn ${className || ''}`,
+        children,
+        ...otherProps // Pass through all other props
+    };
+}
+
+// Usage
+const buttonProps = Button({
+    children: 'Click me',
+    className: 'primary',
+    onClick: () => console.log('clicked'),
+    disabled: false,
+    'data-testid': 'submit-button'
+});
+```
+
+**5. API Data Processing:**
+```javascript
+function processApiResponse(response) {
+    const { data, meta, ...otherFields } = response;
+    
+    return {
+        items: data || [],
+        pagination: meta?.pagination || {},
+        additionalInfo: otherFields
+    };
+}
+
+// Transform user data
+function transformUsers(users) {
+    return users.map(({ password, ...safeUser }) => ({
+        ...safeUser,
+        displayName: `${safeUser.firstName} ${safeUser.lastName}`
+    }));
+}
+```
+
+**Advanced Patterns:**
+
+**1. Conditional Spreading:**
+```javascript
+const baseConfig = { host: 'localhost', port: 3000 };
+const isDevelopment = true;
+
+const config = {
+    ...baseConfig,
+    ...(isDevelopment && { debug: true, verbose: true }),
+    ...(process.env.SSL && { ssl: true, port: 443 })
+};
+```
+
+**2. Function Composition:**
+```javascript
+const pipe = (...functions) => (value) => 
+    functions.reduce((acc, fn) => fn(acc), value);
+
+const addOne = x => x + 1;
+const double = x => x * 2;
+const square = x => x * x;
+
+const transform = pipe(addOne, double, square);
+console.log(transform(3)); // ((3 + 1) * 2)^2 = 64
+```
+
+**3. Dynamic Object Creation:**
+```javascript
+function createObject(keys, values) {
+    return keys.reduce((obj, key, index) => ({
+        ...obj,
+        [key]: values[index]
+    }), {});
+}
+
+const keys = ['name', 'age', 'city'];
+const values = ['John', 30, 'NYC'];
+const person = createObject(keys, values);
+console.log(person); // { name: 'John', age: 30, city: 'NYC' }
+```
+
+**Performance Considerations:**
+```javascript
+// Spread creates new objects/arrays - consider performance
+const largeArray = Array.from({length: 100000}, (_, i) => i);
+
+console.time('spread');
+const spreadCopy = [...largeArray];
+console.timeEnd('spread');
+
+console.time('slice');
+const sliceCopy = largeArray.slice();
+console.timeEnd('slice');
+
+// For objects, spread is generally fast for shallow copying
+const largeObject = Object.fromEntries(
+    Array.from({length: 1000}, (_, i) => [`key${i}`, i])
+);
+
+console.time('object spread');
+const objectCopy = { ...largeObject };
+console.timeEnd('object spread');
+```
+
+**Best Practices:**
+1. Use spread for immutable updates
+2. Use rest parameters for flexible function signatures
+3. Be careful with nested objects - spread is shallow
+4. Use meaningful names for rest parameters
+5. Consider performance with very large data structures
+6. Combine with destructuring for powerful patterns
+
+**Related Questions:** [Destructuring](#24-what-is-destructuring-assignment), [Array Methods](#21-what-are-the-most-common-array-methods), [Object Manipulation](#20-how-do-you-create-and-manipulate-objects-in-javascript)
 
 [⬆️ Back to Top](#table-of-contents)
 
 ## Prototypes and Inheritance
-26. What are prototypes in JavaScript?
-27. How does prototypal inheritance work?
-28. What's the difference between `__proto__` and `prototype`?
-29. How do ES6 classes relate to prototypes?
-30. What is the prototype chain?
+
+### 26. What are prototypes in JavaScript?
+
+**Prototypes** are the mechanism by which JavaScript objects inherit features from one another. Every object in JavaScript has a prototype, which is another object that the original object inherits properties and methods from.
+
+**Understanding Prototypes:**
+
+**1. Every Object Has a Prototype:**
+```javascript
+const obj = {};
+console.log(obj.__proto__); // Object.prototype
+console.log(Object.getPrototypeOf(obj)); // Object.prototype (preferred method)
+
+// Functions have Function.prototype
+function myFunc() {}
+console.log(myFunc.__proto__); // Function.prototype
+
+// Arrays have Array.prototype
+const arr = [];
+console.log(arr.__proto__); // Array.prototype
+```
+
+**2. Prototype Chain:**
+```javascript
+const person = {
+    name: 'John',
+    age: 30
+};
+
+// person inherits from Object.prototype
+console.log(person.toString()); // "[object Object]" - inherited method
+console.log(person.hasOwnProperty('name')); // true - inherited method
+
+// The chain: person -> Object.prototype -> null
+console.log(Object.getPrototypeOf(person) === Object.prototype); // true
+console.log(Object.getPrototypeOf(Object.prototype)); // null
+```
+
+**3. Function Prototypes:**
+```javascript
+function Person(name) {
+    this.name = name;
+}
+
+// Functions have a special 'prototype' property
+console.log(Person.prototype); // Person.prototype object
+console.log(typeof Person.prototype); // "object"
+
+// This prototype is used when creating instances with 'new'
+const john = new Person('John');
+console.log(john.__proto__ === Person.prototype); // true
+```
+
+**4. Adding Methods to Prototypes:**
+```javascript
+function Person(name, age) {
+    this.name = name;
+    this.age = age;
+}
+
+// Add methods to the prototype
+Person.prototype.greet = function() {
+    return `Hello, I'm ${this.name}`;
+};
+
+Person.prototype.getAge = function() {
+    return this.age;
+};
+
+// All instances share the same prototype methods
+const john = new Person('John', 30);
+const jane = new Person('Jane', 25);
+
+console.log(john.greet()); // "Hello, I'm John"
+console.log(jane.greet()); // "Hello, I'm Jane"
+
+// Methods are shared, not duplicated
+console.log(john.greet === jane.greet); // true
+```
+
+**5. Prototype Properties vs Instance Properties:**
+```javascript
+function Person(name) {
+    this.name = name; // Instance property
+}
+
+Person.prototype.species = 'Homo sapiens'; // Prototype property
+
+const john = new Person('John');
+
+console.log(john.name); // "John" - instance property
+console.log(john.species); // "Homo sapiens" - prototype property
+
+// hasOwnProperty checks instance properties only
+console.log(john.hasOwnProperty('name')); // true
+console.log(john.hasOwnProperty('species')); // false
+
+// Check if property exists in prototype chain
+console.log('species' in john); // true
+```
+
+**6. Built-in Object Prototypes:**
+```javascript
+// Array prototype
+const arr = [1, 2, 3];
+console.log(arr.push); // function - from Array.prototype
+console.log(arr.toString); // function - from Object.prototype
+
+// String prototype
+const str = 'hello';
+console.log(str.toUpperCase); // function - from String.prototype
+console.log(str.charAt); // function - from String.prototype
+
+// Number prototype
+const num = 42;
+console.log(num.toFixed); // function - from Number.prototype
+```
+
+**7. Creating Objects with Specific Prototypes:**
+```javascript
+// Using Object.create()
+const animal = {
+    type: 'animal',
+    makeSound() {
+        return 'Some sound';
+    }
+};
+
+const dog = Object.create(animal);
+dog.breed = 'Golden Retriever';
+dog.makeSound = function() {
+    return 'Woof!';
+};
+
+console.log(dog.type); // "animal" - inherited
+console.log(dog.makeSound()); // "Woof!" - overridden
+console.log(dog.breed); // "Golden Retriever" - own property
+```
+
+**8. Prototype Inspection:**
+```javascript
+function Person(name) {
+    this.name = name;
+}
+
+Person.prototype.greet = function() {
+    return `Hello, I'm ${this.name}`;
+};
+
+const john = new Person('John');
+
+// Check prototype
+console.log(Object.getPrototypeOf(john) === Person.prototype); // true
+
+// List prototype properties
+console.log(Object.getOwnPropertyNames(Person.prototype));
+// ['constructor', 'greet']
+
+// Check if property exists in prototype chain
+console.log('greet' in john); // true
+console.log('toString' in john); // true (from Object.prototype)
+```
+
+**Best Practices:**
+1. Use `Object.getPrototypeOf()` instead of `__proto__`
+2. Add methods to prototypes, not instances
+3. Use `hasOwnProperty()` to check instance properties
+4. Be careful when modifying built-in prototypes
+5. Use `Object.create()` for clean inheritance
+
+**Related Questions:** [Prototypal Inheritance](#27-how-does-prototypal-inheritance-work), [Prototype Chain](#30-what-is-the-prototype-chain)
 
 [⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 27. How does prototypal inheritance work?
+
+**Prototypal inheritance** is JavaScript's mechanism for object inheritance where objects can inherit properties and methods from other objects through the prototype chain.
+
+**How It Works:**
+
+**1. Basic Prototype Chain:**
+```javascript
+// Parent object
+const animal = {
+    type: 'animal',
+    makeSound() {
+        return 'Some generic sound';
+    },
+    eat() {
+        return 'Eating food';
+    }
+};
+
+// Child object inherits from animal
+const dog = Object.create(animal);
+dog.breed = 'Golden Retriever';
+dog.makeSound = function() {
+    return 'Woof! Woof!';
+};
+
+console.log(dog.type); // "animal" - inherited
+console.log(dog.eat()); // "Eating food" - inherited
+console.log(dog.makeSound()); // "Woof! Woof!" - overridden
+console.log(dog.breed); // "Golden Retriever" - own property
+```
+
+**2. Constructor Function Inheritance:**
+```javascript
+// Parent constructor
+function Animal(name) {
+    this.name = name;
+    this.type = 'animal';
+}
+
+Animal.prototype.makeSound = function() {
+    return 'Some generic sound';
+};
+
+Animal.prototype.eat = function() {
+    return `${this.name} is eating`;
+};
+
+// Child constructor
+function Dog(name, breed) {
+    Animal.call(this, name); // Call parent constructor
+    this.breed = breed;
+}
+
+// Set up inheritance
+Dog.prototype = Object.create(Animal.prototype);
+Dog.prototype.constructor = Dog;
+
+// Add child-specific methods
+Dog.prototype.makeSound = function() {
+    return 'Woof! Woof!';
+};
+
+Dog.prototype.fetch = function() {
+    return `${this.name} is fetching the ball`;
+};
+
+// Create instances
+const buddy = new Dog('Buddy', 'Golden Retriever');
+console.log(buddy.name); // "Buddy"
+console.log(buddy.type); // "animal" - inherited
+console.log(buddy.makeSound()); // "Woof! Woof!" - overridden
+console.log(buddy.eat()); // "Buddy is eating" - inherited
+console.log(buddy.fetch()); // "Buddy is fetching the ball" - own method
+```
+
+**3. ES6 Class Inheritance:**
+```javascript
+// Parent class
+class Animal {
+    constructor(name) {
+        this.name = name;
+        this.type = 'animal';
+    }
+    
+    makeSound() {
+        return 'Some generic sound';
+    }
+    
+    eat() {
+        return `${this.name} is eating`;
+    }
+}
+
+// Child class
+class Dog extends Animal {
+    constructor(name, breed) {
+        super(name); // Call parent constructor
+        this.breed = breed;
+    }
+    
+    makeSound() {
+        return 'Woof! Woof!';
+    }
+    
+    fetch() {
+        return `${this.name} is fetching the ball`;
+    }
+}
+
+const buddy = new Dog('Buddy', 'Golden Retriever');
+console.log(buddy instanceof Dog); // true
+console.log(buddy instanceof Animal); // true
+console.log(buddy instanceof Object); // true
+```
+
+**4. Property Lookup Process:**
+```javascript
+function Person(name) {
+    this.name = name;
+}
+
+Person.prototype.species = 'Homo sapiens';
+Person.prototype.greet = function() {
+    return `Hello, I'm ${this.name}`;
+};
+
+const john = new Person('John');
+
+// Property lookup process:
+// 1. Check instance properties
+console.log(john.name); // "John" - found in instance
+
+// 2. Check prototype properties
+console.log(john.species); // "Homo sapiens" - found in Person.prototype
+
+// 3. Check prototype's prototype (Object.prototype)
+console.log(john.toString); // function - found in Object.prototype
+
+// 4. Continue up the chain until null
+console.log(john.nonExistent); // undefined - not found anywhere
+```
+
+**5. Method Overriding:**
+```javascript
+function Animal(name) {
+    this.name = name;
+}
+
+Animal.prototype.makeSound = function() {
+    return 'Some generic sound';
+};
+
+function Dog(name) {
+    Animal.call(this, name);
+}
+
+Dog.prototype = Object.create(Animal.prototype);
+Dog.prototype.constructor = Dog;
+
+// Override parent method
+Dog.prototype.makeSound = function() {
+    return 'Woof! Woof!';
+};
+
+// Call parent method from child
+Dog.prototype.makeSoundAndEat = function() {
+    return `${this.makeSound()} and ${Animal.prototype.eat.call(this)}`;
+};
+
+const buddy = new Dog('Buddy');
+console.log(buddy.makeSound()); // "Woof! Woof!" - overridden
+```
+
+**6. Multiple Inheritance (Mixins):**
+```javascript
+// Mixin objects
+const Flyable = {
+    fly() {
+        return `${this.name} is flying`;
+    }
+};
+
+const Swimmable = {
+    swim() {
+        return `${this.name} is swimming`;
+    }
+};
+
+// Base class
+function Animal(name) {
+    this.name = name;
+}
+
+// Mix in capabilities
+Object.assign(Animal.prototype, Flyable);
+
+function Duck(name) {
+    Animal.call(this, name);
+}
+
+Duck.prototype = Object.create(Animal.prototype);
+Duck.prototype.constructor = Duck;
+
+// Mix in additional capabilities
+Object.assign(Duck.prototype, Swimmable);
+
+const donald = new Duck('Donald');
+console.log(donald.fly()); // "Donald is flying"
+console.log(donald.swim()); // "Donald is swimming"
+```
+
+**7. Prototype Chain Inspection:**
+```javascript
+function Person(name) {
+    this.name = name;
+}
+
+Person.prototype.species = 'Homo sapiens';
+
+const john = new Person('John');
+
+// Check the prototype chain
+let current = john;
+let level = 0;
+
+while (current !== null) {
+    console.log(`Level ${level}:`, current.constructor.name);
+    console.log('Properties:', Object.getOwnPropertyNames(current));
+    current = Object.getPrototypeOf(current);
+    level++;
+}
+
+// Output:
+// Level 0: Person
+// Properties: ['name']
+// Level 1: Object
+// Properties: ['constructor', 'species', 'greet', ...]
+// Level 2: null
+```
+
+**Key Concepts:**
+1. **Delegation**: Objects delegate property access to their prototype
+2. **Dynamic**: Prototype chain is checked at runtime
+3. **Mutable**: Prototypes can be modified after creation
+4. **Flexible**: Multiple inheritance through mixins
+5. **Efficient**: Methods are shared, not duplicated
+
+**Best Practices:**
+1. Use `Object.create()` for clean inheritance
+2. Always set `constructor` property when overriding prototypes
+3. Use `call()` or `apply()` to invoke parent constructors
+4. Prefer composition over deep inheritance chains
+5. Use ES6 classes for cleaner syntax
+6. Be careful with prototype pollution
+
+**Related Questions:** [Prototypes](#26-what-are-prototypes-in-javascript), [ES6 Classes](#29-how-do-es6-classes-relate-to-prototypes), [Prototype Chain](#30-what-is-the-prototype-chain)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 28. What's the difference between `__proto__` and `prototype`?
+
+The key difference is that **`__proto__`** is a property of object instances that points to their prototype, while **`prototype`** is a property of constructor functions that defines what prototype new instances will have.
+
+**`__proto__` - Instance Property:**
+```javascript
+const obj = {};
+console.log(obj.__proto__); // Object.prototype
+
+const arr = [];
+console.log(arr.__proto__); // Array.prototype
+
+function Person(name) {
+    this.name = name;
+}
+
+const john = new Person('John');
+console.log(john.__proto__); // Person.prototype
+console.log(john.__proto__ === Person.prototype); // true
+```
+
+**`prototype` - Constructor Property:**
+```javascript
+function Person(name) {
+    this.name = name;
+}
+
+// prototype is a property of the constructor function
+console.log(Person.prototype); // Person.prototype object
+console.log(typeof Person.prototype); // "object"
+
+// Only functions have prototype property
+console.log(Person.prototype.constructor === Person); // true
+```
+
+**Key Differences:**
+
+**1. What They Are:**
+```javascript
+function Person(name) {
+    this.name = name;
+}
+
+Person.prototype.species = 'Homo sapiens';
+
+const john = new Person('John');
+
+// __proto__ is on the instance
+console.log(john.__proto__); // Person.prototype
+
+// prototype is on the constructor
+console.log(Person.prototype); // Person.prototype
+
+// They point to the same object
+console.log(john.__proto__ === Person.prototype); // true
+```
+
+**2. When They're Used:**
+```javascript
+function Animal(name) {
+    this.name = name;
+}
+
+// prototype is used when creating new instances
+Animal.prototype.makeSound = function() {
+    return 'Some sound';
+};
+
+const dog = new Animal('Buddy');
+
+// __proto__ is used for property lookup
+console.log(dog.makeSound()); // "Some sound" - found via __proto__
+console.log(dog.__proto__.makeSound()); // "Some sound" - same thing
+```
+
+**3. Modifying Prototypes:**
+```javascript
+function Person(name) {
+    this.name = name;
+}
+
+const john = new Person('John');
+
+// Modify constructor's prototype
+Person.prototype.greet = function() {
+    return `Hello, I'm ${this.name}`;
+};
+
+// This affects all instances (existing and new)
+console.log(john.greet()); // "Hello, I'm John"
+
+// Modify instance's __proto__ (not recommended)
+john.__proto__.sayGoodbye = function() {
+    return `Goodbye, ${this.name}`;
+};
+
+// This affects all instances of the same constructor
+const jane = new Person('Jane');
+console.log(jane.sayGoodbye()); // "Goodbye, Jane"
+```
+
+**4. Modern vs Legacy:**
+```javascript
+const obj = {};
+
+// Legacy way (deprecated)
+console.log(obj.__proto__); // Object.prototype
+
+// Modern way (recommended)
+console.log(Object.getPrototypeOf(obj)); // Object.prototype
+
+// Setting prototype
+const newProto = { newMethod: () => 'new method' };
+
+// Legacy way (deprecated)
+obj.__proto__ = newProto;
+
+// Modern way (recommended)
+Object.setPrototypeOf(obj, newProto);
+```
+
+**5. Function vs Object:**
+```javascript
+function Person(name) {
+    this.name = name;
+}
+
+// Functions have BOTH __proto__ and prototype
+console.log(Person.__proto__); // Function.prototype
+console.log(Person.prototype); // Person.prototype object
+
+// Regular objects only have __proto__
+const obj = {};
+console.log(obj.__proto__); // Object.prototype
+console.log(obj.prototype); // undefined
+```
+
+**6. Inheritance Setup:**
+```javascript
+function Animal(name) {
+    this.name = name;
+}
+
+Animal.prototype.eat = function() {
+    return `${this.name} is eating`;
+};
+
+function Dog(name, breed) {
+    Animal.call(this, name);
+    this.breed = breed;
+}
+
+// Set up inheritance using prototype
+Dog.prototype = Object.create(Animal.prototype);
+Dog.prototype.constructor = Dog;
+
+Dog.prototype.bark = function() {
+    return 'Woof!';
+};
+
+const buddy = new Dog('Buddy', 'Golden Retriever');
+
+// __proto__ chain: buddy -> Dog.prototype -> Animal.prototype -> Object.prototype -> null
+console.log(buddy.__proto__ === Dog.prototype); // true
+console.log(buddy.__proto__.__proto__ === Animal.prototype); // true
+```
+
+**7. Property Lookup:**
+```javascript
+function Person(name) {
+    this.name = name;
+}
+
+Person.prototype.species = 'Homo sapiens';
+
+const john = new Person('John');
+
+// Property lookup process:
+// 1. Check instance properties
+console.log(john.name); // "John" - found in instance
+
+// 2. Check __proto__ (Person.prototype)
+console.log(john.species); // "Homo sapiens" - found in __proto__
+
+// 3. Check __proto__.__proto__ (Object.prototype)
+console.log(john.toString); // function - found in __proto__.__proto__
+
+// Manual lookup using __proto__
+console.log(john.__proto__.species); // "Homo sapiens"
+console.log(john.__proto__.__proto__.toString); // function
+```
+
+**8. Common Mistakes:**
+```javascript
+function Person(name) {
+    this.name = name;
+}
+
+const john = new Person('John');
+
+// WRONG: Trying to access prototype on instance
+console.log(john.prototype); // undefined
+
+// CORRECT: Access prototype via __proto__ or Object.getPrototypeOf
+console.log(john.__proto__); // Person.prototype
+console.log(Object.getPrototypeOf(john)); // Person.prototype
+
+// WRONG: Modifying __proto__ directly
+john.__proto__ = { newMethod: () => 'new' }; // Not recommended
+
+// CORRECT: Modify constructor's prototype
+Person.prototype.newMethod = () => 'new';
+```
+
+**9. ES6 Classes:**
+```javascript
+class Person {
+    constructor(name) {
+        this.name = name;
+    }
+    
+    greet() {
+        return `Hello, I'm ${this.name}`;
+    }
+}
+
+const john = new Person('John');
+
+// ES6 classes still use prototypes under the hood
+console.log(john.__proto__ === Person.prototype); // true
+console.log(Person.prototype.greet); // function
+
+// The class syntax is just syntactic sugar
+console.log(typeof Person); // "function"
+```
+
+**10. Prototype Chain Visualization:**
+```javascript
+function Animal(name) {
+    this.name = name;
+}
+
+function Dog(name, breed) {
+    Animal.call(this, name);
+    this.breed = breed;
+}
+
+Dog.prototype = Object.create(Animal.prototype);
+Dog.prototype.constructor = Dog;
+
+const buddy = new Dog('Buddy', 'Golden Retriever');
+
+// Visualize the chain
+console.log('buddy.__proto__ === Dog.prototype:', buddy.__proto__ === Dog.prototype);
+console.log('Dog.prototype.__proto__ === Animal.prototype:', Dog.prototype.__proto__ === Animal.prototype);
+console.log('Animal.prototype.__proto__ === Object.prototype:', Animal.prototype.__proto__ === Object.prototype);
+console.log('Object.prototype.__proto__ === null:', Object.prototype.__proto__ === null);
+```
+
+**Summary Table:**
+
+| Aspect | `__proto__` | `prototype` |
+|--------|-------------|-------------|
+| **Location** | On object instances | On constructor functions |
+| **Purpose** | Points to object's prototype | Defines prototype for new instances |
+| **Access** | `obj.__proto__` | `Constructor.prototype` |
+| **Modification** | `obj.__proto__ = newProto` | `Constructor.prototype = newProto` |
+| **Modern Alternative** | `Object.getPrototypeOf(obj)` | Still `Constructor.prototype` |
+| **Available On** | All objects | Only functions |
+| **Used For** | Property lookup | Inheritance setup |
+
+**Best Practices:**
+1. Use `Object.getPrototypeOf()` instead of `__proto__`
+2. Use `Object.setPrototypeOf()` instead of `__proto__ =`
+3. Modify `prototype` for inheritance setup
+4. Don't modify `__proto__` directly
+5. Understand that ES6 classes use prototypes under the hood
+
+**Related Questions:** [Prototypes](#26-what-are-prototypes-in-javascript), [Prototypal Inheritance](#27-how-does-prototypal-inheritance-work), [ES6 Classes](#29-how-do-es6-classes-relate-to-prototypes)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 29. How do ES6 classes relate to prototypes?
+
+ES6 classes are **syntactic sugar** over JavaScript's existing prototype-based inheritance. They provide a cleaner syntax but still use prototypes under the hood.
+
+**Class Syntax vs Prototype:**
+
+**1. Basic Class Declaration:**
+```javascript
+// ES6 Class
+class Person {
+    constructor(name, age) {
+        this.name = name;
+        this.age = age;
+    }
+    
+    greet() {
+        return `Hello, I'm ${this.name}`;
+    }
+    
+    getAge() {
+        return this.age;
+    }
+}
+
+// Equivalent Constructor Function
+function Person(name, age) {
+    this.name = name;
+    this.age = age;
+}
+
+Person.prototype.greet = function() {
+    return `Hello, I'm ${this.name}`;
+};
+
+Person.prototype.getAge = function() {
+    return this.age;
+};
+
+// Both create the same prototype structure
+const john1 = new Person('John', 30); // Class
+const john2 = new Person('John', 30); // Constructor
+
+console.log(john1.__proto__ === Person.prototype); // true
+console.log(john2.__proto__ === Person.prototype); // true
+console.log(john1.greet === john2.greet); // true
+```
+
+**2. Class Inheritance:**
+```javascript
+// ES6 Class Inheritance
+class Animal {
+    constructor(name) {
+        this.name = name;
+    }
+    
+    makeSound() {
+        return 'Some generic sound';
+    }
+}
+
+class Dog extends Animal {
+    constructor(name, breed) {
+        super(name);
+        this.breed = breed;
+    }
+    
+    makeSound() {
+        return 'Woof! Woof!';
+    }
+    
+    fetch() {
+        return `${this.name} is fetching`;
+    }
+}
+
+// Equivalent Prototype Inheritance
+function Animal(name) {
+    this.name = name;
+}
+
+Animal.prototype.makeSound = function() {
+    return 'Some generic sound';
+};
+
+function Dog(name, breed) {
+    Animal.call(this, name);
+    this.breed = breed;
+}
+
+Dog.prototype = Object.create(Animal.prototype);
+Dog.prototype.constructor = Dog;
+
+Dog.prototype.makeSound = function() {
+    return 'Woof! Woof!';
+};
+
+Dog.prototype.fetch = function() {
+    return `${this.name} is fetching`;
+};
+```
+
+**3. Static Methods:**
+```javascript
+// ES6 Class with Static Methods
+class MathUtils {
+    static add(a, b) {
+        return a + b;
+    }
+    
+    static multiply(a, b) {
+        return a * b;
+    }
+}
+
+// Equivalent Constructor Function
+function MathUtils() {}
+
+MathUtils.add = function(a, b) {
+    return a + b;
+};
+
+MathUtils.multiply = function(a, b) {
+    return a * b;
+};
+
+// Usage is identical
+console.log(MathUtils.add(2, 3)); // 5
+console.log(MathUtils.multiply(4, 5)); // 20
+```
+
+**4. Getters and Setters:**
+```javascript
+// ES6 Class with Getters/Setters
+class Person {
+    constructor(firstName, lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+    
+    get fullName() {
+        return `${this.firstName} ${this.lastName}`;
+    }
+    
+    set fullName(name) {
+        [this.firstName, this.lastName] = name.split(' ');
+    }
+}
+
+// Equivalent with Object.defineProperty
+function Person(firstName, lastName) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+}
+
+Object.defineProperty(Person.prototype, 'fullName', {
+    get: function() {
+        return `${this.firstName} ${this.lastName}`;
+    },
+    set: function(name) {
+        [this.firstName, this.lastName] = name.split(' ');
+    },
+    enumerable: true,
+    configurable: true
+});
+
+const person = new Person('John', 'Doe');
+console.log(person.fullName); // "John Doe"
+person.fullName = 'Jane Smith';
+console.log(person.firstName); // "Jane"
+```
+
+**5. Private Fields (ES2022):**
+```javascript
+// ES6 Class with Private Fields
+class BankAccount {
+    #balance = 0;
+    #accountNumber;
+    
+    constructor(accountNumber, initialBalance = 0) {
+        this.#accountNumber = accountNumber;
+        this.#balance = initialBalance;
+    }
+    
+    deposit(amount) {
+        this.#balance += amount;
+        return this.#balance;
+    }
+    
+    getBalance() {
+        return this.#balance;
+    }
+}
+
+// Private fields are not accessible outside the class
+const account = new BankAccount('12345', 1000);
+console.log(account.getBalance()); // 1000
+// console.log(account.#balance); // SyntaxError: Private field '#balance' must be declared in an enclosing class
+```
+
+**6. Class Methods vs Prototype Methods:**
+```javascript
+class Person {
+    constructor(name) {
+        this.name = name;
+    }
+    
+    // Instance method (goes to prototype)
+    greet() {
+        return `Hello, I'm ${this.name}`;
+    }
+    
+    // Static method (goes to constructor)
+    static createAnonymous() {
+        return new Person('Anonymous');
+    }
+}
+
+const john = new Person('John');
+
+// Instance method is on prototype
+console.log(john.greet); // function - from Person.prototype
+console.log(john.__proto__.greet); // function - same thing
+
+// Static method is on constructor
+console.log(Person.createAnonymous); // function - from Person
+console.log(john.createAnonymous); // undefined - not on instance
+```
+
+**7. Class Hoisting:**
+```javascript
+// Classes are NOT hoisted like functions
+// console.log(MyClass); // ReferenceError: Cannot access 'MyClass' before initialization
+
+class MyClass {
+    constructor() {
+        this.value = 42;
+    }
+}
+
+// Functions ARE hoisted
+console.log(MyFunction); // function MyFunction() { ... }
+
+function MyFunction() {
+    this.value = 42;
+}
+```
+
+**8. Class vs Constructor Function:**
+```javascript
+// Class
+class Person {
+    constructor(name) {
+        this.name = name;
+    }
+}
+
+// Constructor Function
+function Person(name) {
+    this.name = name;
+}
+
+// Both create similar objects, but classes have stricter behavior
+const classInstance = new Person('John');
+const funcInstance = new Person('John');
+
+console.log(classInstance instanceof Person); // true
+console.log(funcInstance instanceof Person); // true
+
+// Classes must be called with 'new'
+// Person('John'); // TypeError: Class constructor Person cannot be invoked without 'new'
+
+// Constructor functions can be called without 'new' (though not recommended)
+const funcInstance2 = Person('Jane'); // Works, but 'this' refers to global object
+```
+
+**9. Class Inheritance Chain:**
+```javascript
+class Animal {
+    constructor(name) {
+        this.name = name;
+    }
+}
+
+class Dog extends Animal {
+    constructor(name, breed) {
+        super(name);
+        this.breed = breed;
+    }
+}
+
+const buddy = new Dog('Buddy', 'Golden Retriever');
+
+// Prototype chain: buddy -> Dog.prototype -> Animal.prototype -> Object.prototype -> null
+console.log(buddy.__proto__ === Dog.prototype); // true
+console.log(Dog.prototype.__proto__ === Animal.prototype); // true
+console.log(Animal.prototype.__proto__ === Object.prototype); // true
+
+// instanceof works with classes
+console.log(buddy instanceof Dog); // true
+console.log(buddy instanceof Animal); // true
+console.log(buddy instanceof Object); // true
+```
+
+**10. Mixins with Classes:**
+```javascript
+// Mixin functions
+const Flyable = {
+    fly() {
+        return `${this.name} is flying`;
+    }
+};
+
+const Swimmable = {
+    swim() {
+        return `${this.name} is swimming`;
+    }
+};
+
+// Mixin helper function
+function mixin(target, ...sources) {
+    Object.assign(target.prototype, ...sources);
+}
+
+class Animal {
+    constructor(name) {
+        this.name = name;
+    }
+}
+
+class Duck extends Animal {
+    constructor(name) {
+        super(name);
+    }
+}
+
+// Apply mixins
+mixin(Duck, Flyable, Swimmable);
+
+const donald = new Duck('Donald');
+console.log(donald.fly()); // "Donald is flying"
+console.log(donald.swim()); // "Donald is swimming"
+```
+
+**Key Differences:**
+
+| Feature | ES6 Classes | Constructor Functions |
+|---------|-------------|----------------------|
+| **Syntax** | Clean, familiar | Verbose |
+| **Hoisting** | Not hoisted | Hoisted |
+| **Strict Mode** | Always in strict mode | Depends on context |
+| **Call without `new`** | Throws error | Works (but problematic) |
+| **Private Fields** | Supported (ES2022) | Not supported |
+| **Super** | Built-in `super` keyword | Manual `Parent.call(this)` |
+| **Prototype** | Still uses prototypes | Uses prototypes |
+
+**Best Practices:**
+1. Use classes for cleaner syntax
+2. Remember that classes are still prototypes under the hood
+3. Use `super()` in child constructors
+4. Prefer composition over deep inheritance
+5. Use private fields for encapsulation
+6. Don't forget that classes are not hoisted
+
+**Related Questions:** [Prototypes](#26-what-are-prototypes-in-javascript), [Prototypal Inheritance](#27-how-does-prototypal-inheritance-work), [Prototype Chain](#30-what-is-the-prototype-chain)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 30. What is the prototype chain?
+
+The **prototype chain** is the mechanism by which JavaScript objects inherit properties and methods from other objects. When a property is accessed on an object, JavaScript searches up the prototype chain until it finds the property or reaches the end of the chain.
+
+**How the Prototype Chain Works:**
+
+**1. Basic Chain Structure:**
+```javascript
+const obj = {};
+console.log(obj.__proto__); // Object.prototype
+console.log(obj.__proto__.__proto__); // null
+
+// Chain: obj -> Object.prototype -> null
+```
+
+**2. Property Lookup Process:**
+```javascript
+function Person(name) {
+    this.name = name;
+}
+
+Person.prototype.species = 'Homo sapiens';
+Person.prototype.greet = function() {
+    return `Hello, I'm ${this.name}`;
+};
+
+const john = new Person('John');
+
+// Property lookup follows this order:
+// 1. Check instance properties
+console.log(john.name); // "John" - found in instance
+
+// 2. Check Person.prototype
+console.log(john.species); // "Homo sapiens" - found in prototype
+
+// 3. Check Object.prototype
+console.log(john.toString); // function - found in Object.prototype
+
+// 4. Continue until null
+console.log(john.nonExistent); // undefined - not found anywhere
+```
+
+**3. Inheritance Chain:**
+```javascript
+function Animal(name) {
+    this.name = name;
+}
+
+Animal.prototype.eat = function() {
+    return `${this.name} is eating`;
+};
+
+function Dog(name, breed) {
+    Animal.call(this, name);
+    this.breed = breed;
+}
+
+Dog.prototype = Object.create(Animal.prototype);
+Dog.prototype.constructor = Dog;
+
+Dog.prototype.bark = function() {
+    return 'Woof!';
+};
+
+const buddy = new Dog('Buddy', 'Golden Retriever');
+
+// Chain: buddy -> Dog.prototype -> Animal.prototype -> Object.prototype -> null
+console.log(buddy.breed); // "Golden Retriever" - instance property
+console.log(buddy.bark()); // "Woof!" - Dog.prototype
+console.log(buddy.eat()); // "Buddy is eating" - Animal.prototype
+console.log(buddy.toString()); // "[object Object]" - Object.prototype
+```
+
+**4. Chain Visualization:**
+```javascript
+function Person(name) {
+    this.name = name;
+}
+
+Person.prototype.species = 'Homo sapiens';
+
+const john = new Person('John');
+
+// Visualize the entire chain
+let current = john;
+let level = 0;
+
+while (current !== null) {
+    console.log(`Level ${level}:`, current.constructor.name);
+    console.log('Own properties:', Object.getOwnPropertyNames(current));
+    current = Object.getPrototypeOf(current);
+    level++;
+}
+
+// Output:
+// Level 0: Person
+// Own properties: ['name']
+// Level 1: Object
+// Own properties: ['constructor', 'species', 'greet', ...]
+// Level 2: null
+```
+
+**5. Method Overriding:**
+```javascript
+function Animal(name) {
+    this.name = name;
+}
+
+Animal.prototype.makeSound = function() {
+    return 'Some generic sound';
+};
+
+function Dog(name) {
+    Animal.call(this, name);
+}
+
+Dog.prototype = Object.create(Animal.prototype);
+Dog.prototype.constructor = Dog;
+
+// Override parent method
+Dog.prototype.makeSound = function() {
+    return 'Woof! Woof!';
+};
+
+const buddy = new Dog('Buddy');
+
+// JavaScript finds the method in Dog.prototype first
+console.log(buddy.makeSound()); // "Woof! Woof!" - from Dog.prototype
+
+// Access parent method explicitly
+console.log(Animal.prototype.makeSound.call(buddy)); // "Some generic sound"
+```
+
+**6. Property Shadowing:**
+```javascript
+function Person(name) {
+    this.name = name;
+}
+
+Person.prototype.species = 'Homo sapiens';
+
+const john = new Person('John');
+
+// Instance property shadows prototype property
+john.species = 'Alien';
+
+console.log(john.species); // "Alien" - instance property
+console.log(john.__proto__.species); // "Homo sapiens" - prototype property
+
+// Check if property is own or inherited
+console.log(john.hasOwnProperty('species')); // true - own property
+console.log(john.hasOwnProperty('name')); // true - own property
+console.log(john.hasOwnProperty('toString')); // false - inherited
+```
+
+**7. Chain Modification:**
+```javascript
+const obj = { a: 1 };
+const proto = { b: 2 };
+const grandProto = { c: 3 };
+
+// Set up chain: obj -> proto -> grandProto -> Object.prototype -> null
+Object.setPrototypeOf(obj, proto);
+Object.setPrototypeOf(proto, grandProto);
+
+console.log(obj.a); // 1 - own property
+console.log(obj.b); // 2 - from proto
+console.log(obj.c); // 3 - from grandProto
+console.log(obj.toString); // function - from Object.prototype
+```
+
+**8. Built-in Object Chains:**
+```javascript
+const arr = [1, 2, 3];
+
+// Array prototype chain
+console.log(arr.__proto__ === Array.prototype); // true
+console.log(Array.prototype.__proto__ === Object.prototype); // true
+console.log(Object.prototype.__proto__ === null); // true
+
+// String prototype chain
+const str = 'hello';
+console.log(str.__proto__ === String.prototype); // true
+console.log(String.prototype.__proto__ === Object.prototype); // true
+
+// Function prototype chain
+function fn() {}
+console.log(fn.__proto__ === Function.prototype); // true
+console.log(Function.prototype.__proto__ === Object.prototype); // true
+```
+
+**9. Chain Inspection Methods:**
+```javascript
+function Person(name) {
+    this.name = name;
+}
+
+Person.prototype.species = 'Homo sapiens';
+
+const john = new Person('John');
+
+// Check if property exists in chain
+console.log('name' in john); // true - own property
+console.log('species' in john); // true - inherited
+console.log('toString' in john); // true - inherited from Object.prototype
+
+// Get property descriptor
+console.log(Object.getOwnPropertyDescriptor(john, 'name'));
+// { value: 'John', writable: true, enumerable: true, configurable: true }
+
+// List all properties in chain
+function getAllProperties(obj) {
+    const props = [];
+    let current = obj;
+    
+    while (current !== null) {
+        props.push(...Object.getOwnPropertyNames(current));
+        current = Object.getPrototypeOf(current);
+    }
+    
+    return [...new Set(props)]; // Remove duplicates
+}
+
+console.log(getAllProperties(john));
+// ['name', 'constructor', 'species', 'greet', 'toString', 'valueOf', ...]
+```
+
+**10. Performance Considerations:**
+```javascript
+// Deep prototype chains can impact performance
+function createDeepChain(depth) {
+    let current = {};
+    
+    for (let i = 0; i < depth; i++) {
+        const newObj = { [`level${i}`]: i };
+        Object.setPrototypeOf(newObj, current);
+        current = newObj;
+    }
+    
+    return current;
+}
+
+const deepObj = createDeepChain(1000);
+
+// Accessing properties deep in the chain is slower
+console.time('deep property access');
+for (let i = 0; i < 10000; i++) {
+    deepObj.level999; // Access property deep in chain
+}
+console.timeEnd('deep property access');
+
+// Shallow chains are faster
+const shallowObj = { a: 1, b: 2, c: 3 };
+console.time('shallow property access');
+for (let i = 0; i < 10000; i++) {
+    shallowObj.a; // Access own property
+}
+console.timeEnd('shallow property access');
+```
+
+**11. Common Chain Patterns:**
+
+**Single Inheritance:**
+```javascript
+function Vehicle(make, model) {
+    this.make = make;
+    this.model = model;
+}
+
+Vehicle.prototype.start = function() {
+    return `${this.make} ${this.model} is starting`;
+};
+
+function Car(make, model, doors) {
+    Vehicle.call(this, make, model);
+    this.doors = doors;
+}
+
+Car.prototype = Object.create(Vehicle.prototype);
+Car.prototype.constructor = Car;
+
+Car.prototype.honk = function() {
+    return 'Beep! Beep!';
+};
+```
+
+**Multiple Inheritance (Mixins):**
+```javascript
+const Flyable = {
+    fly() {
+        return `${this.name} is flying`;
+    }
+};
+
+const Swimmable = {
+    swim() {
+        return `${this.name} is swimming`;
+    }
+};
+
+function Duck(name) {
+    this.name = name;
+}
+
+// Mix in capabilities
+Object.assign(Duck.prototype, Flyable, Swimmable);
+
+const donald = new Duck('Donald');
+console.log(donald.fly()); // "Donald is flying"
+console.log(donald.swim()); // "Donald is swimming"
+```
+
+**12. Chain Debugging:**
+```javascript
+function debugPrototypeChain(obj, name = 'Object') {
+    console.log(`\n=== ${name} Prototype Chain ===`);
+    
+    let current = obj;
+    let level = 0;
+    
+    while (current !== null) {
+        console.log(`Level ${level}:`, current.constructor.name);
+        console.log('Properties:', Object.getOwnPropertyNames(current));
+        
+        if (level > 10) { // Prevent infinite loops
+            console.log('... (chain too deep, stopping)');
+            break;
+        }
+        
+        current = Object.getPrototypeOf(current);
+        level++;
+    }
+    
+    console.log('=== End Chain ===\n');
+}
+
+const testObj = { test: 'value' };
+debugPrototypeChain(testObj, 'Test Object');
+```
+
+**Key Concepts:**
+1. **Delegation**: Objects delegate property access to their prototype
+2. **Search Order**: Instance → Prototype → Prototype's prototype → ... → null
+3. **Shadowing**: Instance properties override prototype properties
+4. **Dynamic**: Chain is checked at runtime
+5. **Mutable**: Chain can be modified (though not recommended)
+
+**Best Practices:**
+1. Keep prototype chains shallow for better performance
+2. Use `hasOwnProperty()` to check for own properties
+3. Avoid modifying built-in prototype chains
+4. Use `Object.getPrototypeOf()` instead of `__proto__`
+5. Prefer composition over deep inheritance
+6. Be careful with circular references
+
+**Related Questions:** [Prototypes](#26-what-are-prototypes-in-javascript), [Prototypal Inheritance](#27-how-does-prototypal-inheritance-work), [__proto__ vs prototype](#28-whats-the-difference-between-__proto__-and-prototype)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
 
 ## Asynchronous JavaScript
 31. What are callbacks and what is callback hell?

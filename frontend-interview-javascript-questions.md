@@ -44,39 +44,30 @@
    - Prototype chain
 
 ### Asynchronous Programming
-6. [Asynchronous JavaScript](#asynchronous-javascript) - Questions 31-37
+6. [Asynchronous JavaScript](#asynchronous-javascript) - Questions 31-35
    - Callbacks and callback hell
    - Promises and their methods
    - async/await syntax
    - Event Loop mechanism
    - Microtasks vs macrotasks
-   - Error handling in async code
-   - Promise.all(), Promise.race(), Promise.allSettled()
 
 ### DOM and Browser APIs
-7. [Event Handling](#event-handling) - Questions 38-42
+7. [Event Handling](#event-handling) - Questions 36-40
    - JavaScript event handling
    - Event bubbling and capturing
    - Event delegation
    - Preventing default behavior
    - addEventListener vs onclick
 
-8. [DOM Manipulation](#dom-manipulation) - Questions 43-47
+8. [DOM Manipulation](#dom-manipulation) - Questions 41-45
    - DOM element selection
    - Creating, modifying, removing elements
    - innerHTML vs textContent vs innerText
    - Form validation
    - document.ready vs window.onload
 
-9. [Browser APIs](#browser-apis) - Questions 70-74
-   - localStorage vs sessionStorage vs cookies
-   - Fetch API
-   - Web Workers
-   - Geolocation API
-   - History API
-
 ### Modern JavaScript
-10. [ES6+ Features](#es6-features) - Questions 48-54
+9. [ES6+ Features](#es6-features) - Questions 46-52
     - Template literals
     - Default parameters
     - Modules and import/export
@@ -85,21 +76,14 @@
     - Generators and iterators
     - for...of vs for...in loops
 
-11. [Modern JavaScript Tools](#modern-javascript-tools) - Questions 83-87
-    - npm and package.json
-    - Build tools (Webpack, Vite)
-    - Babel transpiler
-    - ESLint linting
-    - Development vs production builds
-
 ### Error Handling and Performance
-12. [Error Handling](#error-handling) - Questions 55-58
+10. [Error Handling](#error-handling) - Questions 53-56
     - JavaScript error handling
     - Throwing and catching errors
     - Error types in JavaScript
     - Custom error types
 
-13. [Performance and Optimization](#performance-and-optimization) - Questions 59-63
+11. [Performance and Optimization](#performance-and-optimization) - Questions 57-61
     - Performance optimization techniques
     - Memory leak prevention
     - Debouncing and throttling
@@ -107,7 +91,7 @@
     - Lazy loading
 
 ### Advanced Topics
-14. [Advanced Concepts](#advanced-concepts) - Questions 64-69
+12. [Advanced Concepts](#advanced-concepts) - Questions 62-67
     - Memoization
     - Design patterns (Singleton, Observer, Module)
     - Functional programming
@@ -115,32 +99,51 @@
     - Pure functions
     - Recursion
 
-15. [Security](#security) - Questions 75-78
+13. [Browser APIs](#browser-apis) - Questions 68-77
+    - localStorage vs sessionStorage vs cookies
+    - Fetch API
+    - Web Workers
+    - Geolocation API
+    - History API
+    - Service Worker API
+    - Progressive Web Apps
+    - Intersection Observer API
+    - Web Workers vs Service Workers (comparison)
+
+14. [Security](#security) - Questions 73-76
     - Cross-Site Scripting (XSS)
     - Cross-Site Request Forgery (CSRF)
     - Input sanitization
     - Content Security Policy (CSP)
 
-16. [Testing](#testing) - Questions 79-82
+15. [Testing](#testing) - Questions 77-80
     - Unit testing in JavaScript
     - Test-driven development (TDD)
     - Mocks and stubs
     - Testing asynchronous code
 
 ### Data Handling
-17. [Regular Expressions](#regular-expressions) - Questions 88-90
+16. [Regular Expressions](#regular-expressions) - Questions 81-84
     - Using regex in JavaScript
     - Common validation patterns
     - match, search, replace, test methods
 
-18. [JSON and Data Handling](#json-and-data-handling) - Questions 91-94
+17. [JSON and Data Handling](#json-and-data-handling) - Questions 85-88
     - Working with JSON
     - JSON.parse() vs JSON.stringify()
     - API response handling
     - CORS handling
 
+### Modern JavaScript Tools
+18. [Modern JavaScript Tools](#modern-javascript-tools) - Questions 89-93
+    - npm and package.json
+    - Build tools (Webpack, Vite)
+    - Babel transpiler
+    - ESLint linting
+    - Development vs production builds
+
 ### Practical Applications
-19. [Miscellaneous](#miscellaneous) - Questions 95-100
+19. [Miscellaneous](#miscellaneous) - Questions 94-99
     - Synchronous vs asynchronous code
     - Array checking methods
     - typeof operator limitations
@@ -148,7 +151,7 @@
     - slice, splice, split differences
     - Array and object sorting
 
-20. [Coding Challenges](#coding-challenges-common-interview-questions) - Questions 101-110
+20. [Coding Challenges](#coding-challenges-common-interview-questions) - Questions 100-109
     - String reversal
     - Palindrome checking
     - Array duplicate finding
@@ -158,7 +161,7 @@
     - Promise implementation
     - Array method implementations
 
-21. [Framework-Agnostic Frontend Concepts](#framework-agnostic-frontend-concepts) - Questions 111-120
+21. [Framework-Agnostic Frontend Concepts](#framework-agnostic-frontend-concepts) - Questions 110-119
     - Virtual DOM
     - Component-based architecture
     - State management
@@ -5446,103 +5449,9864 @@ debugPrototypeChain(testObj, 'Test Object');
 ---
 
 ## Asynchronous JavaScript
-31. What are callbacks and what is callback hell?
-32. What are Promises and how do they work?
-33. What is async/await and how does it differ from Promises?
-34. What is the Event Loop?
-35. What's the difference between microtasks and macrotasks?
-36. How do you handle errors in asynchronous code?
-37. What is Promise.all() vs Promise.race() vs Promise.allSettled()?
+
+### 31. What are callbacks and what is callback hell?
+
+**Callbacks** are functions that are passed as arguments to other functions and are executed at a later time, typically after an asynchronous operation completes. **Callback hell** refers to the deeply nested, hard-to-read code that results from chaining multiple asynchronous operations using callbacks.
+
+**Understanding Callbacks:**
+
+**1. Basic Callback Pattern:**
+```javascript
+// Synchronous callback
+function greet(name, callback) {
+    const message = `Hello, ${name}!`;
+    callback(message);
+}
+
+greet('John', function(message) {
+    console.log(message); // "Hello, John!"
+});
+
+// Asynchronous callback
+function fetchData(callback) {
+    setTimeout(() => {
+        const data = { id: 1, name: 'John' };
+        callback(data);
+    }, 1000);
+}
+
+fetchData(function(data) {
+    console.log(data); // { id: 1, name: 'John' } (after 1 second)
+});
+```
+
+**2. Common Callback Examples:**
+```javascript
+// Array methods with callbacks
+const numbers = [1, 2, 3, 4, 5];
+
+numbers.forEach(function(num) {
+    console.log(num * 2);
+});
+
+const doubled = numbers.map(function(num) {
+    return num * 2;
+});
+
+// DOM event callbacks
+document.addEventListener('click', function(event) {
+    console.log('Clicked:', event.target);
+});
+
+// Timer callbacks
+setTimeout(function() {
+    console.log('This runs after 2 seconds');
+}, 2000);
+```
+
+**3. Error-First Callback Pattern:**
+```javascript
+function readFile(filename, callback) {
+    setTimeout(() => {
+        if (filename === 'error.txt') {
+            callback(new Error('File not found'), null);
+        } else {
+            callback(null, `Content of ${filename}`);
+        }
+    }, 1000);
+}
+
+// Usage with error handling
+readFile('data.txt', function(error, data) {
+    if (error) {
+        console.error('Error:', error.message);
+        return;
+    }
+    console.log('Data:', data);
+});
+```
+
+**4. Callback Hell Problem:**
+```javascript
+// Nested callbacks become hard to read and maintain
+getUserData(function(user) {
+    getProfileData(user.id, function(profile) {
+        getSettingsData(profile.id, function(settings) {
+            getNotificationsData(settings.id, function(notifications) {
+                getMessagesData(notifications.id, function(messages) {
+                    // Deep nesting - hard to read and debug
+                    console.log('All data loaded:', {
+                        user, profile, settings, notifications, messages
+                    });
+                });
+            });
+        });
+    });
+});
+```
+
+**5. Solutions to Callback Hell:**
+
+**Named Functions:**
+```javascript
+function handleUserData(user) {
+    getProfileData(user.id, handleProfileData);
+}
+
+function handleProfileData(profile) {
+    getSettingsData(profile.id, handleSettingsData);
+}
+
+function handleSettingsData(settings) {
+    getNotificationsData(settings.id, handleMessagesData);
+}
+
+function handleMessagesData(messages) {
+    console.log('All data loaded:', messages);
+}
+
+// Much cleaner!
+getUserData(handleUserData);
+```
+
+**Promise-based Solution:**
+```javascript
+getUserData()
+    .then(user => getProfileData(user.id))
+    .then(profile => getSettingsData(profile.id))
+    .then(settings => getNotificationsData(settings.id))
+    .then(notifications => getMessagesData(notifications.id))
+    .then(messages => console.log('All data loaded:', messages))
+    .catch(error => console.error('Error:', error));
+```
+
+**Best Practices:**
+1. Use named functions instead of anonymous callbacks
+2. Implement error-first callback pattern
+3. Consider using Promises or async/await for complex flows
+4. Use Promise.all() for parallel operations
+5. Avoid deep nesting by breaking functions into smaller pieces
+
+**Related Questions:** [Promises](#32-what-are-promises-and-how-do-they-work), [Async/Await](#33-what-is-asyncawait-and-how-does-it-differ-from-promises)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 32. What are Promises and how do they work?
+
+**Promises** are objects that represent the eventual completion or failure of an asynchronous operation. They provide a cleaner way to handle asynchronous code compared to callbacks.
+
+**Promise States:**
+- **Pending**: Initial state, neither fulfilled nor rejected
+- **Fulfilled**: Operation completed successfully
+- **Rejected**: Operation failed
+
+**1. Creating Promises:**
+```javascript
+const promise = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        const success = Math.random() > 0.5;
+        if (success) {
+            resolve('Operation successful!');
+        } else {
+            reject(new Error('Operation failed!'));
+        }
+    }, 1000);
+});
+
+promise
+    .then(result => console.log(result))
+    .catch(error => console.error(error));
+```
+
+**2. Promise Methods:**
+```javascript
+const fetchData = () => {
+    return new Promise((resolve) => {
+        setTimeout(() => resolve({ id: 1, name: 'John' }), 1000);
+    });
+};
+
+fetchData()
+    .then(data => {
+        console.log('Data received:', data);
+        return data.id;
+    })
+    .then(id => console.log('ID:', id))
+    .catch(error => console.error('Error:', error))
+    .finally(() => console.log('Operation completed'));
+```
+
+**3. Chaining Promises:**
+```javascript
+getUser(1)
+    .then(user => {
+        console.log('User:', user);
+        return getProfile(user.id);
+    })
+    .then(profile => {
+        console.log('Profile:', profile);
+        return getSettings(profile.userId);
+    })
+    .then(settings => console.log('Settings:', settings))
+    .catch(error => console.error('Error in chain:', error));
+```
+
+**4. Promise.all() - Parallel Execution:**
+```javascript
+Promise.all([promise1, promise2, promise3])
+    .then(results => console.log('All completed:', results))
+    .catch(error => console.error('One failed:', error));
+```
+
+**5. Promise.race() - First to Complete:**
+```javascript
+const timeoutPromise = new Promise((_, reject) => 
+    setTimeout(() => reject(new Error('Timeout')), 5000)
+);
+
+Promise.race([dataPromise, timeoutPromise])
+    .then(data => console.log('Data received:', data))
+    .catch(error => console.error('Error:', error.message));
+```
+
+**6. Converting Callbacks to Promises:**
+```javascript
+function promisify(fn) {
+    return function(...args) {
+        return new Promise((resolve, reject) => {
+            fn(...args, (error, result) => {
+                if (error) reject(error);
+                else resolve(result);
+            });
+        });
+    };
+}
+
+const readFileAsync = promisify(readFile);
+readFileAsync('data.txt')
+    .then(data => console.log(data))
+    .catch(error => console.error(error.message));
+```
+
+**Best Practices:**
+1. Always handle errors with .catch() or try-catch
+2. Use Promise.all() for parallel operations
+3. Use Promise.race() for timeout patterns
+4. Prefer async/await for complex flows
+5. Convert callbacks to Promises for consistency
+
+**Related Questions:** [Callbacks](#31-what-are-callbacks-and-what-is-callback-hell), [Async/Await](#33-what-is-asyncawait-and-how-does-it-differ-from-promises)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 33. What is async/await and how does it differ from Promises?
+
+**async/await** is syntactic sugar built on top of Promises that makes asynchronous code look and behave more like synchronous code. It provides a cleaner, more readable way to work with Promises.
+
+**Key Differences:**
+
+**1. Syntax Comparison:**
+```javascript
+// Promise-based approach
+function fetchUserData(userId) {
+    return fetch(`/api/users/${userId}`)
+        .then(response => response.json())
+        .then(user => {
+            return fetch(`/api/profiles/${user.id}`)
+                .then(response => response.json())
+                .then(profile => ({ user, profile }));
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            throw error;
+        });
+}
+
+// async/await approach
+async function fetchUserData(userId) {
+    try {
+        const userResponse = await fetch(`/api/users/${userId}`);
+        const user = await userResponse.json();
+        
+        const profileResponse = await fetch(`/api/profiles/${user.id}`);
+        const profile = await profileResponse.json();
+        
+        return { user, profile };
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+```
+
+**2. Basic async/await Usage:**
+```javascript
+// async function always returns a Promise
+async function getData() {
+    return 'Hello World';
+}
+
+// Using await
+async function processData() {
+    const data = await getData();
+    console.log(data); // "Hello World"
+    return data.toUpperCase();
+}
+
+processData().then(result => console.log(result)); // "HELLO WORLD"
+```
+
+**3. Error Handling:**
+```javascript
+// Promise error handling
+riskyOperation()
+    .then(result => console.log(result))
+    .catch(error => console.error('Error:', error.message));
+
+// async/await error handling
+async function handleRiskyOperation() {
+    try {
+        const result = await riskyOperation();
+        console.log(result);
+    } catch (error) {
+        console.error('Error:', error.message);
+    }
+}
+```
+
+**4. Sequential vs Parallel Execution:**
+```javascript
+// Sequential execution (slower)
+async function sequentialExample() {
+    const user = await fetchUser();
+    const profile = await fetchProfile(user.id);
+    const settings = await fetchSettings(profile.id);
+    return { user, profile, settings };
+}
+
+// Parallel execution (faster)
+async function parallelExample() {
+    const [user, profile, settings] = await Promise.all([
+        fetchUser(),
+        fetchProfile(1),
+        fetchSettings(1)
+    ]);
+    return { user, profile, settings };
+}
+```
+
+**5. Common Patterns:**
+```javascript
+// Retry pattern
+async function retryOperation(fn, maxAttempts = 3) {
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        try {
+            return await fn();
+        } catch (error) {
+            if (attempt === maxAttempts) throw error;
+            await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+        }
+    }
+}
+
+// Timeout pattern
+async function withTimeout(promise, timeoutMs) {
+    const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Timeout')), timeoutMs)
+    );
+    return Promise.race([promise, timeoutPromise]);
+}
+```
+
+**Best Practices:**
+1. Use async/await for complex asynchronous flows
+2. Always handle errors with try-catch
+3. Use Promise.all() for parallel operations
+4. Don't forget the await keyword
+5. Use Promise.race() for timeout patterns
+
+**Related Questions:** [Promises](#32-what-are-promises-and-how-do-they-work), [Event Loop](#34-what-is-the-event-loop)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 34. What is the Event Loop?
+
+The **Event Loop** is the mechanism that allows JavaScript to handle asynchronous operations despite being single-threaded. It manages the execution of code, handling events, and processing callbacks.
+
+**How the Event Loop Works:**
+
+**1. JavaScript Runtime Components:**
+```javascript
+// JavaScript runtime consists of:
+// 1. Call Stack - where function calls are executed
+// 2. Web APIs - browser APIs (setTimeout, DOM, etc.)
+// 3. Task Queue (Macrotask Queue) - for callbacks
+// 4. Microtask Queue - for Promises and other microtasks
+// 5. Event Loop - coordinates everything
+
+console.log('1. Start');
+setTimeout(() => console.log('2. Timeout'), 0);
+Promise.resolve().then(() => console.log('3. Promise'));
+console.log('4. End');
+
+// Output:
+// 1. Start
+// 4. End
+// 3. Promise
+// 2. Timeout
+```
+
+**2. Microtasks vs Macrotasks:**
+```javascript
+console.log('1. Start');
+
+// Macrotask
+setTimeout(() => console.log('2. Timeout (Macrotask)'), 0);
+
+// Microtask
+Promise.resolve().then(() => console.log('3. Promise (Microtask)'));
+
+// Microtask
+queueMicrotask(() => console.log('4. queueMicrotask (Microtask)'));
+
+console.log('5. End');
+
+// Output:
+// 1. Start
+// 5. End
+// 3. Promise (Microtask)
+// 4. queueMicrotask (Microtask)
+// 2. Timeout (Macrotask)
+```
+
+**3. Event Loop Phases:**
+```javascript
+// 1. Execute all synchronous code
+console.log('Sync code');
+
+// 2. Execute all microtasks
+Promise.resolve().then(() => console.log('Microtask 1'));
+queueMicrotask(() => console.log('Microtask 2'));
+
+// 3. Execute one macrotask
+setTimeout(() => console.log('Macrotask 1'), 0);
+
+// 4. Repeat: microtasks → one macrotask → microtasks → one macrotask...
+```
+
+**Key Concepts:**
+1. **Single-threaded**: JavaScript has one call stack
+2. **Non-blocking**: Uses callbacks and promises for async operations
+3. **Event-driven**: Responds to events and callbacks
+4. **Microtasks have priority**: Execute before macrotasks
+5. **Call stack must be empty**: Before processing queues
+
+**Best Practices:**
+1. Avoid blocking the call stack with long-running operations
+2. Use setTimeout(0) to yield control back to the event loop
+3. Use requestAnimationFrame for smooth animations
+4. Be aware of microtask vs macrotask priority
+5. Use Web Workers for CPU-intensive tasks
+
+**Related Questions:** [Microtasks vs Macrotasks](#35-whats-the-difference-between-microtasks-and-macrotasks), [Promises](#32-what-are-promises-and-how-do-they-work)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 35. What's the difference between microtasks and macrotasks?
+
+**Microtasks** and **macrotasks** are two different queues in the JavaScript event loop that handle different types of asynchronous operations. Microtasks have higher priority and execute before macrotasks.
+
+**Key Differences:**
+
+| Aspect | Microtasks | Macrotasks |
+|--------|------------|------------|
+| **Priority** | Higher (execute first) | Lower (execute after microtasks) |
+| **Queue** | Microtask Queue | Task Queue (Macrotask Queue) |
+| **Examples** | Promises, queueMicrotask(), MutationObserver | setTimeout, setInterval, DOM events, I/O |
+| **Execution** | All microtasks in queue | One macrotask at a time |
+
+**1. Basic Example:**
+```javascript
+console.log('1. Start');
+
+// Macrotask
+setTimeout(() => console.log('2. setTimeout (Macrotask)'), 0);
+
+// Microtask
+Promise.resolve().then(() => console.log('3. Promise (Microtask)'));
+
+// Microtask
+queueMicrotask(() => console.log('4. queueMicrotask (Microtask)'));
+
+console.log('5. End');
+
+// Output:
+// 1. Start
+// 5. End
+// 3. Promise (Microtask)
+// 4. queueMicrotask (Microtask)
+// 2. setTimeout (Macrotask)
+```
+
+**2. Microtask Examples:**
+```javascript
+// Promise.then()
+Promise.resolve().then(() => console.log('Promise microtask'));
+
+// queueMicrotask()
+queueMicrotask(() => console.log('queueMicrotask'));
+
+// async/await (creates microtasks)
+async function asyncFunction() {
+    await Promise.resolve();
+    console.log('async/await microtask');
+}
+```
+
+**3. Macrotask Examples:**
+```javascript
+// setTimeout
+setTimeout(() => console.log('setTimeout macrotask'), 0);
+
+// DOM events
+document.addEventListener('click', () => {
+    console.log('Click event macrotask');
+});
+
+// I/O operations
+fetch('/api/data').then(() => {
+    console.log('Fetch response macrotask');
+});
+```
+
+**4. Execution Order:**
+```javascript
+console.log('1. Synchronous');
+
+// Macrotasks
+setTimeout(() => console.log('2. setTimeout 1'), 0);
+setTimeout(() => console.log('3. setTimeout 2'), 0);
+
+// Microtasks
+Promise.resolve().then(() => console.log('4. Promise 1'));
+queueMicrotask(() => console.log('5. queueMicrotask 1'));
+
+console.log('6. Synchronous end');
+
+// Output:
+// 1. Synchronous
+// 6. Synchronous end
+// 4. Promise 1
+// 5. queueMicrotask 1
+// 2. setTimeout 1
+// 3. setTimeout 2
+```
+
+**Best Practices:**
+1. Use microtasks for immediate, high-priority operations
+2. Use macrotasks for non-critical, background operations
+3. Be careful not to create microtask storms
+4. Use setTimeout(0) to yield control back to the event loop
+5. Understand that microtasks can block macrotasks
+
+**Related Questions:** [Event Loop](#34-what-is-the-event-loop), [Promises](#32-what-are-promises-and-how-do-they-work), [Async/Await](#33-what-is-asyncawait-and-how-does-it-differ-from-promises)
 
 [⬆️ Back to Top](#table-of-contents)
 
 ## Event Handling
-38. How does event handling work in JavaScript?
-39. What is event bubbling and capturing?
-40. What is event delegation?
-41. How do you prevent default behavior and stop event propagation?
-42. What's the difference between `addEventListener` and `onclick`?
+
+### 36. How does event handling work in JavaScript?
+
+**Event handling** in JavaScript allows you to respond to user interactions and browser events. It involves registering event listeners that execute functions when specific events occur.
+
+**Basic Event Handling:**
+
+**1. addEventListener Method (Recommended):**
+```javascript
+// Basic event listener
+const button = document.getElementById('myButton');
+
+button.addEventListener('click', function(event) {
+    console.log('Button clicked!');
+    console.log('Event object:', event);
+});
+
+// Arrow function syntax
+button.addEventListener('click', (event) => {
+    console.log('Button clicked with arrow function!');
+});
+
+// Named function
+function handleClick(event) {
+    console.log('Button clicked with named function!');
+}
+
+button.addEventListener('click', handleClick);
+```
+
+**2. Event Object:**
+```javascript
+button.addEventListener('click', function(event) {
+    console.log('Event type:', event.type); // 'click'
+    console.log('Target element:', event.target); // The button element
+    console.log('Current target:', event.currentTarget); // The button element
+    console.log('Event phase:', event.eventPhase); // 2 (bubbling phase)
+    console.log('Time stamp:', event.timeStamp); // When the event occurred
+    console.log('Default prevented:', event.defaultPrevented); // false
+});
+```
+
+**3. Different Event Types:**
+```javascript
+// Mouse events
+button.addEventListener('click', handleClick);
+button.addEventListener('dblclick', handleDoubleClick);
+button.addEventListener('mousedown', handleMouseDown);
+button.addEventListener('mouseup', handleMouseUp);
+button.addEventListener('mouseover', handleMouseOver);
+button.addEventListener('mouseout', handleMouseOut);
+
+// Keyboard events
+document.addEventListener('keydown', handleKeyDown);
+document.addEventListener('keyup', handleKeyUp);
+document.addEventListener('keypress', handleKeyPress);
+
+// Form events
+const form = document.getElementById('myForm');
+form.addEventListener('submit', handleSubmit);
+form.addEventListener('reset', handleReset);
+
+const input = document.getElementById('myInput');
+input.addEventListener('input', handleInput);
+input.addEventListener('change', handleChange);
+input.addEventListener('focus', handleFocus);
+input.addEventListener('blur', handleBlur);
+
+// Window events
+window.addEventListener('load', handleLoad);
+window.addEventListener('resize', handleResize);
+window.addEventListener('scroll', handleScroll);
+```
+
+**4. Event Listener Options:**
+```javascript
+// Third parameter options
+button.addEventListener('click', handleClick, {
+    capture: false,        // Use capturing phase (default: false)
+    once: true,           // Remove listener after first execution
+    passive: false,       // Never call preventDefault() (default: false)
+    signal: abortSignal   // AbortController signal to remove listener
+});
+
+// Once option - removes listener after first execution
+button.addEventListener('click', handleClick, { once: true });
+
+// Capture phase
+button.addEventListener('click', handleClick, { capture: true });
+
+// Passive option for performance
+window.addEventListener('scroll', handleScroll, { passive: true });
+```
+
+**5. Removing Event Listeners:**
+```javascript
+// Remove with named function
+button.addEventListener('click', handleClick);
+button.removeEventListener('click', handleClick); // Must be same function reference
+
+// Remove with AbortController
+const controller = new AbortController();
+button.addEventListener('click', handleClick, { 
+    signal: controller.signal 
+});
+controller.abort(); // Removes the listener
+```
+
+**6. Event Handler Functions:**
+```javascript
+function handleClick(event) {
+    console.log('Button clicked!');
+    console.log('Event details:', {
+        type: event.type,
+        target: event.target,
+        clientX: event.clientX,
+        clientY: event.clientY,
+        button: event.button,
+        ctrlKey: event.ctrlKey,
+        shiftKey: event.shiftKey,
+        altKey: event.altKey
+    });
+}
+
+function handleKeyDown(event) {
+    console.log('Key pressed:', event.key);
+    console.log('Key code:', event.code);
+    console.log('Modifier keys:', {
+        ctrl: event.ctrlKey,
+        shift: event.shiftKey,
+        alt: event.altKey,
+        meta: event.metaKey
+    });
+}
+```
+
+**7. Event Delegation:**
+```javascript
+// Event delegation for dynamic content
+document.addEventListener('click', function(event) {
+    if (event.target.matches('.delete-button')) {
+        handleDelete(event);
+    } else if (event.target.matches('.edit-button')) {
+        handleEdit(event);
+    }
+});
+```
+
+**8. Custom Events:**
+```javascript
+// Create custom event
+const customEvent = new CustomEvent('myCustomEvent', {
+    detail: { message: 'Hello from custom event!' },
+    bubbles: true,
+    cancelable: true
+});
+
+// Listen for custom event
+button.addEventListener('myCustomEvent', function(event) {
+    console.log('Custom event received:', event.detail.message);
+});
+
+// Dispatch custom event
+button.dispatchEvent(customEvent);
+```
+
+**Best Practices:**
+1. Use `addEventListener` instead of `onclick` attributes
+2. Use event delegation for dynamic content
+3. Clean up event listeners to prevent memory leaks
+4. Use passive listeners for scroll and touch events
+5. Use named functions for easier debugging
+6. Consider using AbortController for cleanup
+
+**Related Questions:** [Event Bubbling and Capturing](#39-what-is-event-bubbling-and-capturing), [Event Delegation](#40-what-is-event-delegation)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 37. What is event bubbling and capturing?
+
+**Event bubbling** and **capturing** are two phases of event propagation in the DOM. They determine the order in which event handlers are executed when an event occurs on an element that has parent elements.
+
+**Event Propagation Phases:**
+
+**1. Capturing Phase (Phase 1):**
+- Events travel from the root element down to the target element
+- Parent elements receive the event before their children
+- Use `capture: true` in addEventListener to listen during this phase
+
+**2. Target Phase (Phase 2):**
+- The event reaches the target element
+- Event handlers on the target element are executed
+
+**3. Bubbling Phase (Phase 3):**
+- Events bubble up from the target element to the root
+- Child elements' events bubble up to their parents
+- This is the default behavior for most events
+
+**Basic Example:**
+```html
+<div id="grandparent">
+    <div id="parent">
+        <div id="child">Click me!</div>
+    </div>
+</div>
+```
+
+```javascript
+const grandparent = document.getElementById('grandparent');
+const parent = document.getElementById('parent');
+const child = document.getElementById('child');
+
+// Bubbling phase (default)
+child.addEventListener('click', () => console.log('Child clicked (bubbling)'));
+parent.addEventListener('click', () => console.log('Parent clicked (bubbling)'));
+grandparent.addEventListener('click', () => console.log('Grandparent clicked (bubbling)'));
+
+// Capturing phase
+child.addEventListener('click', () => console.log('Child clicked (capturing)'), { capture: true });
+parent.addEventListener('click', () => console.log('Parent clicked (capturing)'), { capture: true });
+grandparent.addEventListener('click', () => console.log('Grandparent clicked (capturing)'), { capture: true });
+
+// Clicking the child element outputs:
+// Grandparent clicked (capturing)
+// Parent clicked (capturing)
+// Child clicked (capturing)
+// Child clicked (bubbling)
+// Parent clicked (bubbling)
+// Grandparent clicked (bubbling)
+```
+
+**2. Event Object Properties:**
+```javascript
+function handleEvent(event) {
+    console.log('Event phase:', event.eventPhase);
+    // 1 = CAPTURING_PHASE
+    // 2 = AT_TARGET
+    // 3 = BUBBLING_PHASE
+    
+    console.log('Target:', event.target); // Element that triggered the event
+    console.log('Current target:', event.currentTarget); // Element with the listener
+    console.log('Bubbles:', event.bubbles); // Whether event bubbles
+    console.log('Cancelable:', event.cancelable); // Whether event can be cancelled
+}
+```
+
+**3. Stopping Event Propagation:**
+```javascript
+// stopPropagation() - stops event from propagating further
+child.addEventListener('click', function(event) {
+    console.log('Child clicked');
+    event.stopPropagation(); // Stops bubbling/capturing
+});
+
+// stopImmediatePropagation() - stops event and other listeners on same element
+child.addEventListener('click', function(event) {
+    console.log('First listener');
+    event.stopImmediatePropagation(); // Stops other listeners on child
+});
+
+child.addEventListener('click', function(event) {
+    console.log('Second listener'); // This won't execute
+});
+```
+
+**4. Events That Don't Bubble:**
+```javascript
+// These events don't bubble by default
+const input = document.getElementById('myInput');
+
+input.addEventListener('focus', handleFocus); // Doesn't bubble
+input.addEventListener('blur', handleBlur);   // Doesn't bubble
+input.addEventListener('load', handleLoad);   // Doesn't bubble
+input.addEventListener('unload', handleUnload); // Doesn't bubble
+
+// Check if event bubbles
+function handleEvent(event) {
+    console.log('Event bubbles:', event.bubbles);
+}
+```
+
+**5. Practical Examples:**
+
+**Event Delegation with Bubbling:**
+```javascript
+// Instead of adding listeners to each button
+document.addEventListener('click', function(event) {
+    if (event.target.matches('.delete-btn')) {
+        handleDelete(event);
+    } else if (event.target.matches('.edit-btn')) {
+        handleEdit(event);
+    }
+});
+
+// Modal close on backdrop click
+modal.addEventListener('click', function(event) {
+    if (event.target === modal) {
+        closeModal();
+    }
+});
+```
+
+**Capturing for Early Intervention:**
+```javascript
+// Prevent all clicks on a specific container during capturing
+container.addEventListener('click', function(event) {
+    event.stopPropagation();
+    console.log('Click prevented on container');
+}, { capture: true });
+```
+
+**Best Practices:**
+1. Use event delegation for dynamic content
+2. Understand which events bubble and which don't
+3. Use `stopPropagation()` carefully - it can break other functionality
+4. Use capturing phase for early intervention
+5. Consider performance implications of event propagation
+
+**Related Questions:** [Event Delegation](#40-what-is-event-delegation), [Preventing Default Behavior](#41-how-do-you-prevent-default-behavior-and-stop-event-propagation)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 38. What is event delegation?
+
+**Event delegation** is a technique where you attach a single event listener to a parent element to handle events for multiple child elements. This is particularly useful for dynamic content and improves performance.
+
+**How Event Delegation Works:**
+
+**1. Basic Event Delegation:**
+```html
+<ul id="todo-list">
+    <li class="todo-item" data-id="1">Buy groceries</li>
+    <li class="todo-item" data-id="2">Walk the dog</li>
+    <li class="todo-item" data-id="3">Read a book</li>
+</ul>
+```
+
+```javascript
+// Instead of adding listeners to each <li>
+const todoList = document.getElementById('todo-list');
+
+todoList.addEventListener('click', function(event) {
+    // Check if the clicked element is a todo item
+    if (event.target.classList.contains('todo-item')) {
+        const todoId = event.target.dataset.id;
+        console.log('Todo clicked:', todoId);
+        toggleTodo(todoId);
+    }
+});
+
+// Add new todo items dynamically
+function addTodo(text) {
+    const li = document.createElement('li');
+    li.className = 'todo-item';
+    li.dataset.id = Date.now();
+    li.textContent = text;
+    todoList.appendChild(li);
+    // No need to add event listener - delegation handles it!
+}
+```
+
+**2. Using matches() Method:**
+```javascript
+document.addEventListener('click', function(event) {
+    // Handle delete buttons
+    if (event.target.matches('.delete-btn')) {
+        handleDelete(event);
+    }
+    
+    // Handle edit buttons
+    if (event.target.matches('.edit-btn')) {
+        handleEdit(event);
+    }
+    
+    // Handle any button with data-action
+    if (event.target.matches('button[data-action]')) {
+        const action = event.target.dataset.action;
+        handleAction(action, event);
+    }
+    
+    // Handle links with specific class
+    if (event.target.matches('a.nav-link')) {
+        event.preventDefault();
+        handleNavigation(event);
+    }
+});
+```
+
+**3. Event Delegation with Closest():**
+```javascript
+document.addEventListener('click', function(event) {
+    // Find the closest element with a specific class
+    const card = event.target.closest('.card');
+    if (card) {
+        handleCardClick(card, event);
+    }
+    
+    // Find the closest form
+    const form = event.target.closest('form');
+    if (form) {
+        handleFormInteraction(form, event);
+    }
+    
+    // Find the closest item with data-id
+    const item = event.target.closest('[data-id]');
+    if (item) {
+        const id = item.dataset.id;
+        handleItemClick(id, event);
+    }
+});
+```
+
+**4. Performance Benefits:**
+```javascript
+// ❌ Inefficient - one listener per item
+function addListenersToItems() {
+    const items = document.querySelectorAll('.item');
+    items.forEach(item => {
+        item.addEventListener('click', handleItemClick);
+    });
+}
+
+// ✅ Efficient - one listener for all items
+document.addEventListener('click', function(event) {
+    if (event.target.matches('.item')) {
+        handleItemClick(event);
+    }
+});
+```
+
+**5. Event Delegation for Dynamic Content:**
+```javascript
+class TodoApp {
+    constructor() {
+        this.todos = [];
+        this.setupEventDelegation();
+    }
+    
+    setupEventDelegation() {
+        document.addEventListener('click', (event) => {
+            if (event.target.matches('.add-todo-btn')) {
+                this.addTodo();
+            } else if (event.target.matches('.delete-todo-btn')) {
+                this.deleteTodo(event.target.dataset.id);
+            } else if (event.target.matches('.toggle-todo-btn')) {
+                this.toggleTodo(event.target.dataset.id);
+            }
+        });
+        
+        document.addEventListener('change', (event) => {
+            if (event.target.matches('.todo-checkbox')) {
+                this.toggleTodo(event.target.dataset.id);
+            }
+        });
+    }
+    
+    addTodo() {
+        const input = document.getElementById('todo-input');
+        const text = input.value.trim();
+        if (text) {
+            const todo = { id: Date.now(), text, completed: false };
+            this.todos.push(todo);
+            this.renderTodo(todo);
+            input.value = '';
+        }
+    }
+    
+    renderTodo(todo) {
+        const container = document.getElementById('todo-container');
+        const todoElement = document.createElement('div');
+        todoElement.className = 'todo-item';
+        todoElement.dataset.id = todo.id;
+        todoElement.innerHTML = `
+            <input type="checkbox" class="todo-checkbox" data-id="${todo.id}">
+            <span class="todo-text">${todo.text}</span>
+            <button class="delete-todo-btn" data-id="${todo.id}">Delete</button>
+        `;
+        container.appendChild(todoElement);
+    }
+}
+```
+
+**Best Practices:**
+1. Use event delegation for dynamic content
+2. Use specific selectors to avoid conflicts
+3. Use `closest()` for complex DOM traversal
+traversal - a step-by-step search of tree elements by connections between ancestor nodes and descendant nodes is called tree traversal. It's assumed that each node will only be visited once during the traversal. Basically, it's the same as traversing any collection using a loop or recursion.
+
+4. Consider performance implications
+5. Test with different DOM structures
+6. Use `matches()` for flexible element selection
+
+**Related Questions:** [Event Bubbling and Capturing](#39-what-is-event-bubbling-and-capturing), [Preventing Default Behavior](#41-how-do-you-prevent-default-behavior-and-stop-event-propagation)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 39. How do you prevent default behavior and stop event propagation?
+
+**Preventing default behavior** and **stopping event propagation** are two different concepts that control how events behave in the DOM.
+
+**Preventing Default Behavior:**
+
+**1. preventDefault() Method:**
+```javascript
+// Prevent form submission
+const form = document.getElementById('myForm');
+form.addEventListener('submit', function(event) {
+    event.preventDefault();
+    console.log('Form submission prevented');
+    // Handle form data manually
+});
+
+// Prevent link navigation
+const link = document.getElementById('myLink');
+link.addEventListener('click', function(event) {
+    event.preventDefault();
+    console.log('Link navigation prevented');
+    // Handle navigation manually
+});
+
+// Prevent context menu
+document.addEventListener('contextmenu', function(event) {
+    event.preventDefault();
+    console.log('Right-click menu prevented');
+});
+```
+
+**2. Common Use Cases for preventDefault():**
+```javascript
+// Form validation
+form.addEventListener('submit', function(event) {
+    const input = document.getElementById('email');
+    if (!isValidEmail(input.value)) {
+        event.preventDefault();
+        showError('Please enter a valid email');
+    }
+});
+
+// Custom keyboard shortcuts
+document.addEventListener('keydown', function(event) {
+    if (event.ctrlKey && event.key === 's') {
+        event.preventDefault();
+        saveDocument();
+    }
+});
+
+// Prevent text selection
+document.addEventListener('selectstart', function(event) {
+    event.preventDefault();
+});
+```
+
+**Stopping Event Propagation:**
+
+**3. stopPropagation() Method:**
+```javascript
+const parent = document.getElementById('parent');
+const child = document.getElementById('child');
+
+// Child stops propagation
+child.addEventListener('click', function(event) {
+    console.log('Child clicked');
+    event.stopPropagation(); // Prevents parent from receiving event
+});
+
+parent.addEventListener('click', function(event) {
+    console.log('Parent clicked'); // This won't execute when child is clicked
+});
+
+// Only "Child clicked" will be logged
+```
+
+**4. stopImmediatePropagation() Method:**
+```javascript
+const button = document.getElementById('myButton');
+
+// First listener
+button.addEventListener('click', function(event) {
+    console.log('First listener');
+    event.stopImmediatePropagation(); // Stops other listeners on same element
+});
+
+// Second listener - won't execute
+button.addEventListener('click', function(event) {
+    console.log('Second listener'); // This won't execute
+});
+```
+
+**5. Practical Examples:**
+
+**Modal Implementation:**
+```javascript
+const modal = document.getElementById('modal');
+const closeBtn = document.getElementById('close-btn');
+
+// Close modal when clicking close button
+closeBtn.addEventListener('click', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    closeModal();
+});
+
+// Close modal when clicking backdrop
+modal.addEventListener('click', function(event) {
+    if (event.target === modal) {
+        closeModal();
+    }
+});
+
+// Prevent modal from closing when clicking content
+const modalContent = document.getElementById('modal-content');
+modalContent.addEventListener('click', function(event) {
+    event.stopPropagation();
+});
+```
+
+**Best Practices:**
+1. Use `preventDefault()` to stop default browser behavior
+2. Use `stopPropagation()` to prevent event bubbling
+3. Use `stopImmediatePropagation()` to stop other listeners on the same element
+4. Be careful with `stopPropagation()` - it can break other functionality
+5. Test event handling thoroughly
+6. Consider accessibility when preventing default behavior
+
+**Related Questions:** [Event Bubbling and Capturing](#39-what-is-event-bubbling-and-capturing), [Event Delegation](#40-what-is-event-delegation)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 40. What's the difference between `addEventListener` and `onclick`?
+
+The main difference is that **`addEventListener`** allows multiple event listeners on the same element, while **`onclick`** only allows one. `addEventListener` also provides more control and options.
+
+**Key Differences:**
+
+| Aspect | `addEventListener` | `onclick` |
+|--------|-------------------|-----------|
+| **Multiple Listeners** | ✅ Supports multiple | ❌ Only one |
+| **Event Options** | ✅ Capture, passive, once | ❌ No options |
+| **Event Object** | ✅ Full event object | ✅ Basic event object |
+| **Removal** | ✅ `removeEventListener` | ✅ Set to `null` |
+| **Performance** | ✅ Better for many listeners | ⚠️ Good for single listener |
+| **Standards** | ✅ Modern standard | ⚠️ Legacy but still used |
+
+**1. Basic Usage:**
+```javascript
+const button = document.getElementById('myButton');
+
+// addEventListener - can add multiple listeners
+button.addEventListener('click', function(event) {
+    console.log('First click handler');
+});
+
+button.addEventListener('click', function(event) {
+    console.log('Second click handler');
+});
+
+// onclick - only one handler
+button.onclick = function(event) {
+    console.log('onclick handler');
+};
+
+// Adding another onclick overwrites the previous one
+button.onclick = function(event) {
+    console.log('New onclick handler'); // Previous handler is lost
+};
+```
+
+**2. Multiple Event Listeners:**
+```javascript
+const button = document.getElementById('myButton');
+
+// addEventListener - multiple listeners work
+button.addEventListener('click', handleClick1);
+button.addEventListener('click', handleClick2);
+button.addEventListener('click', handleClick3);
+
+// All three functions will execute when button is clicked
+
+// onclick - only the last one works
+button.onclick = handleClick1;
+button.onclick = handleClick2; // This overwrites handleClick1
+button.onclick = handleClick3; // This overwrites handleClick2
+
+// Only handleClick3 will execute
+```
+
+**3. Event Options:**
+```javascript
+const button = document.getElementById('myButton');
+
+// addEventListener with options
+button.addEventListener('click', handleClick, {
+    capture: true,        // Use capturing phase
+    once: true,          // Remove after first execution
+    passive: true        // Never call preventDefault()
+});
+
+// onclick has no options
+button.onclick = handleClick; // No additional options
+```
+
+**4. Event Removal:**
+```javascript
+const button = document.getElementById('myButton');
+
+// addEventListener - need exact function reference to remove
+function handleClick(event) {
+    console.log('Clicked');
+}
+
+button.addEventListener('click', handleClick);
+button.removeEventListener('click', handleClick); // Removed
+
+// onclick - set to null
+button.onclick = handleClick;
+button.onclick = null; // Removed
+```
+
+**5. Event Delegation:**
+```javascript
+// addEventListener - perfect for delegation
+document.addEventListener('click', function(event) {
+    if (event.target.matches('.delete-btn')) {
+        handleDelete(event);
+    } else if (event.target.matches('.edit-btn')) {
+        handleEdit(event);
+    }
+});
+
+// onclick - not suitable for delegation
+// Would need individual onclick handlers
+```
+
+**Best Practices:**
+1. Use `addEventListener` for new code
+2. Use `onclick` only for simple, single-handler cases
+3. Prefer `addEventListener` for event delegation
+4. Use `addEventListener` when you need event options
+5. Consider performance implications
+6. Use `addEventListener` for better maintainability
+
+**Related Questions:** [Event Handling](#38-how-does-event-handling-work-in-javascript), [Event Delegation](#40-what-is-event-delegation)
 
 [⬆️ Back to Top](#table-of-contents)
 
 ## DOM Manipulation
-43. How do you select DOM elements?
-44. How do you create, modify, and remove DOM elements?
-45. What's the difference between `innerHTML`, `textContent`, and `innerText`?
-46. How do you handle form validation in JavaScript?
-47. What is the difference between `document.ready` and `window.onload`?
+
+### 41. How do you select DOM elements?
+
+**DOM element selection** is the process of finding and accessing HTML elements in the Document Object Model. JavaScript provides several methods to select elements based on different criteria.
+
+**1. getElementById():**
+```javascript
+// Select element by ID
+const element = document.getElementById('myId');
+console.log(element); // Returns the element or null
+
+// Example
+const header = document.getElementById('main-header');
+header.style.color = 'blue';
+```
+
+**2. getElementsByClassName():**
+```javascript
+// Select elements by class name
+const elements = document.getElementsByClassName('myClass');
+console.log(elements); // Returns HTMLCollection (live collection)
+
+// Access individual elements
+const firstElement = elements[0];
+const allElements = Array.from(elements); // Convert to array
+
+// Example
+const buttons = document.getElementsByClassName('btn');
+Array.from(buttons).forEach(button => {
+    button.addEventListener('click', handleClick);
+});
+```
+
+**3. getElementsByTagName():**
+```javascript
+// Select elements by tag name
+const elements = document.getElementsByTagName('div');
+console.log(elements); // Returns HTMLCollection
+
+// Example
+const paragraphs = document.getElementsByTagName('p');
+console.log(`Found ${paragraphs.length} paragraphs`);
+```
+
+**4. querySelector():**
+```javascript
+// Select first matching element
+const element = document.querySelector('#myId');
+const element2 = document.querySelector('.myClass');
+const element3 = document.querySelector('div.myClass');
+const element4 = document.querySelector('[data-id="123"]');
+
+// Complex selectors
+const element5 = document.querySelector('div > p:first-child');
+const element6 = document.querySelector('input[type="email"]');
+const element7 = document.querySelector('.parent .child:not(.hidden)');
+```
+
+**5. querySelectorAll():**
+```javascript
+// Select all matching elements
+const elements = document.querySelectorAll('.myClass');
+console.log(elements); // Returns NodeList (static collection)
+
+// Convert to array for easier manipulation
+const elementsArray = Array.from(elements);
+
+// Example
+const buttons = document.querySelectorAll('button[data-action]');
+buttons.forEach(button => {
+    button.addEventListener('click', handleAction);
+});
+```
+
+**6. Modern Selection Methods:**
+```javascript
+// Select by data attributes
+const element = document.querySelector('[data-id="123"]');
+const elements = document.querySelectorAll('[data-category="important"]');
+
+// Select by attribute values
+const emailInputs = document.querySelectorAll('input[type="email"]');
+const requiredFields = document.querySelectorAll('[required]');
+
+// Select by pseudo-classes
+const firstChild = document.querySelector('p:first-child');
+const lastChild = document.querySelector('li:last-child');
+const evenRows = document.querySelectorAll('tr:nth-child(even)');
+```
+
+**7. Selection within Elements:**
+```javascript
+const container = document.getElementById('container');
+
+// Select within specific element
+const child = container.querySelector('.child');
+const children = container.querySelectorAll('.child');
+
+// Select direct children only
+const directChildren = container.querySelectorAll(':scope > .child');
+```
+
+**8. Performance Considerations:**
+```javascript
+// Cache frequently used elements
+const header = document.getElementById('header');
+const nav = document.querySelector('nav');
+const main = document.querySelector('main');
+
+// Use specific selectors for better performance
+const specificElements = document.querySelectorAll('div.myClass'); // Better
+const allDivs = document.querySelectorAll('div'); // Less efficient
+
+// Use getElementById for single elements (fastest)
+const element = document.getElementById('myId'); // Fastest
+
+// Use querySelector for complex selectors
+const complexElement = document.querySelector('div.container > ul.list > li.item:first-child');
+```
+
+**9. Common Selection Patterns:**
+```javascript
+// Select form elements
+const form = document.querySelector('form');
+const inputs = form.querySelectorAll('input');
+const textInputs = form.querySelectorAll('input[type="text"]');
+const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+
+// Select navigation elements
+const navLinks = document.querySelectorAll('nav a');
+const activeLink = document.querySelector('nav a.active');
+
+// Select table elements
+const table = document.querySelector('table');
+const rows = table.querySelectorAll('tbody tr');
+const cells = table.querySelectorAll('td');
+
+// Select modal elements
+const modal = document.querySelector('.modal');
+const modalContent = modal.querySelector('.modal-content');
+const closeButton = modal.querySelector('.close-btn');
+```
+
+**10. Error Handling:**
+```javascript
+// Check if element exists
+const element = document.getElementById('myId');
+if (element) {
+    element.style.display = 'none';
+} else {
+    console.error('Element with ID "myId" not found');
+}
+
+// Safe selection with fallback
+function safeSelect(selector) {
+    const element = document.querySelector(selector);
+    if (!element) {
+        console.warn(`Element with selector "${selector}" not found`);
+        return null;
+    }
+    return element;
+}
+
+const element = safeSelect('#myId');
+if (element) {
+    // Use element safely
+    element.classList.add('active');
+}
+```
+
+**Best Practices:**
+1. Use `getElementById()` for single elements by ID (fastest)
+2. Use `querySelector()` for complex selectors
+3. Use `querySelectorAll()` for multiple elements
+4. Cache frequently used elements
+5. Check if elements exist before using them
+6. Use specific selectors for better performance
+7. Consider using `closest()` for finding parent elements
+
+**Related Questions:** [Creating and Modifying DOM Elements](#44-how-do-you-create-modify-and-remove-dom-elements), [Form Validation](#46-how-do-you-handle-form-validation-in-javascript)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 42. How do you create, modify, and remove DOM elements?
+
+**DOM manipulation** involves creating, modifying, and removing HTML elements dynamically using JavaScript. This is essential for building interactive web applications.
+
+**Creating DOM Elements:**
+
+**1. createElement():**
+```javascript
+// Create new element
+const div = document.createElement('div');
+const button = document.createElement('button');
+const input = document.createElement('input');
+
+// Set attributes
+div.id = 'myDiv';
+div.className = 'container';
+button.textContent = 'Click me';
+input.type = 'email';
+input.placeholder = 'Enter email';
+
+// Add to DOM
+document.body.appendChild(div);
+div.appendChild(button);
+div.appendChild(input);
+```
+
+**2. createTextNode():**
+```javascript
+// Create text node
+const textNode = document.createTextNode('Hello World');
+const paragraph = document.createElement('p');
+paragraph.appendChild(textNode);
+
+// Or use textContent (preferred)
+const paragraph2 = document.createElement('p');
+paragraph2.textContent = 'Hello World';
+```
+
+**3. createDocumentFragment():**
+```javascript
+// Create document fragment for better performance
+const fragment = document.createDocumentFragment();
+
+// Add multiple elements to fragment
+for (let i = 0; i < 1000; i++) {
+    const li = document.createElement('li');
+    li.textContent = `Item ${i}`;
+    fragment.appendChild(li);
+}
+
+// Add fragment to DOM (single reflow)
+const list = document.getElementById('myList');
+list.appendChild(fragment);
+```
+
+**Modifying DOM Elements:**
+
+**4. Content Modification:**
+```javascript
+const element = document.getElementById('myElement');
+
+// Text content
+element.textContent = 'New text content';
+element.innerText = 'New inner text'; // Respects styling
+element.innerHTML = '<strong>Bold text</strong>';
+
+// HTML content
+element.innerHTML = `
+    <h2>Title</h2>
+    <p>Paragraph with <em>emphasis</em></p>
+    <button>Click me</button>
+`;
+```
+
+**5. Attribute Modification:**
+```javascript
+const element = document.getElementById('myElement');
+
+// Set attributes
+element.setAttribute('id', 'newId');
+element.setAttribute('class', 'newClass');
+element.setAttribute('data-value', '123');
+
+// Get attributes
+const id = element.getAttribute('id');
+const className = element.getAttribute('class');
+
+// Remove attributes
+element.removeAttribute('data-value');
+
+// Check if attribute exists
+if (element.hasAttribute('data-value')) {
+    console.log('Attribute exists');
+}
+
+// Direct property access
+element.id = 'newId';
+element.className = 'newClass';
+element.dataset.value = '123';
+```
+
+**6. Class List Manipulation:**
+```javascript
+const element = document.getElementById('myElement');
+
+// Add classes
+element.classList.add('active', 'highlighted');
+element.classList.add('new-class');
+
+// Remove classes
+element.classList.remove('active');
+element.classList.remove('old-class', 'another-class');
+
+// Toggle classes
+element.classList.toggle('active');
+element.classList.toggle('hidden', true); // Force add
+element.classList.toggle('visible', false); // Force remove
+
+// Check if class exists
+if (element.classList.contains('active')) {
+    console.log('Element has active class');
+}
+
+// Replace classes
+element.classList.replace('old-class', 'new-class');
+```
+
+**7. Style Modification:**
+```javascript
+const element = document.getElementById('myElement');
+
+// Set individual styles
+element.style.color = 'red';
+element.style.backgroundColor = 'blue';
+element.style.fontSize = '16px';
+element.style.display = 'none';
+
+// Set multiple styles
+element.style.cssText = 'color: red; background-color: blue; font-size: 16px;';
+
+// Get computed styles
+const computedStyle = window.getComputedStyle(element);
+const color = computedStyle.color;
+const fontSize = computedStyle.fontSize;
+```
+
+**Removing DOM Elements:**
+
+**8. removeChild():**
+```javascript
+const parent = document.getElementById('parent');
+const child = document.getElementById('child');
+
+// Remove child element
+parent.removeChild(child);
+
+// Check if child exists before removing
+if (parent.contains(child)) {
+    parent.removeChild(child);
+}
+```
+
+**9. remove():**
+```javascript
+const element = document.getElementById('myElement');
+
+// Remove element (modern method)
+element.remove();
+
+// Remove with error handling
+if (element && element.parentNode) {
+    element.remove();
+} else {
+    console.warn('Element not found or has no parent');
+}
+```
+
+**10. replaceChild():**
+```javascript
+const parent = document.getElementById('parent');
+const oldChild = document.getElementById('oldChild');
+const newChild = document.createElement('div');
+newChild.textContent = 'New content';
+
+// Replace child element
+parent.replaceChild(newChild, oldChild);
+```
+
+**Best Practices:**
+1. Use `createElement()` for new elements
+2. Use `textContent` instead of `innerHTML` for plain text
+3. Use `createDocumentFragment()` for multiple elements
+4. Cache frequently accessed elements
+5. Use `classList` for class manipulation
+6. Remove event listeners to prevent memory leaks
+7. Check if elements exist before manipulating them
+
+**Related Questions:** [DOM Element Selection](#43-how-do-you-select-dom-elements), [innerHTML vs textContent](#45-whats-the-difference-between-innerhtml-textcontent-and-innertext)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 43. What's the difference between `innerHTML`, `textContent`, and `innerText`?
+
+These three properties are used to get or set the content of HTML elements, but they behave differently in terms of what content they include and how they handle HTML.
+
+**Key Differences:**
+
+| Property | HTML Content | Text Content | Performance | Security | Whitespace |
+|----------|-------------|--------------|-------------|----------|------------|
+| `innerHTML` | ✅ Includes HTML | ✅ Includes text | ⚠️ Slower | ❌ XSS risk | ✅ Preserved |
+| `textContent` | ❌ Strips HTML | ✅ Includes text | ✅ Faster | ✅ Safe | ✅ Preserved |
+| `innerText` | ❌ Strips HTML | ✅ Includes text | ⚠️ Slower | ✅ Safe | ❌ Collapsed |
+
+**1. innerHTML:**
+```javascript
+const element = document.getElementById('myElement');
+
+// Get HTML content
+const htmlContent = element.innerHTML;
+console.log(htmlContent); // "<p>Hello <strong>World</strong></p>"
+
+// Set HTML content
+element.innerHTML = '<p>New <em>content</em></p>';
+
+// Complex HTML
+element.innerHTML = `
+    <div class="card">
+        <h3>Title</h3>
+        <p>Description with <a href="#">link</a></p>
+        <button onclick="handleClick()">Click me</button>
+    </div>
+`;
+```
+
+**2. textContent:**
+```javascript
+const element = document.getElementById('myElement');
+
+// Get text content (strips HTML)
+const textContent = element.textContent;
+console.log(textContent); // "Hello World" (HTML tags removed)
+
+// Set text content (escapes HTML)
+element.textContent = '<p>This will be displayed as text</p>';
+// Result: "<p>This will be displayed as text</p>" (not rendered as HTML)
+
+// Safe for user input
+const userInput = '<script>alert("XSS")</script>';
+element.textContent = userInput; // Safe - displays as text
+```
+
+**3. innerText:**
+```javascript
+const element = document.getElementById('myElement');
+
+// Get visible text content
+const innerText = element.innerText;
+console.log(innerText); // "Hello World" (respects CSS styling)
+
+// Set text content
+element.innerText = 'New text content';
+
+// Respects CSS display properties
+element.innerHTML = '<p>Visible</p><p style="display:none">Hidden</p>';
+console.log(element.innerText); // "Visible" (hidden text excluded)
+```
+
+**Best Practices:**
+1. Use `textContent` for user input to prevent XSS
+2. Use `innerHTML` only when you need HTML markup
+3. Use `innerText` when you need visible text only
+4. Sanitize HTML content before using `innerHTML`
+5. Consider performance implications
+6. Be aware of whitespace differences
+
+**Related Questions:** [Creating and Modifying DOM Elements](#44-how-do-you-create-modify-and-remove-dom-elements), [Form Validation](#46-how-do-you-handle-form-validation-in-javascript)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 44. How do you handle form validation in JavaScript?
+
+**Form validation** ensures that user input meets specific requirements before submission. JavaScript provides various methods to validate forms both on the client side and in real-time.
+
+**1. Basic Form Validation:**
+```javascript
+const form = document.getElementById('myForm');
+
+form.addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
+    
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData);
+    
+    // Validate form data
+    if (validateForm(data)) {
+        submitForm(data);
+    }
+});
+
+function validateForm(data) {
+    const errors = [];
+    
+    // Required field validation
+    if (!data.name || data.name.trim() === '') {
+        errors.push('Name is required');
+    }
+    
+    // Email validation
+    if (!data.email || !isValidEmail(data.email)) {
+        errors.push('Valid email is required');
+    }
+    
+    // Password validation
+    if (!data.password || data.password.length < 8) {
+        errors.push('Password must be at least 8 characters');
+    }
+    
+    // Display errors
+    if (errors.length > 0) {
+        displayErrors(errors);
+        return false;
+    }
+    
+    return true;
+}
+```
+
+**2. Real-time Validation:**
+```javascript
+// Validate on input
+const nameInput = document.getElementById('name');
+nameInput.addEventListener('input', function(event) {
+    validateField(event.target);
+});
+
+const emailInput = document.getElementById('email');
+emailInput.addEventListener('blur', function(event) {
+    validateField(event.target);
+});
+
+function validateField(field) {
+    const value = field.value.trim();
+    const fieldName = field.name;
+    let isValid = true;
+    let errorMessage = '';
+    
+    switch (fieldName) {
+        case 'name':
+            if (value === '') {
+                isValid = false;
+                errorMessage = 'Name is required';
+            } else if (value.length < 2) {
+                isValid = false;
+                errorMessage = 'Name must be at least 2 characters';
+            }
+            break;
+            
+        case 'email':
+            if (value === '') {
+                isValid = false;
+                errorMessage = 'Email is required';
+            } else if (!isValidEmail(value)) {
+                isValid = false;
+                errorMessage = 'Please enter a valid email';
+            }
+            break;
+    }
+    
+    showFieldValidation(field, isValid, errorMessage);
+}
+```
+
+**3. Validation Functions:**
+```javascript
+// Email validation
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+// Phone validation
+function isValidPhone(phone) {
+    const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+    return phoneRegex.test(phone.replace(/\s/g, ''));
+}
+
+// Password strength validation
+function validatePassword(password) {
+    const errors = [];
+    
+    if (password.length < 8) {
+        errors.push('At least 8 characters');
+    }
+    
+    if (!/[A-Z]/.test(password)) {
+        errors.push('At least one uppercase letter');
+    }
+    
+    if (!/[a-z]/.test(password)) {
+        errors.push('At least one lowercase letter');
+    }
+    
+    if (!/\d/.test(password)) {
+        errors.push('At least one number');
+    }
+    
+    return errors;
+}
+```
+
+**4. Visual Feedback:**
+```javascript
+function showFieldValidation(field, isValid, errorMessage) {
+    const fieldContainer = field.closest('.field-container');
+    const errorElement = fieldContainer.querySelector('.error-message');
+    
+    // Remove existing validation classes
+    field.classList.remove('valid', 'invalid');
+    
+    if (isValid) {
+        field.classList.add('valid');
+        if (errorElement) {
+            errorElement.textContent = '';
+            errorElement.style.display = 'none';
+        }
+    } else {
+        field.classList.add('invalid');
+        if (errorElement) {
+            errorElement.textContent = errorMessage;
+            errorElement.style.display = 'block';
+        }
+    }
+}
+```
+
+**Best Practices:**
+1. Always validate on both client and server side
+2. Provide immediate feedback to users
+3. Use HTML5 validation attributes when possible
+4. Sanitize and escape user input
+5. Provide clear, specific error messages
+6. Consider accessibility in validation feedback
+
+**Related Questions:** [Creating and Modifying DOM Elements](#44-how-do-you-create-modify-and-remove-dom-elements), [Document Ready vs Window Load](#47-what-is-the-difference-between-documentready-and-windowonload)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 45. What is the difference between `document.ready` and `window.onload`?
+
+The main difference is **when** they fire during the page loading process. `document.ready` fires when the DOM is fully constructed, while `window.onload` fires when all resources (images, stylesheets, etc.) have finished loading.
+
+**Key Differences:**
+
+| Aspect | `document.ready` | `window.onload` |
+|--------|------------------|-----------------|
+| **Timing** | DOM ready (faster) | All resources loaded (slower) |
+| **Resources** | ❌ Images, CSS may not be loaded | ✅ All resources loaded |
+| **Performance** | ✅ Faster execution | ⚠️ Slower execution |
+| **Use Case** | DOM manipulation | Resource-dependent operations |
+
+**1. document.ready (jQuery):**
+```javascript
+// jQuery document ready
+$(document).ready(function() {
+    console.log('DOM is ready');
+    // Safe to manipulate DOM elements
+    $('#myElement').addClass('loaded');
+});
+
+// Shorthand
+$(function() {
+    console.log('DOM is ready');
+});
+```
+
+**2. Native JavaScript Equivalent:**
+```javascript
+// DOMContentLoaded event (equivalent to document.ready)
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM is ready');
+    // Safe to manipulate DOM elements
+    document.getElementById('myElement').classList.add('loaded');
+});
+```
+
+**3. window.onload:**
+```javascript
+// window.onload
+window.onload = function() {
+    console.log('All resources loaded');
+    // Safe to access images, stylesheets, etc.
+    const img = document.getElementById('myImage');
+    console.log('Image dimensions:', img.offsetWidth, img.offsetHeight);
+};
+
+// Or using addEventListener
+window.addEventListener('load', function() {
+    console.log('All resources loaded');
+});
+```
+
+**4. Timing Comparison:**
+```javascript
+console.log('Script start');
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM ready');
+});
+
+window.addEventListener('load', function() {
+    console.log('Window loaded');
+});
+
+console.log('Script end');
+
+// Output order:
+// Script start
+// Script end
+// DOM ready
+// Window loaded
+```
+
+**5. When to Use Each:**
+
+**Use `DOMContentLoaded` for:**
+- DOM manipulation
+- Event listener attachment
+- Form handling
+- Element selection and modification
+
+**Use `window.onload` for:**
+- Image dimension calculations
+- Layout-dependent operations
+- Resource-heavy initializations
+- Operations requiring all assets
+
+**Best Practices:**
+1. Use `DOMContentLoaded` for DOM manipulation
+2. Use `window.onload` for resource-dependent operations
+3. Check `document.readyState` for immediate execution
+4. Use `addEventListener` instead of `onload` property
+5. Consider performance implications
+
+**Related Questions:** [DOM Element Selection](#43-how-do-you-select-dom-elements), [Creating and Modifying DOM Elements](#44-how-do-you-create-modify-and-remove-dom-elements)
 
 [⬆️ Back to Top](#table-of-contents)
 
 ## ES6+ Features
-48. What are template literals?
-49. What are default parameters?
-50. What are modules and how do you use import/export?
-51. What are Sets and Maps?
-52. What are Symbols?
-53. What are generators and iterators?
-54. What is the `for...of` vs `for...in` loop?
+
+### 46. What are template literals?
+
+**Template literals** are string literals that allow embedded expressions and multi-line strings. They use backticks (`) instead of quotes and support string interpolation.
+
+**Basic Syntax:**
+```javascript
+// Template literal with backticks
+const name = 'John';
+const age = 30;
+const message = `Hello, my name is ${name} and I am ${age} years old.`;
+console.log(message); // "Hello, my name is John and I am 30 years old."
+```
+
+**1. String Interpolation:**
+```javascript
+// Variables and expressions
+const price = 19.99;
+const tax = 0.08;
+const total = `Total: $${(price * (1 + tax)).toFixed(2)}`;
+console.log(total); // "Total: $21.59"
+
+// Function calls
+const user = { firstName: 'Jane', lastName: 'Doe' };
+const greeting = `Welcome, ${user.firstName.toUpperCase()} ${user.lastName}!`;
+console.log(greeting); // "Welcome, JANE Doe!"
+
+// Complex expressions
+const items = ['apple', 'banana', 'orange'];
+const list = `Items: ${items.map(item => item.toUpperCase()).join(', ')}`;
+console.log(list); // "Items: APPLE, BANANA, ORANGE"
+```
+
+**2. Multi-line Strings:**
+```javascript
+// Traditional approach (concatenation)
+const oldWay = 'This is line 1\n' +
+               'This is line 2\n' +
+               'This is line 3';
+
+// Template literals (cleaner)
+const newWay = `This is line 1
+This is line 2
+This is line 3`;
+
+console.log(newWay);
+// This is line 1
+// This is line 2
+// This is line 3
+```
+
+**3. HTML Templates:**
+```javascript
+function createUserCard(user) {
+    return `
+        <div class="user-card">
+            <h3>${user.name}</h3>
+            <p>Email: ${user.email}</p>
+            <p>Age: ${user.age}</p>
+            <p>Status: ${user.isActive ? 'Active' : 'Inactive'}</p>
+        </div>
+    `;
+}
+
+const user = {
+    name: 'John Doe',
+    email: 'john@example.com',
+    age: 30,
+    isActive: true
+};
+
+const cardHTML = createUserCard(user);
+console.log(cardHTML);
+```
+
+**4. Tagged Template Literals:**
+```javascript
+// Tagged template function
+function highlight(strings, ...values) {
+    return strings.reduce((result, string, i) => {
+        const value = values[i] ? `<mark>${values[i]}</mark>` : '';
+        return result + string + value;
+    }, '');
+}
+
+const name = 'John';
+const age = 30;
+const highlighted = highlight`Hello ${name}, you are ${age} years old.`;
+console.log(highlighted); // "Hello <mark>John</mark>, you are <mark>30</mark> years old."
+```
+
+**Best Practices:**
+1. Use template literals for string interpolation
+2. Use tagged templates for complex string processing
+3. Be careful with user input in template literals (XSS prevention)
+4. Use `String.raw` for raw string content
+5. Consider performance for frequently called functions
+6. Use template literals for multi-line strings
+7. Leverage tagged templates for domain-specific languages
+
+**Related Questions:** [Default Parameters](#47-what-are-default-parameters), [Modules and Import/Export](#48-what-are-modules-and-how-do-you-use-importexport)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 47. What are default parameters?
+
+**Default parameters** allow you to set default values for function parameters when they are not provided or are `undefined`. This makes functions more flexible and reduces the need for parameter validation.
+
+**Basic Syntax:**
+```javascript
+// Basic default parameter
+function greet(name = 'World') {
+    return `Hello, ${name}!`;
+}
+
+console.log(greet()); // "Hello, World!"
+console.log(greet('John')); // "Hello, John!"
+```
+
+**1. Multiple Default Parameters:**
+```javascript
+function createUser(name = 'Anonymous', age = 0, isActive = true) {
+    return {
+        name,
+        age,
+        isActive,
+        createdAt: new Date()
+    };
+}
+
+console.log(createUser()); // { name: 'Anonymous', age: 0, isActive: true, createdAt: Date }
+console.log(createUser('John')); // { name: 'John', age: 0, isActive: true, createdAt: Date }
+console.log(createUser('Jane', 25)); // { name: 'Jane', age: 25, isActive: true, createdAt: Date }
+console.log(createUser('Bob', 30, false)); // { name: 'Bob', age: 30, isActive: false, createdAt: Date }
+```
+
+**2. Expressions as Default Values:**
+```javascript
+// Function calls as defaults
+function getCurrentTime() {
+    return new Date().toISOString();
+}
+
+function logMessage(message, timestamp = getCurrentTime()) {
+    console.log(`[${timestamp}] ${message}`);
+}
+
+logMessage('User logged in'); // [2024-01-15T10:30:00.000Z] User logged in
+
+// Complex expressions
+function calculateArea(length = 10, width = length) {
+    return length * width;
+}
+
+console.log(calculateArea()); // 100 (10 * 10)
+console.log(calculateArea(5)); // 25 (5 * 5)
+console.log(calculateArea(5, 8)); // 40 (5 * 8)
+```
+
+**3. Object and Array Defaults:**
+```javascript
+// Object default
+function createConfig(options = {}) {
+    return {
+        timeout: 5000,
+        retries: 3,
+        debug: false,
+        ...options
+    };
+}
+
+console.log(createConfig()); // { timeout: 5000, retries: 3, debug: false }
+console.log(createConfig({ timeout: 10000, debug: true })); // { timeout: 10000, retries: 3, debug: true }
+
+// Array default
+function processItems(items = []) {
+    return items.map(item => item.toUpperCase());
+}
+
+console.log(processItems()); // []
+console.log(processItems(['apple', 'banana'])); // ['APPLE', 'BANANA']
+```
+
+**4. Destructuring with Defaults:**
+```javascript
+// Object destructuring with defaults
+function createUser({ name = 'Anonymous', age = 0, email = 'no-email@example.com' } = {}) {
+    return { name, age, email };
+}
+
+console.log(createUser()); // { name: 'Anonymous', age: 0, email: 'no-email@example.com' }
+console.log(createUser({ name: 'John' })); // { name: 'John', age: 0, email: 'no-email@example.com' }
+
+// Array destructuring with defaults
+function getFirstAndLast([first = 'first', , last = 'last'] = []) {
+    return { first, last };
+}
+
+console.log(getFirstAndLast()); // { first: 'first', last: 'last' }
+console.log(getFirstAndLast(['a', 'b', 'c'])); // { first: 'a', last: 'c' }
+```
+
+**Best Practices:**
+1. Use default parameters instead of checking for `undefined`
+2. Place default parameters at the end of the parameter list
+3. Use simple values for defaults to avoid side effects
+4. Use destructuring with defaults for object parameters
+5. Be careful with mutable default values (use functions)
+6. Document default parameter behavior
+7. Consider using default parameters in class constructors
+
+**Related Questions:** [Template Literals](#46-what-are-template-literals), [Modules and Import/Export](#48-what-are-modules-and-how-do-you-use-importexport)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 48. What are modules and how do you use import/export?
+
+**Modules** are reusable pieces of code that can be imported and exported between different files. They help organize code, avoid global namespace pollution, and enable better code splitting and tree shaking.
+
+**1. Export Types:**
+
+**Named Exports:**
+```javascript
+// math.js
+export const PI = 3.14159;
+export const E = 2.71828;
+
+export function add(a, b) {
+    return a + b;
+}
+
+export function multiply(a, b) {
+    return a * b;
+}
+
+// Alternative syntax
+const subtract = (a, b) => a - b;
+const divide = (a, b) => a / b;
+
+export { subtract, divide };
+```
+
+**Default Export:**
+```javascript
+// calculator.js
+class Calculator {
+    constructor() {
+        this.result = 0;
+    }
+    
+    add(value) {
+        this.result += value;
+        return this;
+    }
+    
+    multiply(value) {
+        this.result *= value;
+        return this;
+    }
+    
+    getResult() {
+        return this.result;
+    }
+}
+
+export default Calculator;
+```
+
+**2. Import Types:**
+
+**Named Imports:**
+```javascript
+// main.js
+import { add, multiply, PI } from './math.js';
+
+console.log(add(5, 3)); // 8
+console.log(multiply(4, 6)); // 24
+console.log(PI); // 3.14159
+
+// Import with aliases
+import { add as addition, multiply as multiplication } from './math.js';
+
+// Import all named exports
+import * as math from './math.js';
+console.log(math.add(2, 3)); // 5
+console.log(math.PI); // 3.14159
+```
+
+**Default Import:**
+```javascript
+// main.js
+import Calculator from './calculator.js';
+
+const calc = new Calculator();
+calc.add(5).multiply(2);
+console.log(calc.getResult()); // 10
+
+// Import with alias
+import Calculator as Calc from './calculator.js';
+```
+
+**3. Mixed Imports:**
+```javascript
+// utils.js
+export const VERSION = '1.0.0';
+export function formatDate(date) {
+    return date.toISOString();
+}
+
+export default class Utils {
+    static log(message) {
+        console.log(`[${new Date().toISOString()}] ${message}`);
+    }
+}
+
+// main.js
+import Utils, { VERSION, formatDate } from './utils.js';
+
+Utils.log('Application started');
+console.log('Version:', VERSION);
+console.log('Date:', formatDate(new Date()));
+```
+
+**4. Re-exporting:**
+```javascript
+// index.js (barrel export)
+export { add, multiply, PI } from './math.js';
+export { Calculator } from './calculator.js';
+export { Utils, VERSION, formatDate } from './utils.js';
+
+// main.js
+import { add, Calculator, Utils } from './index.js';
+```
+
+**5. Dynamic Imports:**
+```javascript
+// Dynamic import (returns a Promise)
+async function loadModule() {
+    const { add, multiply } = await import('./math.js');
+    console.log(add(5, 3)); // 8
+}
+
+// Conditional loading
+if (user.isAdmin) {
+    const { AdminPanel } = await import('./admin.js');
+    new AdminPanel();
+}
+
+// Lazy loading with error handling
+async function loadFeature() {
+    try {
+        const module = await import('./feature.js');
+        module.default();
+    } catch (error) {
+        console.error('Failed to load feature:', error);
+    }
+}
+```
+
+**6. Module Patterns:**
+
+**Utility Module:**
+```javascript
+// helpers.js
+export const formatCurrency = (amount, currency = 'USD') => {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: currency
+    }).format(amount);
+};
+
+export const debounce = (func, wait) => {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+};
+
+export const throttle = (func, limit) => {
+    let inThrottle;
+    return function(...args) {
+        if (!inThrottle) {
+            func.apply(this, args);
+            inThrottle = true;
+            setTimeout(() => inThrottle = false, limit);
+        }
+    };
+};
+```
+
+**Service Module:**
+```javascript
+// api.js
+class ApiService {
+    constructor(baseURL) {
+        this.baseURL = baseURL;
+    }
+    
+    async get(endpoint) {
+        const response = await fetch(`${this.baseURL}${endpoint}`);
+        return response.json();
+    }
+    
+    async post(endpoint, data) {
+        const response = await fetch(`${this.baseURL}${endpoint}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        return response.json();
+    }
+}
+
+export default ApiService;
+```
+
+**7. Module Configuration:**
+```javascript
+// config.js
+const config = {
+    apiUrl: process.env.API_URL || 'https://api.example.com',
+    timeout: 5000,
+    retries: 3
+};
+
+export default config;
+
+// constants.js
+export const HTTP_STATUS = {
+    OK: 200,
+    CREATED: 201,
+    BAD_REQUEST: 400,
+    UNAUTHORIZED: 401,
+    NOT_FOUND: 404,
+    INTERNAL_SERVER_ERROR: 500
+};
+
+export const API_ENDPOINTS = {
+    USERS: '/users',
+    POSTS: '/posts',
+    COMMENTS: '/comments'
+};
+```
+
+**8. Common Patterns:**
+```javascript
+// Event emitter module
+// events.js
+class EventEmitter {
+    constructor() {
+        this.events = {};
+    }
+    
+    on(event, listener) {
+        if (!this.events[event]) {
+            this.events[event] = [];
+        }
+        this.events[event].push(listener);
+    }
+    
+    emit(event, ...args) {
+        if (this.events[event]) {
+            this.events[event].forEach(listener => listener(...args));
+        }
+    }
+    
+    off(event, listener) {
+        if (this.events[event]) {
+            this.events[event] = this.events[event].filter(l => l !== listener);
+        }
+    }
+}
+
+export default EventEmitter;
+```
+
+**Best Practices:**
+1. Use named exports for utilities and constants
+2. Use default exports for main classes or functions
+3. Keep modules focused and single-purpose
+4. Use barrel exports for clean imports
+5. Use dynamic imports for code splitting
+6. Handle import errors gracefully
+7. Use consistent naming conventions
+
+**Related Questions:** [Template Literals](#46-what-are-template-literals), [Sets and Maps](#49-what-are-sets-and-maps)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 49. What are Sets and Maps?
+
+**Sets** and **Maps** are new data structures introduced in ES6 that provide better alternatives to arrays and objects for specific use cases.
+
+**Sets:**
+A Set is a collection of unique values where each value can only occur once.
+
+**1. Basic Set Operations:**
+```javascript
+// Creating a Set
+const mySet = new Set();
+const mySet2 = new Set([1, 2, 3, 4, 5]);
+const mySet3 = new Set('hello'); // {'h', 'e', 'l', 'o'}
+
+// Adding values
+mySet.add(1);
+mySet.add(2);
+mySet.add(2); // Duplicate, won't be added
+mySet.add('hello');
+mySet.add({ name: 'John' });
+
+console.log(mySet); // Set { 1, 2, 'hello', { name: 'John' } }
+console.log(mySet.size); // 4
+
+// Checking if value exists
+console.log(mySet.has(1)); // true
+console.log(mySet.has(3)); // false
+
+// Deleting values
+mySet.delete(1);
+console.log(mySet.has(1)); // false
+
+// Clearing the Set
+mySet.clear();
+console.log(mySet.size); // 0
+```
+
+**2. Set Iteration:**
+```javascript
+const mySet = new Set([1, 2, 3, 4, 5]);
+
+// for...of loop
+for (const value of mySet) {
+    console.log(value);
+}
+
+// forEach method
+mySet.forEach(value => {
+    console.log(value);
+});
+
+// Converting to Array
+const arrayFromSet = Array.from(mySet);
+const arrayFromSet2 = [...mySet];
+
+console.log(arrayFromSet); // [1, 2, 3, 4, 5]
+```
+
+**3. Set Use Cases:**
+```javascript
+// Removing duplicates from array
+const numbers = [1, 2, 2, 3, 3, 4, 5, 5];
+const uniqueNumbers = [...new Set(numbers)];
+console.log(uniqueNumbers); // [1, 2, 3, 4, 5]
+
+// Tracking unique values
+const visitedPages = new Set();
+visitedPages.add('/home');
+visitedPages.add('/about');
+visitedPages.add('/contact');
+visitedPages.add('/home'); // Duplicate
+
+console.log(visitedPages.size); // 3
+
+// Set operations
+const setA = new Set([1, 2, 3, 4]);
+const setB = new Set([3, 4, 5, 6]);
+
+// Union
+const union = new Set([...setA, ...setB]);
+console.log(union); // Set { 1, 2, 3, 4, 5, 6 }
+
+// Intersection
+const intersection = new Set([...setA].filter(x => setB.has(x)));
+console.log(intersection); // Set { 3, 4 }
+
+// Difference
+const difference = new Set([...setA].filter(x => !setB.has(x)));
+console.log(difference); // Set { 1, 2 }
+```
+
+**Maps:**
+A Map is a collection of key-value pairs where keys can be of any type.
+
+**4. Basic Map Operations:**
+```javascript
+// Creating a Map
+const myMap = new Map();
+const myMap2 = new Map([
+    ['key1', 'value1'],
+    ['key2', 'value2'],
+    [1, 'number key']
+]);
+
+// Setting values
+myMap.set('name', 'John');
+myMap.set('age', 30);
+myMap.set(1, 'one');
+myMap.set({ id: 1 }, 'object key');
+
+console.log(myMap); // Map { 'name' => 'John', 'age' => 30, 1 => 'one', { id: 1 } => 'object key' }
+console.log(myMap.size); // 4
+
+// Getting values
+console.log(myMap.get('name')); // 'John'
+console.log(myMap.get('age')); // 30
+console.log(myMap.get('nonexistent')); // undefined
+
+// Checking if key exists
+console.log(myMap.has('name')); // true
+console.log(myMap.has('email')); // false
+
+// Deleting entries
+myMap.delete('age');
+console.log(myMap.has('age')); // false
+
+// Clearing the Map
+myMap.clear();
+console.log(myMap.size); // 0
+```
+
+**5. Map Iteration:**
+```javascript
+const myMap = new Map([
+    ['name', 'John'],
+    ['age', 30],
+    ['city', 'New York']
+]);
+
+// for...of loop
+for (const [key, value] of myMap) {
+    console.log(`${key}: ${value}`);
+}
+
+// forEach method
+myMap.forEach((value, key) => {
+    console.log(`${key}: ${value}`);
+});
+
+// Getting keys and values
+console.log([...myMap.keys()]); // ['name', 'age', 'city']
+console.log([...myMap.values()]); // ['John', 30, 'New York']
+console.log([...myMap.entries()]); // [['name', 'John'], ['age', 30], ['city', 'New York']]
+```
+
+**6. Map Use Cases:**
+```javascript
+// Caching function results
+const cache = new Map();
+
+function expensiveOperation(n) {
+    if (cache.has(n)) {
+        console.log('Cache hit!');
+        return cache.get(n);
+    }
+    
+    console.log('Computing...');
+    const result = n * n * n; // Expensive operation
+    cache.set(n, result);
+    return result;
+}
+
+console.log(expensiveOperation(5)); // Computing... 125
+console.log(expensiveOperation(5)); // Cache hit! 125
+
+// Counting occurrences
+const text = 'hello world';
+const charCount = new Map();
+
+for (const char of text) {
+    if (char !== ' ') {
+        charCount.set(char, (charCount.get(char) || 0) + 1);
+    }
+}
+
+console.log(charCount); // Map { 'h' => 1, 'e' => 1, 'l' => 3, 'o' => 2, 'w' => 1, 'r' => 1, 'd' => 1 }
+
+// Object metadata
+const userMetadata = new Map();
+const user1 = { id: 1, name: 'John' };
+const user2 = { id: 2, name: 'Jane' };
+
+userMetadata.set(user1, { lastLogin: new Date(), loginCount: 5 });
+userMetadata.set(user2, { lastLogin: new Date(), loginCount: 3 });
+
+console.log(userMetadata.get(user1)); // { lastLogin: Date, loginCount: 5 }
+```
+
+**7. WeakSet and WeakMap:**
+```javascript
+// WeakSet - holds only objects, allows garbage collection
+const weakSet = new WeakSet();
+const obj1 = { name: 'John' };
+const obj2 = { name: 'Jane' };
+
+weakSet.add(obj1);
+weakSet.add(obj2);
+
+console.log(weakSet.has(obj1)); // true
+
+// WeakMap - keys must be objects, allows garbage collection
+const weakMap = new WeakMap();
+const key1 = { id: 1 };
+const key2 = { id: 2 };
+
+weakMap.set(key1, 'value1');
+weakMap.set(key2, 'value2');
+
+console.log(weakMap.get(key1)); // 'value1'
+```
+
+**8. Performance Comparison:**
+```javascript
+// Set vs Array for unique values
+const numbers = Array.from({ length: 10000 }, (_, i) => i);
+const duplicates = [...numbers, ...numbers];
+
+// Using Set (faster)
+console.time('Set');
+const uniqueSet = new Set(duplicates);
+const uniqueArray = [...uniqueSet];
+console.timeEnd('Set');
+
+// Using Array methods (slower)
+console.time('Array');
+const uniqueArray2 = duplicates.filter((item, index) => 
+    duplicates.indexOf(item) === index
+);
+console.timeEnd('Array');
+
+// Map vs Object for key-value pairs
+const map = new Map();
+const obj = {};
+
+// Map performance
+console.time('Map');
+for (let i = 0; i < 10000; i++) {
+    map.set(i, i * 2);
+}
+console.timeEnd('Map');
+
+// Object performance
+console.time('Object');
+for (let i = 0; i < 10000; i++) {
+    obj[i] = i * 2;
+}
+console.timeEnd('Object');
+```
+
+**Best Practices:**
+1. Use Set for unique value collections
+2. Use Map for key-value pairs with non-string keys
+3. Use WeakSet/WeakMap for object references that can be garbage collected
+4. Use Set for removing duplicates from arrays
+5. Use Map for caching and metadata storage
+6. Consider performance implications for large datasets
+7. Use appropriate iteration methods for your use case
+
+**Related Questions:** [Modules and Import/Export](#48-what-are-modules-and-how-do-you-use-importexport), [Symbols](#50-what-are-symbols)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 50. What are Symbols?
+
+**Symbols** are a primitive data type introduced in ES6 that represents a unique identifier. They are immutable and can be used as object property keys.
+
+**Basic Syntax:**
+```javascript
+// Creating symbols
+const sym1 = Symbol();
+const sym2 = Symbol('description');
+const sym3 = Symbol('description');
+
+console.log(sym1); // Symbol()
+console.log(sym2); // Symbol(description)
+console.log(sym2 === sym3); // false (each symbol is unique)
+```
+
+**1. Symbol Properties:**
+```javascript
+// Using symbols as object keys
+const id = Symbol('id');
+const name = Symbol('name');
+
+const user = {
+    [id]: 123,
+    [name]: 'John Doe',
+    age: 30
+};
+
+console.log(user[id]); // 123
+console.log(user[name]); // 'John Doe'
+console.log(user.age); // 30
+
+// Symbols don't appear in for...in loops
+for (const key in user) {
+    console.log(key); // Only 'age'
+}
+
+// Symbols don't appear in Object.keys()
+console.log(Object.keys(user)); // ['age']
+
+// But they appear in Object.getOwnPropertySymbols()
+console.log(Object.getOwnPropertySymbols(user)); // [Symbol(id), Symbol(name)]
+```
+
+**2. Symbol.for() and Symbol.keyFor():**
+```javascript
+// Symbol.for() - creates or retrieves a symbol from global registry
+const sym1 = Symbol.for('key');
+const sym2 = Symbol.for('key');
+
+console.log(sym1 === sym2); // true (same symbol from registry)
+
+// Symbol.keyFor() - gets the key for a symbol from registry
+console.log(Symbol.keyFor(sym1)); // 'key'
+
+// Regular symbols are not in registry
+const sym3 = Symbol('key');
+console.log(Symbol.keyFor(sym3)); // undefined
+```
+
+**3. Well-known Symbols:**
+```javascript
+// Symbol.iterator - makes object iterable
+const iterable = {
+    [Symbol.iterator]: function* () {
+        yield 1;
+        yield 2;
+        yield 3;
+    }
+};
+
+for (const value of iterable) {
+    console.log(value); // 1, 2, 3
+}
+
+// Symbol.toPrimitive - custom type conversion
+const obj = {
+    [Symbol.toPrimitive](hint) {
+        if (hint === 'number') return 42;
+        if (hint === 'string') return 'hello';
+        return 'default';
+    }
+};
+
+console.log(+obj); // 42
+console.log(String(obj)); // 'hello'
+console.log(obj + ''); // 'default'
+
+// Symbol.toStringTag - custom toString behavior
+const customObj = {
+    [Symbol.toStringTag]: 'CustomObject'
+};
+
+console.log(Object.prototype.toString.call(customObj)); // '[object CustomObject]'
+```
+
+**4. Symbol Use Cases:**
+```javascript
+// Private properties
+const _private = Symbol('private');
+
+class MyClass {
+    constructor() {
+        this[_private] = 'secret';
+        this.public = 'visible';
+    }
+    
+    getPrivate() {
+        return this[_private];
+    }
+}
+
+const instance = new MyClass();
+console.log(instance.public); // 'visible'
+console.log(instance[_private]); // 'secret'
+console.log(instance.getPrivate()); // 'secret'
+
+// Metadata
+const metadata = Symbol('metadata');
+
+function addMetadata(obj, data) {
+    obj[metadata] = data;
+}
+
+function getMetadata(obj) {
+    return obj[metadata];
+}
+
+const user = { name: 'John' };
+addMetadata(user, { created: new Date(), version: 1 });
+console.log(getMetadata(user)); // { created: Date, version: 1 }
+```
+
+**5. Symbol Constants:**
+```javascript
+// Using symbols as constants
+const LOG_LEVELS = {
+    DEBUG: Symbol('debug'),
+    INFO: Symbol('info'),
+    WARN: Symbol('warn'),
+    ERROR: Symbol('error')
+};
+
+function log(level, message) {
+    switch (level) {
+        case LOG_LEVELS.DEBUG:
+            console.debug(message);
+            break;
+        case LOG_LEVELS.INFO:
+            console.info(message);
+            break;
+        case LOG_LEVELS.WARN:
+            console.warn(message);
+            break;
+        case LOG_LEVELS.ERROR:
+            console.error(message);
+            break;
+    }
+}
+
+log(LOG_LEVELS.INFO, 'User logged in');
+log(LOG_LEVELS.ERROR, 'Database connection failed');
+```
+
+**6. Symbol in Classes:**
+```javascript
+// Private methods using symbols
+const _calculate = Symbol('calculate');
+
+class Calculator {
+    constructor() {
+        this.result = 0;
+    }
+    
+    add(value) {
+        this.result = this[_calculate](this.result, value, '+');
+        return this;
+    }
+    
+    multiply(value) {
+        this.result = this[_calculate](this.result, value, '*');
+        return this;
+    }
+    
+    [_calculate](a, b, operation) {
+        switch (operation) {
+            case '+': return a + b;
+            case '*': return a * b;
+            default: return a;
+        }
+    }
+    
+    getResult() {
+        return this.result;
+    }
+}
+
+const calc = new Calculator();
+calc.add(5).multiply(2);
+console.log(calc.getResult()); // 10
+```
+
+**7. Symbol with Mixins:**
+```javascript
+// Mixin pattern using symbols
+const mixin = Symbol('mixin');
+
+function withLogging(target) {
+    target[mixin] = {
+        log(message) {
+            console.log(`[${this.constructor.name}] ${message}`);
+        }
+    };
+    
+    return target;
+}
+
+class User {
+    constructor(name) {
+        this.name = name;
+    }
+}
+
+// Apply mixin
+withLogging(User);
+
+// Use mixin
+const user = new User('John');
+user[mixin].log('User created'); // [User] User created
+```
+
+**8. Symbol Performance:**
+```javascript
+// Symbol vs string keys performance
+const symbolKey = Symbol('key');
+const stringKey = 'key';
+
+const obj = {};
+obj[symbolKey] = 'value';
+obj[stringKey] = 'value';
+
+// Symbol access is slightly faster
+console.time('Symbol access');
+for (let i = 0; i < 1000000; i++) {
+    const value = obj[symbolKey];
+}
+console.timeEnd('Symbol access');
+
+console.time('String access');
+for (let i = 0; i < 1000000; i++) {
+    const value = obj[stringKey];
+}
+console.timeEnd('String access');
+```
+
+**Best Practices:**
+1. Use symbols for private properties
+2. Use symbols for metadata storage
+3. Use symbols for constants to avoid naming conflicts
+4. Use Symbol.for() for global symbols
+5. Use well-known symbols for custom behavior
+6. Consider performance implications
+7. Use symbols sparingly - they can make debugging harder
+
+**Related Questions:** [Sets and Maps](#49-what-are-sets-and-maps), [Generators and Iterators](#51-what-are-generators-and-iterators)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 51. What are generators and iterators?
+
+**Generators** are functions that can be paused and resumed, allowing you to control the execution flow. **Iterators** are objects that provide a way to access elements sequentially.
+
+**1. Generator Functions:**
+```javascript
+// Generator function syntax
+function* generatorFunction() {
+    yield 1;
+    yield 2;
+    yield 3;
+}
+
+const generator = generatorFunction();
+console.log(generator.next()); // { value: 1, done: false }
+console.log(generator.next()); // { value: 2, done: false }
+console.log(generator.next()); // { value: 3, done: false }
+console.log(generator.next()); // { value: undefined, done: true }
+```
+
+**2. Generator with Parameters:**
+```javascript
+function* counter(start = 0, step = 1) {
+    let current = start;
+    while (true) {
+        const reset = yield current;
+        if (reset) {
+            current = start;
+        } else {
+            current += step;
+        }
+    }
+}
+
+const counterGen = counter(10, 5);
+console.log(counterGen.next()); // { value: 10, done: false }
+console.log(counterGen.next()); // { value: 15, done: false }
+console.log(counterGen.next()); // { value: 20, done: false }
+console.log(counterGen.next(true)); // { value: 10, done: false } (reset)
+```
+
+**3. Generator with Return:**
+```javascript
+function* generatorWithReturn() {
+    yield 1;
+    yield 2;
+    return 'finished';
+    yield 3; // This won't execute
+}
+
+const gen = generatorWithReturn();
+console.log(gen.next()); // { value: 1, done: false }
+console.log(gen.next()); // { value: 2, done: false }
+console.log(gen.next()); // { value: 'finished', done: true }
+console.log(gen.next()); // { value: undefined, done: true }
+```
+
+**4. Generator with Error Handling:**
+```javascript
+function* errorGenerator() {
+    try {
+        yield 1;
+        yield 2;
+        throw new Error('Something went wrong');
+        yield 3;
+    } catch (error) {
+        yield `Error caught: ${error.message}`;
+    }
+}
+
+const gen = errorGenerator();
+console.log(gen.next()); // { value: 1, done: false }
+console.log(gen.next()); // { value: 2, done: false }
+console.log(gen.next()); // { value: 'Error caught: Something went wrong', done: false }
+console.log(gen.next()); // { value: undefined, done: true }
+```
+
+**5. Generator Delegation:**
+```javascript
+function* generator1() {
+    yield 1;
+    yield 2;
+}
+
+function* generator2() {
+    yield 3;
+    yield 4;
+}
+
+function* combinedGenerator() {
+    yield* generator1();
+    yield* generator2();
+    yield 5;
+}
+
+const gen = combinedGenerator();
+console.log([...gen]); // [1, 2, 3, 4, 5]
+```
+
+**6. Custom Iterator:**
+```javascript
+// Custom iterable object
+const iterableObject = {
+    data: [1, 2, 3, 4, 5],
+    [Symbol.iterator]() {
+        let index = 0;
+        const data = this.data;
+        
+        return {
+            next() {
+                if (index < data.length) {
+                    return { value: data[index++], done: false };
+                } else {
+                    return { done: true };
+                }
+            }
+        };
+    }
+};
+
+// Using the custom iterator
+for (const value of iterableObject) {
+    console.log(value); // 1, 2, 3, 4, 5
+}
+
+// Or using spread operator
+console.log([...iterableObject]); // [1, 2, 3, 4, 5]
+```
+
+**7. Generator Use Cases:**
+```javascript
+// Infinite sequence
+function* fibonacci() {
+    let a = 0, b = 1;
+    while (true) {
+        yield a;
+        [a, b] = [b, a + b];
+    }
+}
+
+const fib = fibonacci();
+console.log(fib.next().value); // 0
+console.log(fib.next().value); // 1
+console.log(fib.next().value); // 1
+console.log(fib.next().value); // 2
+console.log(fib.next().value); // 3
+
+// Lazy evaluation
+function* range(start, end) {
+    for (let i = start; i < end; i++) {
+        yield i;
+    }
+}
+
+const numbers = range(1, 1000000);
+console.log(numbers.next().value); // 1 (only generates when needed)
+
+// Async generator
+async function* asyncGenerator() {
+    yield await fetch('/api/data1');
+    yield await fetch('/api/data2');
+    yield await fetch('/api/data3');
+}
+
+// Using async generator
+async function processData() {
+    for await (const response of asyncGenerator()) {
+        const data = await response.json();
+        console.log(data);
+    }
+}
+```
+
+**8. Generator with State:**
+```javascript
+function* stateMachine() {
+    let state = 'idle';
+    
+    while (true) {
+        const action = yield state;
+        
+        switch (state) {
+            case 'idle':
+                if (action === 'start') state = 'running';
+                break;
+            case 'running':
+                if (action === 'pause') state = 'paused';
+                else if (action === 'stop') state = 'stopped';
+                break;
+            case 'paused':
+                if (action === 'resume') state = 'running';
+                else if (action === 'stop') state = 'stopped';
+                break;
+            case 'stopped':
+                if (action === 'reset') state = 'idle';
+                break;
+        }
+    }
+}
+
+const machine = stateMachine();
+console.log(machine.next()); // { value: 'idle', done: false }
+console.log(machine.next('start')); // { value: 'running', done: false }
+console.log(machine.next('pause')); // { value: 'paused', done: false }
+console.log(machine.next('resume')); // { value: 'running', done: false }
+console.log(machine.next('stop')); // { value: 'stopped', done: false }
+```
+
+**Best Practices:**
+1. Use generators for lazy evaluation
+2. Use generators for infinite sequences
+3. Use generators for state machines
+4. Use generators for async operations
+5. Use custom iterators for complex data structures
+6. Consider memory usage with large datasets
+7. Use generators for data transformation pipelines
+
+**Related Questions:** [Symbols](#50-what-are-symbols), [for...of vs for...in](#52-what-is-the-forof-vs-forin-loop)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 52. What is the `for...of` vs `for...in` loop?
+
+The main difference is that **`for...of`** iterates over values, while **`for...in`** iterates over property names (keys).
+
+**Key Differences:**
+
+| Aspect | `for...of` | `for...in` |
+|--------|------------|------------|
+| **Iterates over** | Values | Property names (keys) |
+| **Works with** | Iterables (arrays, strings, maps, sets) | Objects (and arrays) |
+| **Order** | Guaranteed order | Not guaranteed order |
+| **Prototype** | Only own properties | Includes inherited properties |
+| **Type** | ES6+ | ES5+ |
+
+**1. Basic Usage:**
+```javascript
+const arr = ['a', 'b', 'c'];
+
+// for...of - iterates over values
+for (const value of arr) {
+    console.log(value); // 'a', 'b', 'c'
+}
+
+// for...in - iterates over indices
+for (const index in arr) {
+    console.log(index); // '0', '1', '2'
+    console.log(arr[index]); // 'a', 'b', 'c'
+}
+```
+
+**2. Object Iteration:**
+```javascript
+const obj = { a: 1, b: 2, c: 3 };
+
+// for...of - doesn't work with plain objects
+// for (const value of obj) { // TypeError: obj is not iterable
+//     console.log(value);
+// }
+
+// for...in - works with objects
+for (const key in obj) {
+    console.log(key); // 'a', 'b', 'c'
+    console.log(obj[key]); // 1, 2, 3
+}
+```
+
+**3. Array Iteration:**
+```javascript
+const arr = [10, 20, 30];
+
+// for...of - values
+for (const value of arr) {
+    console.log(value); // 10, 20, 30
+}
+
+// for...in - indices (as strings)
+for (const index in arr) {
+    console.log(index); // '0', '1', '2'
+    console.log(typeof index); // 'string'
+    console.log(arr[index]); // 10, 20, 30
+}
+```
+
+**4. String Iteration:**
+```javascript
+const str = 'hello';
+
+// for...of - characters
+for (const char of str) {
+    console.log(char); // 'h', 'e', 'l', 'l', 'o'
+}
+
+// for...in - indices
+for (const index in str) {
+    console.log(index); // '0', '1', '2', '3', '4'
+    console.log(str[index]); // 'h', 'e', 'l', 'l', 'o'
+}
+```
+
+**5. Map and Set Iteration:**
+```javascript
+const map = new Map([['a', 1], ['b', 2], ['c', 3]]);
+const set = new Set([1, 2, 3, 4, 5]);
+
+// for...of with Map
+for (const [key, value] of map) {
+    console.log(key, value); // 'a' 1, 'b' 2, 'c' 3
+}
+
+// for...of with Set
+for (const value of set) {
+    console.log(value); // 1, 2, 3, 4, 5
+}
+
+// for...in doesn't work with Map/Set
+// for (const key in map) { // Doesn't iterate
+//     console.log(key);
+// }
+```
+
+**6. Prototype Chain:**
+```javascript
+// Object with inherited properties
+const parent = { inherited: 'parent' };
+const child = Object.create(parent);
+child.own = 'child';
+
+// for...in - includes inherited properties
+for (const key in child) {
+    console.log(key); // 'inherited', 'own'
+}
+
+// for...in with hasOwnProperty check
+for (const key in child) {
+    if (child.hasOwnProperty(key)) {
+        console.log(key); // 'own'
+    }
+}
+
+// for...of - only own properties (when iterable)
+const arr = [1, 2, 3];
+Array.prototype.customMethod = function() {};
+
+for (const value of arr) {
+    console.log(value); // 1, 2, 3 (no customMethod)
+}
+
+for (const index in arr) {
+    console.log(index); // '0', '1', '2', 'customMethod'
+}
+```
+
+**7. Performance Comparison:**
+```javascript
+const largeArray = Array.from({ length: 1000000 }, (_, i) => i);
+
+// for...of performance
+console.time('for...of');
+for (const value of largeArray) {
+    // Do something
+}
+console.timeEnd('for...of');
+
+// for...in performance
+console.time('for...in');
+for (const index in largeArray) {
+    const value = largeArray[index];
+    // Do something
+}
+console.timeEnd('for...in');
+
+// Traditional for loop
+console.time('for loop');
+for (let i = 0; i < largeArray.length; i++) {
+    const value = largeArray[i];
+    // Do something
+}
+console.timeEnd('for loop');
+```
+
+**8. Common Patterns:**
+```javascript
+// Iterating over array with index
+const arr = ['a', 'b', 'c'];
+
+// Using for...of with entries()
+for (const [index, value] of arr.entries()) {
+    console.log(index, value); // 0 'a', 1 'b', 2 'c'
+}
+
+// Using for...in with arrays (not recommended)
+for (const index in arr) {
+    console.log(parseInt(index), arr[index]); // 0 'a', 1 'b', 2 'c'
+}
+
+// Object iteration with for...of
+const obj = { a: 1, b: 2, c: 3 };
+
+// Convert to entries and iterate
+for (const [key, value] of Object.entries(obj)) {
+    console.log(key, value); // 'a' 1, 'b' 2, 'c' 3
+}
+
+// Iterate over keys only
+for (const key of Object.keys(obj)) {
+    console.log(key); // 'a', 'b', 'c'
+}
+
+// Iterate over values only
+for (const value of Object.values(obj)) {
+    console.log(value); // 1, 2, 3
+}
+```
+
+**9. When to Use Each:**
+```javascript
+// Use for...of for:
+// - Array values
+// - String characters
+// - Map entries
+// - Set values
+// - Any iterable object
+
+const iterables = [
+    [1, 2, 3],           // Array
+    'hello',             // String
+    new Map([['a', 1]]), // Map
+    new Set([1, 2, 3])   // Set
+];
+
+for (const iterable of iterables) {
+    for (const value of iterable) {
+        console.log(value);
+    }
+}
+
+// Use for...in for:
+// - Object properties
+// - When you need the key/index
+// - When checking for own properties
+
+const obj = { a: 1, b: 2, c: 3 };
+for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+        console.log(key, obj[key]);
+    }
+}
+```
+
+**Best Practices:**
+1. Use `for...of` for iterating over values
+2. Use `for...in` for iterating over object properties
+3. Always check `hasOwnProperty` with `for...in`
+4. Use `for...of` with `entries()` for index and value
+5. Prefer `for...of` for arrays over `for...in`
+6. Use `Object.entries()` with `for...of` for objects
+7. Consider performance implications for large datasets
+
+**Related Questions:** [Generators and Iterators](#51-what-are-generators-and-iterators), [Error Handling](#53-how-do-you-handle-errors-in-javascript)
 
 [⬆️ Back to Top](#table-of-contents)
 
 ## Error Handling
-55. How do you handle errors in JavaScript?
-56. What is the difference between throwing and catching errors?
-57. What are the different types of errors in JavaScript?
-58. How do you create custom error types?
+
+### 53. How do you handle errors in JavaScript?
+
+**Error handling** in JavaScript involves catching and managing errors that occur during program execution. JavaScript provides several mechanisms for error handling, with `try...catch` being the most common.
+
+**1. Basic try...catch:**
+```javascript
+try {
+    // Code that might throw an error
+    const result = riskyOperation();
+    console.log('Success:', result);
+} catch (error) {
+    // Handle the error
+    console.error('Error occurred:', error.message);
+} finally {
+    // Code that always runs
+    console.log('Cleanup completed');
+}
+```
+
+**2. Throwing Errors:**
+```javascript
+function divide(a, b) {
+    if (b === 0) {
+        throw new Error('Division by zero is not allowed');
+    }
+    return a / b;
+}
+
+try {
+    const result = divide(10, 0);
+} catch (error) {
+    console.error('Error:', error.message); // "Division by zero is not allowed"
+}
+```
+
+**3. Error Types:**
+```javascript
+// Built-in error types
+try {
+    throw new Error('Generic error');
+} catch (error) {
+    console.log(error instanceof Error); // true
+}
+
+try {
+    throw new TypeError('Type error');
+} catch (error) {
+    console.log(error instanceof TypeError); // true
+}
+
+try {
+    throw new ReferenceError('Reference error');
+} catch (error) {
+    console.log(error instanceof ReferenceError); // true
+}
+
+try {
+    throw new SyntaxError('Syntax error');
+} catch (error) {
+    console.log(error instanceof SyntaxError); // true
+}
+```
+
+**4. Custom Error Classes:**
+```javascript
+class ValidationError extends Error {
+    constructor(message, field) {
+        super(message);
+        this.name = 'ValidationError';
+        this.field = field;
+    }
+}
+
+class NetworkError extends Error {
+    constructor(message, statusCode) {
+        super(message);
+        this.name = 'NetworkError';
+        this.statusCode = statusCode;
+    }
+}
+
+// Using custom errors
+function validateUser(user) {
+    if (!user.name) {
+        throw new ValidationError('Name is required', 'name');
+    }
+    if (!user.email) {
+        throw new ValidationError('Email is required', 'email');
+    }
+}
+
+try {
+    validateUser({});
+} catch (error) {
+    if (error instanceof ValidationError) {
+        console.log(`Validation failed for ${error.field}: ${error.message}`);
+    }
+}
+```
+
+**5. Async Error Handling:**
+```javascript
+// Promise-based error handling
+async function fetchData() {
+    try {
+        const response = await fetch('/api/data');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Fetch error:', error.message);
+        throw error; // Re-throw if needed
+    }
+}
+
+// Using fetchData
+fetchData()
+    .then(data => console.log('Data:', data))
+    .catch(error => console.error('Error:', error.message));
+```
+
+**Best Practices:**
+1. Always handle errors appropriately
+2. Use specific error types for different scenarios
+3. Provide meaningful error messages
+4. Log errors for debugging and monitoring
+5. Implement retry mechanisms for transient errors
+6. Use fallback strategies when possible
+7. Don't ignore errors silently
+8. Test error handling paths
+9. Use global error handlers for unexpected errors
+10. Consider user experience when handling errors
+
+**Related Questions:** [Throwing and Catching Errors](#54-what-is-the-difference-between-throwing-and-catching-errors), [Error Types](#55-what-are-the-different-types-of-errors-in-javascript)
 
 [⬆️ Back to Top](#table-of-contents)
 
+---
+
+### 54. What is the difference between throwing and catching errors?
+
+**Throwing errors** means creating and raising an error condition, while **catching errors** means handling and responding to errors that have been thrown.
+
+**Key Differences:**
+
+| Aspect | Throwing | Catching |
+|--------|----------|----------|
+| **Purpose** | Signal that an error occurred | Handle the error |
+| **When** | When error condition is detected | When error is thrown |
+| **Syntax** | `throw new Error()` | `try...catch` |
+| **Control** | Stops execution | Continues execution |
+| **Location** | Anywhere in code | Only in try block |
+
+**1. Throwing Errors:**
+```javascript
+// Basic error throwing
+function validateAge(age) {
+    if (age < 0) {
+        throw new Error('Age cannot be negative');
+    }
+    if (age > 150) {
+        throw new Error('Age cannot be greater than 150');
+    }
+    return true;
+}
+
+// Throwing different error types
+function processData(data) {
+    if (!data) {
+        throw new TypeError('Data is required');
+    }
+    if (typeof data !== 'object') {
+        throw new TypeError('Data must be an object');
+    }
+    if (!data.id) {
+        throw new ReferenceError('Data must have an id property');
+    }
+    return data;
+}
+```
+
+**2. Catching Errors:**
+```javascript
+// Basic error catching
+try {
+    validateAge(-5);
+} catch (error) {
+    console.error('Validation failed:', error.message);
+}
+
+// Catching specific error types
+try {
+    processData('invalid');
+} catch (error) {
+    if (error instanceof TypeError) {
+        console.error('Type error:', error.message);
+    } else if (error instanceof ReferenceError) {
+        console.error('Reference error:', error.message);
+    } else {
+        console.error('Unknown error:', error.message);
+    }
+}
+```
+
+**3. Error Propagation:**
+```javascript
+// Errors propagate up the call stack
+function level1() {
+    try {
+        level2();
+    } catch (error) {
+        console.log('Level 1 caught:', error.message);
+        throw error; // Re-throw to propagate further
+    }
+}
+
+function level2() {
+    try {
+        level3();
+    } catch (error) {
+        console.log('Level 2 caught:', error.message);
+        throw error; // Re-throw to propagate further
+    }
+}
+
+function level3() {
+    throw new Error('Error from level 3');
+}
+```
+
+**Best Practices:**
+1. Throw errors early and catch them late
+2. Use specific error types for different scenarios
+3. Provide meaningful error messages
+4. Don't catch errors unless you can handle them
+5. Re-throw errors when appropriate
+6. Use error boundaries for UI components
+7. Implement retry mechanisms for transient errors
+8. Log errors for debugging and monitoring
+9. Consider error recovery strategies
+10. Test error handling paths
+
+**Related Questions:** [Error Handling](#53-how-do-you-handle-errors-in-javascript), [Error Types](#55-what-are-the-different-types-of-errors-in-javascript)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 55. What are the different types of errors in JavaScript?
+
+JavaScript has several built-in error types, each designed for specific error conditions. Understanding these types helps in proper error handling and debugging.
+
+**1. Built-in Error Types:**
+
+**Error (Base Error):**
+```javascript
+// Generic error
+const error = new Error('Something went wrong');
+console.log(error.name); // "Error"
+console.log(error.message); // "Something went wrong"
+console.log(error instanceof Error); // true
+```
+
+**TypeError:**
+```javascript
+// Type-related errors
+try {
+    const obj = null;
+    obj.property; // TypeError: Cannot read property 'property' of null
+} catch (error) {
+    console.log(error instanceof TypeError); // true
+    console.log(error.name); // "TypeError"
+}
+```
+
+**ReferenceError:**
+```javascript
+// Undefined variable errors
+try {
+    console.log(undefinedVariable); // ReferenceError: undefinedVariable is not defined
+} catch (error) {
+    console.log(error instanceof ReferenceError); // true
+    console.log(error.name); // "ReferenceError"
+}
+```
+
+**SyntaxError:**
+```javascript
+// Syntax errors (usually caught at parse time)
+try {
+    eval('const x = ;'); // SyntaxError: Unexpected token ';'
+} catch (error) {
+    console.log(error instanceof SyntaxError); // true
+    console.log(error.name); // "SyntaxError"
+}
+```
+
+**RangeError:**
+```javascript
+// Range-related errors
+try {
+    const arr = new Array(-1); // RangeError: Invalid array length
+} catch (error) {
+    console.log(error instanceof RangeError); // true
+    console.log(error.name); // "RangeError"
+}
+```
+
+**URIError:**
+```javascript
+// URI-related errors
+try {
+    decodeURIComponent('%'); // URIError: URI malformed
+} catch (error) {
+    console.log(error instanceof URIError); // true
+    console.log(error.name); // "URIError"
+}
+```
+
+**2. Custom Error Types:**
+```javascript
+// Custom error class
+class ValidationError extends Error {
+    constructor(message, field) {
+        super(message);
+        this.name = 'ValidationError';
+        this.field = field;
+    }
+}
+
+class NetworkError extends Error {
+    constructor(message, statusCode) {
+        super(message);
+        this.name = 'NetworkError';
+        this.statusCode = statusCode;
+    }
+}
+
+// Using custom errors
+function validateUser(user) {
+    if (!user.name) {
+        throw new ValidationError('Name is required', 'name');
+    }
+    if (!user.email) {
+        throw new ValidationError('Email is required', 'email');
+    }
+}
+```
+
+**Best Practices:**
+1. Use specific error types for different scenarios
+2. Create custom error classes for domain-specific errors
+3. Include relevant context in error objects
+4. Use error type checking for proper handling
+5. Document custom error types
+6. Follow consistent error naming conventions
+7. Consider error inheritance hierarchies
+8. Test error type creation and handling
+9. Use error factories for consistent error creation
+10. Implement error serialization for logging
+
+**Related Questions:** [Error Handling](#53-how-do-you-handle-errors-in-javascript), [Throwing and Catching Errors](#54-what-is-the-difference-between-throwing-and-catching-errors)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 56. How do you create custom error types?
+
+**Custom error types** allow you to create specific error classes for different scenarios in your application. This provides better error handling, debugging, and user experience.
+
+**1. Basic Custom Error Class:**
+```javascript
+class CustomError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = 'CustomError';
+    }
+}
+
+// Usage
+try {
+    throw new CustomError('Something went wrong');
+} catch (error) {
+    console.log(error instanceof CustomError); // true
+    console.log(error.name); // "CustomError"
+    console.log(error.message); // "Something went wrong"
+}
+```
+
+**2. Error with Additional Properties:**
+```javascript
+class ValidationError extends Error {
+    constructor(message, field, value) {
+        super(message);
+        this.name = 'ValidationError';
+        this.field = field;
+        this.value = value;
+        this.timestamp = new Date().toISOString();
+    }
+}
+
+// Usage
+try {
+    throw new ValidationError('Invalid email format', 'email', 'invalid-email');
+} catch (error) {
+    console.log(error.field); // "email"
+    console.log(error.value); // "invalid-email"
+    console.log(error.timestamp); // "2024-01-15T10:30:00.000Z"
+}
+```
+
+**3. Error with Error Codes:**
+```javascript
+class ApiError extends Error {
+    constructor(message, code, statusCode = 500) {
+        super(message);
+        this.name = 'ApiError';
+        this.code = code;
+        this.statusCode = statusCode;
+    }
+}
+
+// Usage
+try {
+    throw new ApiError('User not found', 'USER_NOT_FOUND', 404);
+} catch (error) {
+    console.log(error.code); // "USER_NOT_FOUND"
+    console.log(error.statusCode); // 404
+}
+```
+
+**Best Practices:**
+1. Extend the base Error class
+2. Set a descriptive name property
+3. Include relevant context information
+4. Implement proper serialization
+5. Add useful methods for error handling
+6. Use consistent naming conventions
+7. Document your custom error types
+8. Consider error inheritance hierarchies
+9. Implement proper error logging
+10. Test your custom error types
+
+**Related Questions:** [Error Handling](#53-how-do-you-handle-errors-in-javascript), [Error Types](#55-what-are-the-different-types-of-errors-in-javascript)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
 ## Performance and Optimization
-59. What are some JavaScript performance optimization techniques?
-60. How do you avoid memory leaks in JavaScript?
-61. What is debouncing and throttling?
-62. How do you optimize DOM manipulation?
-63. What is lazy loading?
+
+### 57. How do you optimize JavaScript performance?
+
+**JavaScript performance optimization** involves improving the speed, efficiency, and responsiveness of JavaScript code. This includes optimizing algorithms, reducing memory usage, and improving execution time.
+
+**1. Algorithm Optimization:**
+```javascript
+// Inefficient O(n²) approach
+function findDuplicates(arr) {
+    const duplicates = [];
+    for (let i = 0; i < arr.length; i++) {
+        for (let j = i + 1; j < arr.length; j++) {
+            if (arr[i] === arr[j] && !duplicates.includes(arr[i])) {
+                duplicates.push(arr[i]);
+            }
+        }
+    }
+    return duplicates;
+}
+
+// Efficient O(n) approach
+function findDuplicatesOptimized(arr) {
+    const seen = new Set();
+    const duplicates = new Set();
+    
+    for (const item of arr) {
+        if (seen.has(item)) {
+            duplicates.add(item);
+        } else {
+            seen.add(item);
+        }
+    }
+    
+    return Array.from(duplicates);
+}
+```
+
+**2. Memory Optimization:**
+```javascript
+// Avoid memory leaks
+function createClosure() {
+    const largeData = new Array(1000000).fill('data');
+    
+    return function() {
+        // Only use what you need
+        return largeData.length;
+    };
+}
+
+// Better approach - don't hold references to large objects
+function createClosureOptimized() {
+    return function(data) {
+        return data.length;
+    };
+}
+```
+
+**3. DOM Optimization:**
+```javascript
+// Inefficient DOM manipulation
+function updateList(items) {
+    const list = document.getElementById('list');
+    list.innerHTML = ''; // Clear all
+    
+    items.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item.name;
+        list.appendChild(li); // Multiple reflows
+    });
+}
+
+// Efficient DOM manipulation
+function updateListOptimized(items) {
+    const list = document.getElementById('list');
+    const fragment = document.createDocumentFragment();
+    
+    items.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item.name;
+        fragment.appendChild(li);
+    });
+    
+    list.innerHTML = '';
+    list.appendChild(fragment); // Single reflow
+}
+```
+
+**Best Practices:**
+1. Use efficient algorithms and data structures
+2. Minimize DOM manipulation and reflows
+3. Use event delegation and throttling
+4. Avoid memory leaks and circular references
+5. Use Web Workers for heavy computations
+6. Implement lazy loading and code splitting
+7. Use caching and memoization
+8. Profile and measure performance
+9. Use modern JavaScript features
+10. Optimize for the critical rendering path
+
+**Related Questions:** [Memory Leaks](#58-what-are-memory-leaks-and-how-do-you-prevent-them), [Debouncing and Throttling](#59-what-is-debouncing-and-throttling)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 58. What are memory leaks and how do you prevent them?
+
+**Memory leaks** occur when memory is allocated but never released, causing the application to consume increasing amounts of memory over time. This can lead to performance degradation and eventually crash the application.
+
+**1. Common Memory Leak Sources:**
+
+**Global Variables:**
+```javascript
+// Bad - creates global variable
+function createUser() {
+    user = { name: 'John', data: new Array(1000000) };
+}
+
+// Good - use local variables
+function createUser() {
+    const user = { name: 'John', data: new Array(1000000) };
+    return user;
+}
+```
+
+**Event Listeners:**
+```javascript
+// Bad - event listener not removed
+function addClickListener() {
+    document.addEventListener('click', function() {
+        console.log('Clicked');
+    });
+}
+
+// Good - remove event listeners
+function addClickListener() {
+    const handler = function() {
+        console.log('Clicked');
+    };
+    
+    document.addEventListener('click', handler);
+    
+    // Remove when no longer needed
+    return () => document.removeEventListener('click', handler);
+}
+```
+
+**2. Memory Leak Prevention:**
+
+**Proper Cleanup:**
+```javascript
+class ResourceManager {
+    constructor() {
+        this.resources = new Set();
+        this.eventListeners = new Map();
+    }
+    
+    addResource(resource) {
+        this.resources.add(resource);
+    }
+    
+    addEventListener(element, event, handler) {
+        element.addEventListener(event, handler);
+        
+        if (!this.eventListeners.has(element)) {
+            this.eventListeners.set(element, []);
+        }
+        this.eventListeners.get(element).push({ event, handler });
+    }
+    
+    cleanup() {
+        // Remove event listeners
+        this.eventListeners.forEach((listeners, element) => {
+            listeners.forEach(({ event, handler }) => {
+                element.removeEventListener(event, handler);
+            });
+        });
+        this.eventListeners.clear();
+        
+        // Clear resources
+        this.resources.clear();
+    }
+}
+```
+
+**Best Practices:**
+1. Avoid global variables
+2. Remove event listeners when no longer needed
+3. Use WeakMap and WeakSet for object references
+4. Implement proper cleanup in classes
+5. Avoid circular references
+6. Use object pooling for frequently created objects
+7. Monitor memory usage
+8. Test for memory leaks
+9. Use profiling tools
+10. Implement garbage collection hints
+
+**Related Questions:** [Performance Optimization](#57-how-do-you-optimize-javascript-performance), [Debouncing and Throttling](#59-what-is-debouncing-and-throttling)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 59. What is debouncing and throttling?
+
+**Debouncing** and **throttling** are techniques used to limit the rate at which functions are executed, improving performance and user experience.
+
+**Debouncing:**
+Delays function execution until after a specified time has passed since the last invocation.
+
+**Throttling:**
+Limits function execution to once per specified time period.
+
+**1. Debouncing Implementation:**
+```javascript
+function debounce(func, delay) {
+    let timeoutId;
+    return function(...args) {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => func.apply(this, args), delay);
+    };
+}
+
+// Usage
+const debouncedSearch = debounce(function(query) {
+    console.log('Searching for:', query);
+}, 300);
+
+// Input field search
+document.getElementById('search').addEventListener('input', (e) => {
+    debouncedSearch(e.target.value);
+});
+```
+
+**2. Throttling Implementation:**
+```javascript
+function throttle(func, limit) {
+    let inThrottle;
+    return function(...args) {
+        if (!inThrottle) {
+            func.apply(this, args);
+            inThrottle = true;
+            setTimeout(() => inThrottle = false, limit);
+        }
+    };
+}
+
+// Usage
+const throttledScroll = throttle(function() {
+    console.log('Scroll event');
+}, 100);
+
+window.addEventListener('scroll', throttledScroll);
+```
+
+**Best Practices:**
+1. Use debouncing for search inputs
+2. Use throttling for scroll and resize events
+3. Choose appropriate delay times
+4. Consider immediate execution for debouncing
+5. Test performance impact
+6. Use modern alternatives like Intersection Observer
+7. Implement proper cleanup
+8. Consider user experience
+9. Use requestAnimationFrame for animations
+10. Profile and measure performance
+
+**Related Questions:** [Performance Optimization](#57-how-do-you-optimize-javascript-performance), [Memory Leaks](#58-what-are-memory-leaks-and-how-do-you-prevent-them)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 60. How do you optimize DOM operations?
+
+**DOM optimization** involves improving the performance of Document Object Model operations, which are often the bottleneck in web applications.
+
+**1. Minimize DOM Access:**
+```javascript
+// Bad - multiple DOM queries
+function updateElements() {
+    document.getElementById('title').textContent = 'New Title';
+    document.getElementById('title').className = 'updated';
+    document.getElementById('title').style.color = 'red';
+}
+
+// Good - single DOM query
+function updateElements() {
+    const title = document.getElementById('title');
+    title.textContent = 'New Title';
+    title.className = 'updated';
+    title.style.color = 'red';
+}
+```
+
+**2. Use Document Fragments:**
+```javascript
+// Bad - multiple reflows
+function createList(items) {
+    const list = document.getElementById('list');
+    
+    items.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item.name;
+        list.appendChild(li); // Causes reflow
+    });
+}
+
+// Good - single reflow
+function createList(items) {
+    const list = document.getElementById('list');
+    const fragment = document.createDocumentFragment();
+    
+    items.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item.name;
+        fragment.appendChild(li);
+    });
+    
+    list.appendChild(fragment); // Single reflow
+}
+```
+
+**Best Practices:**
+1. Minimize DOM queries
+2. Use document fragments
+3. Batch DOM updates
+4. Use CSS classes instead of inline styles
+5. Implement event delegation
+6. Use virtual scrolling for large lists
+7. Avoid layout thrashing
+8. Use requestAnimationFrame for animations
+9. Implement proper cleanup
+10. Profile and measure performance
+
+**Related Questions:** [Performance Optimization](#57-how-do-you-optimize-javascript-performance), [Lazy Loading](#61-what-is-lazy-loading-and-how-do-you-implement-it)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 61. What is lazy loading and how do you implement it?
+
+**Lazy loading** is a technique that delays the loading of resources until they are actually needed, improving initial page load performance and reducing bandwidth usage.
+
+**1. Image Lazy Loading:**
+```javascript
+// Intersection Observer API
+const imageObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const img = entry.target;
+            img.src = img.dataset.src;
+            img.classList.remove('lazy');
+            observer.unobserve(img);
+        }
+    });
+});
+
+// Observe all lazy images
+document.querySelectorAll('img[data-src]').forEach(img => {
+    imageObserver.observe(img);
+});
+```
+
+**2. Module Lazy Loading:**
+```javascript
+// Dynamic import
+async function loadModule(moduleName) {
+    try {
+        const module = await import(`./modules/${moduleName}.js`);
+        return module;
+    } catch (error) {
+        console.error('Failed to load module:', error);
+        return null;
+    }
+}
+
+// Usage
+document.getElementById('loadModule').addEventListener('click', async () => {
+    const module = await loadModule('heavyModule');
+    if (module) {
+        module.init();
+    }
+});
+```
+
+**Best Practices:**
+1. Use Intersection Observer API
+2. Implement proper error handling
+3. Consider fallbacks for older browsers
+4. Optimize loading strategies
+5. Use appropriate thresholds
+6. Implement proper cleanup
+7. Consider user experience
+8. Test performance impact
+9. Use modern loading techniques
+10. Monitor loading performance
+
+**Related Questions:** [Performance Optimization](#57-how-do-you-optimize-javascript-performance), [DOM Optimization](#60-how-do-you-optimize-dom-operations)
 
 [⬆️ Back to Top](#table-of-contents)
 
 ## Advanced Concepts
-64. What is memoization?
-65. What are design patterns in JavaScript (Singleton, Observer, Module)?
-66. What is functional programming in JavaScript?
-67. What is immutability and why is it important?
-68. What are pure functions?
-69. What is recursion and when would you use it?
+
+### 62. What is memoization and how do you implement it?
+
+**Memoization** is an optimization technique that caches the results of expensive function calls and returns the cached result when the same inputs occur again. This can significantly improve performance for functions with expensive computations.
+
+**1. Basic Memoization:**
+```javascript
+function memoize(fn) {
+    const cache = new Map();
+    
+    return function(...args) {
+        const key = JSON.stringify(args);
+        
+        if (cache.has(key)) {
+            console.log('Cache hit!');
+            return cache.get(key);
+        }
+        
+        console.log('Computing...');
+        const result = fn.apply(this, args);
+        cache.set(key, result);
+        return result;
+    };
+}
+
+// Example usage
+function expensiveCalculation(n) {
+    console.log(`Computing for ${n}`);
+    let result = 0;
+    for (let i = 0; i < n * 1000000; i++) {
+        result += i;
+    }
+    return result;
+}
+
+const memoizedCalculation = memoize(expensiveCalculation);
+
+console.log(memoizedCalculation(5)); // Computing... (takes time)
+console.log(memoizedCalculation(5)); // Cache hit! (instant)
+```
+
+**2. Memoization with Cache Size Limit:**
+```javascript
+function memoizeWithLimit(fn, limit = 100) {
+    const cache = new Map();
+    
+    return function(...args) {
+        const key = JSON.stringify(args);
+        
+        if (cache.has(key)) {
+            // Move to end (LRU)
+            const value = cache.get(key);
+            cache.delete(key);
+            cache.set(key, value);
+            return value;
+        }
+        
+        const result = fn.apply(this, args);
+        
+        // Remove oldest if at limit
+        if (cache.size >= limit) {
+            const firstKey = cache.keys().next().value;
+            cache.delete(firstKey);
+        }
+        
+        cache.set(key, result);
+        return result;
+    };
+}
+```
+
+**3. Memoization for Recursive Functions:**
+```javascript
+function memoizedFibonacci() {
+    const cache = new Map();
+    
+    function fibonacci(n) {
+        if (n <= 1) return n;
+        
+        if (cache.has(n)) {
+            return cache.get(n);
+        }
+        
+        const result = fibonacci(n - 1) + fibonacci(n - 2);
+        cache.set(n, result);
+        return result;
+    }
+    
+    return fibonacci;
+}
+
+const fib = memoizedFibonacci();
+console.log(fib(40)); // Much faster than naive implementation
+```
+
+**Best Practices:**
+1. Use memoization for expensive, pure functions
+2. Consider cache size limits for memory management
+3. Use appropriate key generation strategies
+4. Handle async functions carefully
+5. Consider TTL for time-sensitive data
+6. Use WeakMap for object-based caching
+7. Test performance improvements
+8. Be aware of memory usage
+9. Consider cache invalidation strategies
+10. Use memoization judiciously
+
+**Related Questions:** [Design Patterns](#63-what-are-some-common-design-patterns-in-javascript), [Functional Programming](#64-what-is-functional-programming)
 
 [⬆️ Back to Top](#table-of-contents)
 
+---
+
+### 63. What are some common design patterns in JavaScript?
+
+**Design patterns** are reusable solutions to commonly occurring problems in software design. They provide templates for solving problems in a consistent way.
+
+**1. Singleton Pattern:**
+```javascript
+class Singleton {
+    constructor() {
+        if (Singleton.instance) {
+            return Singleton.instance;
+        }
+        
+        this.data = {};
+        Singleton.instance = this;
+    }
+    
+    setData(key, value) {
+        this.data[key] = value;
+    }
+    
+    getData(key) {
+        return this.data[key];
+    }
+}
+
+// Usage
+const instance1 = new Singleton();
+const instance2 = new Singleton();
+console.log(instance1 === instance2); // true
+```
+
+**2. Observer Pattern:**
+```javascript
+class EventEmitter {
+    constructor() {
+        this.events = {};
+    }
+    
+    on(event, listener) {
+        if (!this.events[event]) {
+            this.events[event] = [];
+        }
+        this.events[event].push(listener);
+    }
+    
+    emit(event, ...args) {
+        if (this.events[event]) {
+            this.events[event].forEach(listener => listener(...args));
+        }
+    }
+    
+    off(event, listener) {
+        if (this.events[event]) {
+            this.events[event] = this.events[event].filter(l => l !== listener);
+        }
+    }
+}
+
+// Usage
+const emitter = new EventEmitter();
+emitter.on('user:login', (user) => {
+    console.log(`User ${user.name} logged in`);
+});
+emitter.emit('user:login', { name: 'John', id: 1 });
+```
+
+**3. Factory Pattern:**
+```javascript
+class AnimalFactory {
+    static createAnimal(type, name) {
+        switch (type) {
+            case 'dog':
+                return new Dog(name);
+            case 'cat':
+                return new Cat(name);
+            case 'bird':
+                return new Bird(name);
+            default:
+                throw new Error('Unknown animal type');
+        }
+    }
+}
+
+class Dog {
+    constructor(name) {
+        this.name = name;
+        this.type = 'dog';
+    }
+    
+    speak() {
+        return 'Woof!';
+    }
+}
+
+// Usage
+const dog = AnimalFactory.createAnimal('dog', 'Buddy');
+const cat = AnimalFactory.createAnimal('cat', 'Whiskers');
+```
+
+**Best Practices:**
+1. Choose patterns that fit your problem
+2. Don't over-engineer simple solutions
+3. Understand the trade-offs of each pattern
+4. Use patterns consistently across your codebase
+5. Consider performance implications
+6. Document pattern usage
+7. Test pattern implementations
+8. Consider modern alternatives
+9. Use composition over inheritance
+10. Keep patterns simple and readable
+
+**Related Questions:** [Memoization](#62-what-is-memoization-and-how-do-you-implement-it), [Functional Programming](#64-what-is-functional-programming)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 64. What is functional programming?
+
+**Functional programming** is a programming paradigm that treats computation as the evaluation of mathematical functions and avoids changing state and mutable data. It emphasizes immutability, pure functions, and function composition.
+
+**1. Pure Functions:**
+```javascript
+// Pure function - same input always produces same output
+function add(a, b) {
+    return a + b;
+}
+
+// Impure function - depends on external state
+let counter = 0;
+function increment() {
+    return ++counter; // Side effect
+}
+
+// Pure function version
+function incrementPure(counter) {
+    return counter + 1;
+}
+```
+
+**2. Immutability:**
+```javascript
+// Mutable approach
+const user = { name: 'John', age: 30 };
+user.age = 31; // Mutates original object
+
+// Immutable approach
+const user = { name: 'John', age: 30 };
+const updatedUser = { ...user, age: 31 }; // Creates new object
+```
+
+**3. Higher-Order Functions:**
+```javascript
+// Functions that take other functions as arguments
+function map(array, fn) {
+    const result = [];
+    for (let i = 0; i < array.length; i++) {
+        result.push(fn(array[i], i, array));
+    }
+    return result;
+}
+
+function filter(array, predicate) {
+    const result = [];
+    for (let i = 0; i < array.length; i++) {
+        if (predicate(array[i], i, array)) {
+            result.push(array[i]);
+        }
+    }
+    return result;
+}
+
+// Usage
+const numbers = [1, 2, 3, 4, 5];
+const doubled = map(numbers, x => x * 2);
+const evens = filter(numbers, x => x % 2 === 0);
+```
+
+**Best Practices:**
+1. Write pure functions whenever possible
+2. Avoid side effects and mutations
+3. Use immutable data structures
+4. Compose functions instead of nesting
+5. Use higher-order functions
+6. Implement proper error handling
+7. Consider performance implications
+8. Use functional libraries when appropriate
+9. Test pure functions thoroughly
+10. Balance functional and imperative approaches
+
+**Related Questions:** [Memoization](#62-what-is-memoization-and-how-do-you-implement-it), [Design Patterns](#63-what-are-some-common-design-patterns-in-javascript)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 65. What is immutability and why is it important?
+
+**Immutability** is the principle that data should not be modified after it's created. Instead of changing existing data, you create new data with the desired changes.
+
+**1. Immutable Objects:**
+```javascript
+// Mutable approach
+const user = { name: 'John', age: 30 };
+user.age = 31; // Mutates original object
+
+// Immutable approach
+const user = { name: 'John', age: 30 };
+const updatedUser = { ...user, age: 31 }; // Creates new object
+
+// Deep immutability for nested objects
+const user = {
+    name: 'John',
+    age: 30,
+    address: {
+        street: '123 Main St',
+        city: 'New York'
+    }
+};
+
+// Deep copy
+const deepCopy = {
+    ...user,
+    address: {
+        ...user.address,
+        city: 'Boston'
+    }
+};
+```
+
+**2. Immutable Arrays:**
+```javascript
+const numbers = [1, 2, 3, 4, 5];
+
+// Add element
+const newNumbers = [...numbers, 6];
+
+// Remove element
+const filteredNumbers = numbers.filter(n => n !== 3);
+
+// Update element
+const updatedNumbers = numbers.map(n => n === 3 ? 30 : n);
+```
+
+**Best Practices:**
+1. Use spread operator for shallow copies
+2. Use libraries like Immer for complex updates
+3. Implement structural sharing when possible
+4. Use immutable data structures
+5. Avoid deep cloning when not necessary
+6. Use reference equality for comparisons
+7. Consider performance implications
+8. Use proper error handling
+9. Document immutable patterns
+10. Test immutable operations
+
+**Related Questions:** [Functional Programming](#64-what-is-functional-programming), [Pure Functions](#66-what-are-pure-functions)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 66. What are pure functions?
+
+**Pure functions** are functions that always return the same output for the same input and have no side effects. They don't modify external state or depend on external variables.
+
+**1. Characteristics of Pure Functions:**
+```javascript
+// Pure function
+function add(a, b) {
+    return a + b;
+}
+
+// Impure function
+let counter = 0;
+function increment() {
+    return ++counter; // Side effect: modifies external state
+}
+
+// Pure function version
+function incrementPure(counter) {
+    return counter + 1;
+}
+```
+
+**2. Benefits of Pure Functions:**
+```javascript
+// Predictable behavior
+function calculateTax(amount, rate) {
+    return amount * rate;
+}
+
+// Always returns same result for same input
+console.log(calculateTax(100, 0.1)); // 10
+console.log(calculateTax(100, 0.1)); // 10 (always the same)
+
+// Easy to test
+function testCalculateTax() {
+    const result = calculateTax(100, 0.1);
+    console.assert(result === 10, 'Tax calculation failed');
+}
+```
+
+**Best Practices:**
+1. Avoid side effects
+2. Don't modify input parameters
+3. Don't rely on external state
+4. Return consistent outputs
+5. Use dependency injection
+6. Handle errors gracefully
+7. Write comprehensive tests
+8. Document function behavior
+9. Use pure functions for business logic
+10. Consider performance implications
+
+**Related Questions:** [Immutability](#65-what-is-immutability-and-why-is-it-important), [Recursion](#67-what-is-recursion-and-how-do-you-use-it)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 67. What is recursion and how do you use it?
+
+**Recursion** is a programming technique where a function calls itself to solve a problem. It's particularly useful for problems that can be broken down into smaller, similar subproblems.
+
+**1. Basic Recursion:**
+```javascript
+// Factorial function
+function factorial(n) {
+    if (n <= 1) {
+        return 1; // Base case
+    }
+    return n * factorial(n - 1); // Recursive case
+}
+
+console.log(factorial(5)); // 120
+
+// Fibonacci sequence
+function fibonacci(n) {
+    if (n <= 1) {
+        return n; // Base case
+    }
+    return fibonacci(n - 1) + fibonacci(n - 2); // Recursive case
+}
+
+console.log(fibonacci(10)); // 55
+```
+
+**2. Tail Recursion:**
+```javascript
+// Tail recursive factorial
+function factorialTail(n, acc = 1) {
+    if (n <= 1) {
+        return acc; // Base case
+    }
+    return factorialTail(n - 1, n * acc); // Tail call
+}
+
+// Tail recursive fibonacci
+function fibonacciTail(n, a = 0, b = 1) {
+    if (n === 0) return a;
+    if (n === 1) return b;
+    return fibonacciTail(n - 1, b, a + b);
+}
+
+console.log(fibonacciTail(10)); // 55
+```
+
+**3. Recursion with Arrays:**
+```javascript
+// Sum of array elements
+function sumArray(arr, index = 0) {
+    if (index >= arr.length) {
+        return 0; // Base case
+    }
+    return arr[index] + sumArray(arr, index + 1); // Recursive case
+}
+
+// Find maximum element
+function findMax(arr, index = 0, max = -Infinity) {
+    if (index >= arr.length) {
+        return max; // Base case
+    }
+    const currentMax = Math.max(max, arr[index]);
+    return findMax(arr, index + 1, currentMax); // Recursive case
+}
+```
+
+**Best Practices:**
+1. Always define a base case
+2. Ensure the recursive case moves toward the base case
+3. Use tail recursion when possible
+4. Consider memoization for expensive operations
+5. Handle stack overflow errors
+6. Test with edge cases
+7. Consider iterative alternatives
+8. Use recursion for tree/graph problems
+9. Document recursive functions clearly
+10. Consider performance implications
+
+**Related Questions:** [Pure Functions](#66-what-are-pure-functions), [Memoization](#62-what-is-memoization-and-how-do-you-implement-it)
+
+[⬆️ Back to Top](#table-of-contents)
+
+## Advanced Topics
+
+### 68. What are Browser APIs and how do you use them?
+
+**Browser APIs** are interfaces provided by web browsers that allow JavaScript to interact with browser features and system resources. They enable web applications to access device capabilities, storage, and other browser functionality.
+
+**1. Local Storage API:**
+```javascript
+// Storing data
+localStorage.setItem('username', 'john_doe');
+localStorage.setItem('userPreferences', JSON.stringify({
+    theme: 'dark',
+    language: 'en',
+    notifications: true
+}));
+
+// Retrieving data
+const username = localStorage.getItem('username');
+const preferences = JSON.parse(localStorage.getItem('userPreferences'));
+
+// Removing data
+localStorage.removeItem('username');
+
+// Clearing all data
+localStorage.clear();
+
+// Checking if storage is available
+function isLocalStorageAvailable() {
+    try {
+        const test = 'test';
+        localStorage.setItem(test, test);
+        localStorage.removeItem(test);
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+```
+
+**2. Session Storage API:**
+```javascript
+// Session storage (data persists only for the session)
+sessionStorage.setItem('currentPage', 'dashboard');
+sessionStorage.setItem('sessionId', 'abc123');
+
+// Retrieve and use
+const currentPage = sessionStorage.getItem('currentPage');
+const sessionId = sessionStorage.getItem('sessionId');
+
+// Session storage vs Local storage
+console.log('Session storage:', sessionStorage.length);
+console.log('Local storage:', localStorage.length);
+```
+
+**3. Fetch API:**
+```javascript
+// Basic fetch
+async function fetchData(url) {
+    try {
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Fetch error:', error);
+        throw error;
+    }
+}
+
+// Fetch with options
+async function postData(url, data) {
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify(data)
+    });
+    
+    return response.json();
+}
+```
+
+**Best Practices:**
+1. Always check for API support before using
+2. Handle errors gracefully
+3. Use appropriate error messages
+4. Consider fallbacks for older browsers
+5. Implement proper cleanup
+6. Use modern APIs when available
+7. Test across different browsers
+8. Consider performance implications
+9. Follow security best practices
+10. Document API usage
+
+**Related Questions:** [Security](#69-what-are-common-security-vulnerabilities), [Testing](#70-what-is-unit-testing)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 69. What are common security vulnerabilities?
+
+**Security vulnerabilities** in web applications can lead to data breaches, unauthorized access, and other security issues. Understanding these vulnerabilities is crucial for building secure applications.
+
+**1. Cross-Site Scripting (XSS):**
+```javascript
+// Vulnerable code
+function displayUserInput(input) {
+    document.getElementById('output').innerHTML = input; // Dangerous!
+}
+
+// Safe code
+function displayUserInput(input) {
+    const output = document.getElementById('output');
+    output.textContent = input; // Safe - textContent escapes HTML
+}
+
+// Or use proper escaping
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+```
+
+**2. Cross-Site Request Forgery (CSRF):**
+```javascript
+CSRF stands for Cross-Site Request Forgery, a type of web security exploit where an attacker tricks a user's browser into making an unintended, malicious request to a website where the user is authenticated. This causes the trusted website to perform actions on the user's behalf, such as transferring funds or changing settings, without their knowledge or consent. Common defenses include using unique, unpredictable CSRF tokens that the server validates to ensure the request originates from a legitimate user.  
+// CSRF protection with tokens
+class CSRFProtection {
+    static generateToken() {
+        return crypto.randomUUID();
+    }
+    
+    static setToken() {
+        const token = this.generateToken();
+        sessionStorage.setItem('csrf-token', token);
+        return token;
+    }
+    
+    static getToken() {
+        return sessionStorage.getItem('csrf-token');
+    }
+    
+    static validateToken(token) {
+        return token === this.getToken();
+    }
+}
+```
+
+**3. Input Validation:**
+```javascript
+// Input validation class
+class InputValidator {
+    static validateEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+    
+    static validatePassword(password) {
+        const minLength = 8;
+        const hasUpperCase = /[A-Z]/.test(password);
+        const hasLowerCase = /[a-z]/.test(password);
+        const hasNumbers = /\d/.test(password);
+        const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+        
+        return {
+            isValid: password.length >= minLength && hasUpperCase && 
+                    hasLowerCase && hasNumbers && hasSpecialChar,
+            errors: [
+                password.length < minLength && 'Password must be at least 8 characters',
+                !hasUpperCase && 'Password must contain uppercase letter',
+                !hasLowerCase && 'Password must contain lowercase letter',
+                !hasNumbers && 'Password must contain number',
+                !hasSpecialChar && 'Password must contain special character'
+            ].filter(Boolean)
+        };
+    }
+}
+```
+
+**Best Practices:**
+1. Always validate and sanitize input
+2. Use parameterized queries
+3. Implement proper authentication
+4. Use HTTPS everywhere
+5. Set security headers
+6. Implement rate limiting
+7. Keep dependencies updated
+8. Use Content Security Policy
+9. Implement proper session management
+10. Regular security audits
+
+**Related Questions:** [Browser APIs](#68-what-are-browser-apis-and-how-do-you-use-them), [Testing](#70-what-is-unit-testing)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 70. What is unit testing?
+
+**Unit testing** is a software testing method where individual units or components of a software application are tested in isolation. It helps ensure that each part of the code works correctly.
+
+**1. Basic Unit Testing:**
+```javascript
+// Simple test function
+function test(description, testFunction) {
+    try {
+        testFunction();
+        console.log(`✅ ${description}`);
+    } catch (error) {
+        console.log(`❌ ${description}: ${error.message}`);
+    }
+}
+
+// Assertion functions
+function assert(condition, message) {
+    if (!condition) {
+        throw new Error(message || 'Assertion failed');
+    }
+}
+
+function assertEqual(actual, expected, message) {
+    if (actual !== expected) {
+        throw new Error(message || `Expected ${expected}, but got ${actual}`);
+    }
+}
+
+// Example tests
+function add(a, b) {
+    return a + b;
+}
+
+// Test cases
+test('add function works correctly', () => {
+    assertEqual(add(2, 3), 5);
+    assertEqual(add(-1, 1), 0);
+    assertEqual(add(0, 0), 0);
+});
+```
+
+**2. Mocking and Stubbing:**
+```javascript
+// Mock function
+function createMock() {
+    const calls = [];
+    const mockFn = function(...args) {
+        calls.push(args);
+        return mockFn.returnValue;
+    };
+    
+    mockFn.calls = calls;
+    mockFn.returnValue = undefined;
+    mockFn.mockReturnValue = (value) => {
+        mockFn.returnValue = value;
+        return mockFn;
+    };
+    
+    return mockFn;
+}
+
+// Usage
+const mockFetch = createMock();
+mockFetch.mockReturnValue(Promise.resolve({ json: () => ({ data: 'test' }) }));
+```
+
+**Best Practices:**
+1. Write tests before or alongside code
+2. Test edge cases and error conditions
+3. Keep tests simple and focused
+4. Use descriptive test names
+5. Mock external dependencies
+6. Test async code properly
+7. Maintain good test coverage
+8. Keep tests fast and reliable
+9. Refactor tests when refactoring code
+10. Use appropriate assertions
+
+**Related Questions:** [Security](#69-what-are-common-security-vulnerabilities), [Performance](#71-what-is-performance-optimization)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 71. What is performance optimization?
+
+**Performance optimization** involves improving the speed, efficiency, and responsiveness of web applications. It's crucial for providing a good user experience and reducing resource usage.
+
+**1. Code Optimization:**
+```javascript
+// Inefficient code
+function processLargeArray(arr) {
+    let result = [];
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i] > 100) {
+            result.push(arr[i] * 2);
+        }
+    }
+    return result;
+}
+
+// Optimized code
+function processLargeArray(arr) {
+    return arr
+        .filter(item => item > 100)
+        .map(item => item * 2);
+}
+```
+
+**2. Memory Optimization:**
+```javascript
+// Memory leak prevention
+class DataProcessor {
+    constructor() {
+        this.cache = new Map();
+        this.maxCacheSize = 1000;
+    }
+    
+    processData(data) {
+        const key = JSON.stringify(data);
+        
+        if (this.cache.has(key)) {
+            return this.cache.get(key);
+        }
+        
+        const result = this.expensiveOperation(data);
+        
+        // Prevent memory leaks
+        if (this.cache.size >= this.maxCacheSize) {
+            const firstKey = this.cache.keys().next().value;
+            this.cache.delete(firstKey);
+        }
+        
+        this.cache.set(key, result);
+        return result;
+    }
+    
+    cleanup() {
+        this.cache.clear();
+    }
+}
+```
+
+**3. DOM Optimization:**
+```javascript
+// Inefficient DOM manipulation
+function updateList(items) {
+    const list = document.getElementById('list');
+    list.innerHTML = '';
+    
+    items.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item.name;
+        list.appendChild(li);
+    });
+}
+
+// Optimized DOM manipulation
+function updateListOptimized(items) {
+    const list = document.getElementById('list');
+    const fragment = document.createDocumentFragment();
+    
+    items.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item.name;
+        fragment.appendChild(li);
+    });
+    
+    list.innerHTML = '';
+    list.appendChild(fragment);
+}
+```
+
+**Best Practices:**
+1. Profile before optimizing
+2. Focus on bottlenecks
+3. Use appropriate data structures
+4. Minimize DOM manipulation
+5. Implement proper caching
+6. Use lazy loading
+7. Optimize images and assets
+8. Minimize HTTP requests
+9. Use compression
+10. Monitor performance metrics
+
+**Related Questions:** [Testing](#70-what-is-unit-testing), [Browser APIs](#68-what-are-browser-apis-and-how-do-you-use-them)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 72. What are Web Workers and how do you use them?
+
+**Web Workers** allow you to run JavaScript code in background threads, separate from the main UI thread. This prevents blocking the UI during heavy computations.
+
+**1. Basic Web Worker:**
+```javascript
+// main.js
+const worker = new Worker('worker.js');
+
+worker.postMessage({ command: 'calculate', data: [1, 2, 3, 4, 5] });
+
+worker.onmessage = function(e) {
+    console.log('Result from worker:', e.data);
+};
+
+worker.onerror = function(error) {
+    console.error('Worker error:', error);
+};
+
+// worker.js
+self.onmessage = function(e) {
+    const { command, data } = e.data;
+    
+    if (command === 'calculate') {
+        const result = data.reduce((sum, num) => sum + num, 0);
+        self.postMessage({ result });
+    }
+};
+```
+
+**2. Shared Workers:**
+```javascript
+// main.js
+const sharedWorker = new SharedWorker('shared-worker.js');
+sharedWorker.port.start();
+
+sharedWorker.port.postMessage('Hello from main thread');
+
+sharedWorker.port.onmessage = function(e) {
+    console.log('Message from shared worker:', e.data);
+};
+
+// shared-worker.js
+const connections = [];
+
+self.addEventListener('connect', function(e) {
+    const port = e.ports[0];
+    connections.push(port);
+    
+    port.onmessage = function(e) {
+        connections.forEach(conn => {
+            if (conn !== port) {
+                conn.postMessage(e.data);
+            }
+        });
+    };
+});
+```
+
+**Best Practices:**
+1. Use workers for CPU-intensive tasks
+2. Minimize data transfer between threads
+3. Handle errors properly
+4. Clean up workers when done
+5. Use transferable objects for large data
+6. Consider worker pools for multiple tasks
+7. Test worker functionality
+8. Use appropriate worker types
+9. Monitor worker performance
+10. Implement proper communication patterns
+
+**Related Questions:** [Performance](#71-what-is-performance-optimization), [Browser APIs](#68-what-are-browser-apis-and-how-do-you-use-them)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
 ## Browser APIs
-70. What is localStorage vs sessionStorage vs cookies?
-71. What is the Fetch API?
-72. What are Web Workers?
-73. What is the Geolocation API?
-74. What is the History API?
+
+### 73. What is localStorage vs sessionStorage vs cookies?
+
+**Storage mechanisms** in web browsers provide different ways to store data on the client side. Each has unique characteristics, use cases, and limitations.
+
+**1. localStorage:**
+
+**Characteristics:**
+```javascript
+// localStorage - Persists indefinitely until explicitly cleared
+class LocalStorageManager {
+    // Set item
+    static setItem(key, value) {
+        try {
+            const serializedValue = JSON.stringify(value);
+            localStorage.setItem(key, serializedValue);
+            return true;
+        } catch (error) {
+            console.error('Error saving to localStorage:', error);
+            return false;
+        }
+    }
+    
+    // Get item
+    static getItem(key) {
+        try {
+            const item = localStorage.getItem(key);
+            return item ? JSON.parse(item) : null;
+        } catch (error) {
+            console.error('Error reading from localStorage:', error);
+            return null;
+        }
+    }
+    
+    // Remove item
+    static removeItem(key) {
+        localStorage.removeItem(key);
+    }
+    
+    // Clear all
+    static clear() {
+        localStorage.clear();
+    }
+    
+    // Get all keys
+    static getAllKeys() {
+        return Object.keys(localStorage);
+    }
+    
+    // Check storage availability
+    static isAvailable() {
+        try {
+            const test = '__test__';
+            localStorage.setItem(test, test);
+            localStorage.removeItem(test);
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+}
+
+// Usage examples
+LocalStorageManager.setItem('user', {
+    id: 1,
+    name: 'John Doe',
+    preferences: { theme: 'dark', language: 'en' }
+});
+
+const user = LocalStorageManager.getItem('user');
+console.log(user.name); // 'John Doe'
+```
+
+**2. sessionStorage:**
+
+**Characteristics:**
+```javascript
+// sessionStorage - Persists only for the session (tab/window)
+class SessionStorageManager {
+    static setItem(key, value) {
+        try {
+            sessionStorage.setItem(key, JSON.stringify(value));
+            return true;
+        } catch (error) {
+            console.error('Error saving to sessionStorage:', error);
+            return false;
+        }
+    }
+    
+    static getItem(key) {
+        try {
+            const item = sessionStorage.getItem(key);
+            return item ? JSON.parse(item) : null;
+        } catch (error) {
+            return null;
+        }
+    }
+    
+    static removeItem(key) {
+        sessionStorage.removeItem(key);
+    }
+    
+    static clear() {
+        sessionStorage.clear();
+    }
+}
+
+// Usage - perfect for temporary data
+SessionStorageManager.setItem('currentSession', {
+    sessionId: 'abc123',
+    startTime: Date.now(),
+    currentPage: '/dashboard'
+});
+
+// Data is lost when tab/window is closed
+```
+
+**3. Cookies:**
+
+**Characteristics:**
+```javascript
+// Cookies - Sent with every HTTP request, can have expiration
+class CookieManager {
+    static setCookie(name, value, options = {}) {
+        let cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}`;
+        
+        if (options.days) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (options.days * 24 * 60 * 60 * 1000));
+            cookie += `; expires=${expires.toUTCString()}`;
+        }
+        
+        if (options.path) {
+            cookie += `; path=${options.path}`;
+        } else {
+            cookie += '; path=/';
+        }
+        
+        if (options.domain) {
+            cookie += `; domain=${options.domain}`;
+        }
+        
+        if (options.secure) {
+            cookie += '; secure';
+        }
+        
+        if (options.sameSite) {
+            cookie += `; SameSite=${options.sameSite}`;
+        }
+        
+        if (options.httpOnly) {
+            // Note: httpOnly can only be set server-side
+            console.warn('httpOnly flag can only be set server-side');
+        }
+        
+        document.cookie = cookie;
+    }
+    
+    static getCookie(name) {
+        const nameEQ = encodeURIComponent(name) + '=';
+        const cookies = document.cookie.split(';');
+        
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.indexOf(nameEQ) === 0) {
+                return decodeURIComponent(cookie.substring(nameEQ.length));
+            }
+        }
+        return null;
+    }
+    
+    static deleteCookie(name, path = '/') {
+        document.cookie = `${encodeURIComponent(name)}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path}`;
+    }
+    
+    static getAllCookies() {
+        const cookies = {};
+        document.cookie.split(';').forEach(cookie => {
+            const [name, value] = cookie.trim().split('=');
+            if (name) {
+                cookies[decodeURIComponent(name)] = decodeURIComponent(value || '');
+            }
+        });
+        return cookies;
+    }
+}
+
+// Usage
+CookieManager.setCookie('authToken', 'xyz789', {
+    days: 7,
+    path: '/',
+    secure: true,
+    sameSite: 'Strict'
+});
+
+const token = CookieManager.getCookie('authToken');
+```
+
+**4. Comparison Table:**
+
+```javascript
+// Storage Comparison
+const storageComparison = {
+    localStorage: {
+        capacity: '5-10MB',
+        expiration: 'Never (until manually cleared)',
+        accessibility: 'Any window/tab from same origin',
+        sentWithRequests: 'No',
+        apiType: 'Synchronous',
+        useCase: 'Long-term data storage'
+    },
+    sessionStorage: {
+        capacity: '5-10MB',
+        expiration: 'Tab/window close',
+        accessibility: 'Same tab/window only',
+        sentWithRequests: 'No',
+        apiType: 'Synchronous',
+        useCase: 'Temporary session data'
+    },
+    cookies: {
+        capacity: '4KB per cookie',
+        expiration: 'Configurable',
+        accessibility: 'Any window/tab from same origin',
+        sentWithRequests: 'Yes (with every HTTP request)',
+        apiType: 'Synchronous',
+        useCase: 'Authentication tokens, small data'
+    }
+};
+```
+
+**5. Practical Usage Examples:**
+
+```javascript
+// Combined storage strategy
+class StorageStrategy {
+    // Use localStorage for user preferences
+    static saveUserPreferences(preferences) {
+        LocalStorageManager.setItem('userPrefs', preferences);
+    }
+    
+    // Use sessionStorage for form data
+    static saveFormData(formId, data) {
+        SessionStorageManager.setItem(`form_${formId}`, data);
+    }
+    
+    // Use cookies for authentication
+    static saveAuthToken(token, remember = false) {
+        if (remember) {
+            CookieManager.setCookie('authToken', token, {
+                days: 30,
+                secure: true,
+                sameSite: 'Strict'
+            });
+        } else {
+            // Session cookie (expires when browser closes)
+            CookieManager.setCookie('authToken', token, {
+                secure: true,
+                sameSite: 'Strict'
+            });
+        }
+    }
+    
+    // Clear all storage
+    static clearAllStorage() {
+        localStorage.clear();
+        sessionStorage.clear();
+        // Delete all cookies
+        const cookies = CookieManager.getAllCookies();
+        Object.keys(cookies).forEach(name => {
+            CookieManager.deleteCookie(name);
+        });
+    }
+}
+
+// Real-world example: Shopping cart
+class ShoppingCart {
+    constructor() {
+        this.storageKey = 'shopping_cart';
+    }
+    
+    addItem(item) {
+        const cart = LocalStorageManager.getItem(this.storageKey) || [];
+        cart.push(item);
+        LocalStorageManager.setItem(this.storageKey, cart);
+    }
+    
+    getItems() {
+        return LocalStorageManager.getItem(this.storageKey) || [];
+    }
+    
+    clear() {
+        LocalStorageManager.removeItem(this.storageKey);
+    }
+}
+```
+
+**Best Practices:**
+1. Use localStorage for persistent user preferences
+2. Use sessionStorage for temporary form data
+3. Use cookies for authentication tokens
+4. Always validate and sanitize stored data
+5. Implement error handling for quota exceeded
+6. Encrypt sensitive data before storing
+7. Set appropriate cookie security flags
+8. Clear sensitive data on logout
+9. Monitor storage usage
+10. Provide fallbacks for private browsing mode
+
+**Related Questions:** [Fetch API](#74-what-is-the-fetch-api), [Security](#81-what-is-cross-site-scripting-xss)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 74. What is the Fetch API?
+
+**Fetch API** provides a modern, promise-based way to make HTTP requests in JavaScript. It's more powerful and flexible than the older XMLHttpRequest.
+
+**1. Basic Fetch Usage:**
+
+```javascript
+// GET request
+async function fetchData(url) {
+    try {
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Fetch error:', error);
+        throw error;
+    }
+}
+
+// Usage
+fetchData('https://api.example.com/users')
+    .then(users => console.log(users))
+    .catch(error => console.error(error));
+```
+
+**2. Advanced Fetch Operations:**
+
+```javascript
+// Comprehensive Fetch wrapper
+class FetchClient {
+    constructor(baseURL, defaultOptions = {}) {
+        this.baseURL = baseURL;
+        this.defaultOptions = defaultOptions;
+    }
+    
+    async request(endpoint, options = {}) {
+        const url = `${this.baseURL}${endpoint}`;
+        const config = {
+            ...this.defaultOptions,
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...this.defaultOptions.headers,
+                ...options.headers
+            }
+        };
+        
+        try {
+            const response = await fetch(url, config);
+            
+            // Handle different response types
+            const contentType = response.headers.get('content-type');
+            let data;
+            
+            if (contentType && contentType.includes('application/json')) {
+                data = await response.json();
+            } else if (contentType && contentType.includes('text')) {
+                data = await response.text();
+            } else {
+                data = await response.blob();
+            }
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            return {
+                data,
+                status: response.status,
+                headers: response.headers
+            };
+        } catch (error) {
+            console.error(`Request failed for ${url}:`, error);
+            throw error;
+        }
+    }
+    
+    get(endpoint, options = {}) {
+        return this.request(endpoint, { ...options, method: 'GET' });
+    }
+    
+    post(endpoint, body, options = {}) {
+        return this.request(endpoint, {
+            ...options,
+            method: 'POST',
+            body: JSON.stringify(body)
+        });
+    }
+    
+    put(endpoint, body, options = {}) {
+        return this.request(endpoint, {
+            ...options,
+            method: 'PUT',
+            body: JSON.stringify(body)
+        });
+    }
+    
+    patch(endpoint, body, options = {}) {
+        return this.request(endpoint, {
+            ...options,
+            method: 'PATCH',
+            body: JSON.stringify(body)
+        });
+    }
+    
+    delete(endpoint, options = {}) {
+        return this.request(endpoint, { ...options, method: 'DELETE' });
+    }
+}
+
+// Usage
+const api = new FetchClient('https://api.example.com', {
+    headers: {
+        'Authorization': 'Bearer token123'
+    }
+});
+
+// GET request
+const users = await api.get('/users');
+
+// POST request
+const newUser = await api.post('/users', {
+    name: 'John Doe',
+    email: 'john@example.com'
+});
+```
+
+**3. Fetch with Advanced Features:**
+
+```javascript
+// Request with timeout
+async function fetchWithTimeout(url, options = {}, timeout = 5000) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeout);
+    
+    try {
+        const response = await fetch(url, {
+            ...options,
+            signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        return response;
+    } catch (error) {
+        clearTimeout(timeoutId);
+        if (error.name === 'AbortError') {
+            throw new Error('Request timeout');
+        }
+        throw error;
+    }
+}
+
+// Retry logic
+async function fetchWithRetry(url, options = {}, maxRetries = 3) {
+    for (let i = 0; i < maxRetries; i++) {
+        try {
+            const response = await fetch(url, options);
+            if (response.ok) {
+                return response;
+            }
+            
+            // Don't retry on client errors (4xx)
+            if (response.status >= 400 && response.status < 500) {
+                throw new Error(`Client error: ${response.status}`);
+            }
+        } catch (error) {
+            if (i === maxRetries - 1) throw error;
+            
+            // Exponential backoff
+            const delay = Math.pow(2, i) * 1000;
+            await new Promise(resolve => setTimeout(resolve, delay));
+        }
+    }
+}
+
+// Parallel requests
+async function fetchMultiple(urls) {
+    try {
+        const promises = urls.map(url => fetch(url).then(r => r.json()));
+        const results = await Promise.all(promises);
+        return results;
+    } catch (error) {
+        console.error('Error fetching multiple URLs:', error);
+        throw error;
+    }
+}
+
+// Sequential requests
+async function fetchSequential(urls) {
+    const results = [];
+    for (const url of urls) {
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            results.push(data);
+        } catch (error) {
+            console.error(`Error fetching ${url}:`, error);
+            results.push(null);
+        }
+    }
+    return results;
+}
+```
+
+**4. File Upload with Fetch:**
+
+```javascript
+// Upload single file
+async function uploadFile(url, file, onProgress) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('fileName', file.name);
+    
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            body: formData,
+            // Don't set Content-Type header - browser will set it with boundary
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Upload failed: ${response.statusText}`);
+        }
+        
+        return await response.json();
+    } catch (error) {
+        console.error('Upload error:', error);
+        throw error;
+    }
+}
+
+// Upload multiple files
+async function uploadMultipleFiles(url, files) {
+    const formData = new FormData();
+    
+    files.forEach((file, index) => {
+        formData.append(`file${index}`, file);
+    });
+    
+    const response = await fetch(url, {
+        method: 'POST',
+        body: formData
+    });
+    
+    return await response.json();
+}
+
+// Usage
+const fileInput = document.getElementById('fileInput');
+fileInput.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        try {
+            const result = await uploadFile('/api/upload', file);
+            console.log('Upload successful:', result);
+        } catch (error) {
+            console.error('Upload failed:', error);
+        }
+    }
+});
+```
+
+**5. Fetch with Caching:**
+
+```javascript
+// Cache-first strategy
+class CachedFetch {
+    constructor(cacheName = 'api-cache') {
+        this.cacheName = cacheName;
+    }
+    
+    async fetch(url, options = {}, cacheTime = 60000) {
+        const cacheKey = `${url}_${JSON.stringify(options)}`;
+        const cached = this.getCachedData(cacheKey);
+        
+        if (cached && Date.now() - cached.timestamp < cacheTime) {
+            return cached.data;
+        }
+        
+        try {
+            const response = await fetch(url, options);
+            const data = await response.json();
+            
+            this.setCachedData(cacheKey, data);
+            return data;
+        } catch (error) {
+            // Return stale cache if available
+            if (cached) {
+                console.warn('Using stale cache due to fetch error');
+                return cached.data;
+            }
+            throw error;
+        }
+    }
+    
+    getCachedData(key) {
+        const item = localStorage.getItem(key);
+        return item ? JSON.parse(item) : null;
+    }
+    
+    setCachedData(key, data) {
+        localStorage.setItem(key, JSON.stringify({
+            data,
+            timestamp: Date.now()
+        }));
+    }
+    
+    clearCache() {
+        Object.keys(localStorage).forEach(key => {
+            if (key.startsWith(this.cacheName)) {
+                localStorage.removeItem(key);
+            }
+        });
+    }
+}
+```
+
+**Best Practices:**
+1. Always handle errors properly
+2. Check response.ok before processing
+3. Set appropriate timeouts
+4. Implement retry logic for transient failures
+5. Use AbortController for cancellation
+6. Handle different response types
+7. Implement proper loading states
+8. Use credentials option for cookies
+9. Set appropriate CORS headers
+10. Implement request caching when appropriate
+
+**Related Questions:** [Async/Await](#33-what-is-asyncawait), [Promises](#32-what-are-promises), [Web Workers](#75-what-are-web-workers)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 75. What are Web Workers?
+
+**Web Workers** allow you to run JavaScript code in background threads, separate from the main UI thread. This prevents blocking the UI during heavy computations and improves application performance.
+
+**1. Basic Web Worker:**
+
+```javascript
+// main.js - Main thread
+class WorkerManager {
+    constructor(workerScript) {
+        this.worker = new Worker(workerScript);
+        this.messageHandlers = new Map();
+        this.messageId = 0;
+        
+        this.worker.onmessage = (event) => {
+            const { id, result, error } = event.data;
+            const handler = this.messageHandlers.get(id);
+            
+            if (handler) {
+                if (error) {
+                    handler.reject(new Error(error));
+                } else {
+                    handler.resolve(result);
+                }
+                this.messageHandlers.delete(id);
+            }
+        };
+        
+        this.worker.onerror = (error) => {
+            console.error('Worker error:', error);
+        };
+    }
+    
+    execute(command, data) {
+        return new Promise((resolve, reject) => {
+            const id = this.messageId++;
+            this.messageHandlers.set(id, { resolve, reject });
+            this.worker.postMessage({ id, command, data });
+        });
+    }
+    
+    terminate() {
+        this.worker.terminate();
+        this.messageHandlers.clear();
+    }
+}
+
+// Usage
+const workerManager = new WorkerManager('worker.js');
+
+// Execute heavy computation
+workerManager.execute('processLargeArray', [1, 2, 3, /*...*/])
+    .then(result => console.log('Result:', result))
+    .catch(error => console.error('Error:', error));
+```
+
+```javascript
+// worker.js - Worker thread
+self.onmessage = function(event) {
+    const { id, command, data } = event.data;
+    
+    try {
+        let result;
+        
+        switch(command) {
+            case 'processLargeArray':
+                result = processLargeArray(data);
+                break;
+            case 'calculatePrimes':
+                result = calculatePrimes(data);
+                break;
+            case 'sortData':
+                result = sortData(data);
+                break;
+            default:
+                throw new Error(`Unknown command: ${command}`);
+        }
+        
+        self.postMessage({ id, result });
+    } catch (error) {
+        self.postMessage({ id, error: error.message });
+    }
+};
+
+function processLargeArray(arr) {
+    // Heavy computation
+    return arr.map(item => item * 2).filter(item => item > 100);
+}
+
+function calculatePrimes(max) {
+    const primes = [];
+    for (let i = 2; i <= max; i++) {
+        let isPrime = true;
+        for (let j = 2; j <= Math.sqrt(i); j++) {
+            if (i % j === 0) {
+                isPrime = false;
+                break;
+            }
+        }
+        if (isPrime) primes.push(i);
+    }
+    return primes;
+}
+
+function sortData(data) {
+    return data.sort((a, b) => a - b);
+}
+```
+
+**2. Shared Workers:**
+
+```javascript
+// main.js - Multiple tabs can connect
+const sharedWorker = new SharedWorker('shared-worker.js');
+
+sharedWorker.port.start();
+
+// Send message
+sharedWorker.port.postMessage({
+    type: 'register',
+    clientId: Date.now()
+});
+
+// Receive messages
+sharedWorker.port.onmessage = function(event) {
+    console.log('Message from shared worker:', event.data);
+};
+
+// shared-worker.js
+const connections = [];
+
+self.addEventListener('connect', function(e) {
+    const port = e.ports[0];
+    connections.push(port);
+    
+    port.onmessage = function(event) {
+        const { type, clientId, message } = event.data;
+        
+        if (type === 'register') {
+            port.postMessage({
+                type: 'registered',
+                totalConnections: connections.length
+            });
+        } else if (type === 'broadcast') {
+            // Broadcast to all connected tabs
+            connections.forEach(conn => {
+                if (conn !== port) {
+                    conn.postMessage({
+                        type: 'message',
+                        from: clientId,
+                        message: message
+                    });
+                }
+            });
+        }
+    };
+    
+    port.start();
+});
+```
+
+**3. Advanced Worker Patterns:**
+
+```javascript
+// Worker Pool for parallel processing
+class WorkerPool {
+    constructor(workerScript, poolSize = 4) {
+        this.workers = [];
+        this.taskQueue = [];
+        this.activeWorkers = new Set();
+        
+        for (let i = 0; i < poolSize; i++) {
+            const worker = new Worker(workerScript);
+            worker.onmessage = (event) => this.handleWorkerMessage(worker, event);
+            worker.onerror = (error) => this.handleWorkerError(worker, error);
+            this.workers.push(worker);
+        }
+    }
+    
+    execute(task) {
+        return new Promise((resolve, reject) => {
+            const workerTask = { task, resolve, reject };
+            
+            const availableWorker = this.workers.find(w => !this.activeWorkers.has(w));
+            
+            if (availableWorker) {
+                this.assignTask(availableWorker, workerTask);
+            } else {
+                this.taskQueue.push(workerTask);
+            }
+        });
+    }
+    
+    assignTask(worker, workerTask) {
+        this.activeWorkers.add(worker);
+        worker.currentTask = workerTask;
+        worker.postMessage(workerTask.task);
+    }
+    
+    handleWorkerMessage(worker, event) {
+        const task = worker.currentTask;
+        if (task) {
+            task.resolve(event.data);
+            this.activeWorkers.delete(worker);
+            worker.currentTask = null;
+            
+            // Process next task in queue
+            if (this.taskQueue.length > 0) {
+                const nextTask = this.taskQueue.shift();
+                this.assignTask(worker, nextTask);
+            }
+        }
+    }
+    
+    handleWorkerError(worker, error) {
+        const task = worker.currentTask;
+        if (task) {
+            task.reject(error);
+            this.activeWorkers.delete(worker);
+            worker.currentTask = null;
+        }
+    }
+    
+    terminate() {
+        this.workers.forEach(worker => worker.terminate());
+        this.workers = [];
+        this.taskQueue = [];
+        this.activeWorkers.clear();
+    }
+}
+
+// Usage
+const pool = new WorkerPool('worker.js', 4);
+
+// Process multiple tasks in parallel
+const tasks = [
+    { command: 'processData', data: [1,2,3] },
+    { command: 'calculatePrimes', data: 1000 },
+    { command: 'sortData', data: [5,2,8,1,9] }
+];
+
+const results = await Promise.all(
+    tasks.map(task => pool.execute(task))
+);
+```
+
+**4. Transferable Objects:**
+
+```javascript
+// Efficient large data transfer using Transferable Objects
+function processLargeDataInWorker(largeArray) {
+    const worker = new Worker('processor.js');
+    
+    return new Promise((resolve, reject) => {
+        worker.onmessage = (event) => {
+            resolve(event.data);
+            worker.terminate();
+        };
+        
+        worker.onerror = reject;
+        
+        // Transfer ArrayBuffer instead of copying
+        const buffer = new Float64Array(largeArray).buffer;
+        worker.postMessage({ buffer }, [buffer]);
+        // Note: buffer is now transferred, not accessible in main thread
+    });
+}
+
+// processor.js
+self.onmessage = function(event) {
+    const { buffer } = event.data;
+    const array = new Float64Array(buffer);
+    
+    // Process the data
+    for (let i = 0; i < array.length; i++) {
+        array[i] = array[i] * 2;
+    }
+    
+    // Transfer back
+    self.postMessage({ buffer }, [buffer]);
+};
+```
+
+**5. Real-World Examples:**
+
+```javascript
+// Image processing in worker
+class ImageProcessor {
+    constructor() {
+        this.worker = new Worker('image-worker.js');
+    }
+    
+    async processImage(imageData, filters) {
+        return new Promise((resolve, reject) => {
+            this.worker.onmessage = (event) => {
+                resolve(event.data.imageData);
+            };
+            
+            this.worker.onerror = reject;
+            
+            this.worker.postMessage({
+                imageData,
+                filters
+            }, [imageData.data.buffer]);
+        });
+    }
+}
+
+// image-worker.js
+self.onmessage = function(event) {
+    const { imageData, filters } = event.data;
+    
+    // Apply filters
+    if (filters.grayscale) {
+        applyGrayscale(imageData);
+    }
+    
+    if (filters.brightness) {
+        applyBrightness(imageData, filters.brightness);
+    }
+    
+    self.postMessage({ imageData }, [imageData.data.buffer]);
+};
+
+function applyGrayscale(imageData) {
+    const data = imageData.data;
+    for (let i = 0; i < data.length; i += 4) {
+        const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+        data[i] = avg;     // R
+        data[i + 1] = avg; // G
+        data[i + 2] = avg; // B
+    }
+}
+
+function applyBrightness(imageData, brightness) {
+    const data = imageData.data;
+    for (let i = 0; i < data.length; i += 4) {
+        data[i] += brightness;     // R
+        data[i + 1] += brightness; // G
+        data[i + 2] += brightness; // B
+    }
+}
+```
+
+**Best Practices:**
+1. Use workers for CPU-intensive tasks only
+2. Minimize data transfer between threads
+3. Use Transferable Objects for large data
+4. Implement proper error handling
+5. Terminate workers when done
+6. Use worker pools for multiple tasks
+7. Avoid DOM manipulation in workers
+8. Keep worker code modular
+9. Monitor worker performance
+10. Provide fallbacks for unsupported browsers
+
+**Related Questions:** [Performance Optimization](#71-what-is-performance-optimization), [Fetch API](#74-what-is-the-fetch-api), [Service Workers](#76-what-is-the-service-worker-api)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 76. What is the Geolocation API?
+
+**Geolocation API** allows web applications to access the geographic location of a user's device. It requires user permission and provides latitude, longitude, altitude, and other location data.
+
+**1. Basic Geolocation:**
+
+```javascript
+// Get current position
+function getCurrentLocation() {
+    return new Promise((resolve, reject) => {
+        // Check if geolocation is supported
+        if (!navigator.geolocation) {
+            reject(new Error('Geolocation is not supported by this browser'));
+            return;
+        }
+        
+        navigator.geolocation.getCurrentPosition(
+            // Success callback
+            (position) => {
+                resolve({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                    accuracy: position.coords.accuracy,
+                    altitude: position.coords.altitude,
+                    altitudeAccuracy: position.coords.altitudeAccuracy,
+                    heading: position.coords.heading,
+                    speed: position.coords.speed,
+                    timestamp: position.timestamp
+                });
+            },
+            // Error callback
+            (error) => {
+                reject(error);
+            },
+            // Options
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 300000 // 5 minutes
+            }
+        );
+    });
+}
+
+// Usage
+try {
+    const location = await getCurrentLocation();
+    console.log(`Latitude: ${location.latitude}`);
+    console.log(`Longitude: ${location.longitude}`);
+    console.log(`Accuracy: ${location.accuracy} meters`);
+} catch (error) {
+    console.error('Error getting location:', error.message);
+}
+```
+
+**2. Advanced Geolocation Manager:**
+
+```javascript
+class GeolocationManager {
+    constructor() {
+        this.watchId = null;
+        this.isSupported = 'geolocation' in navigator;
+    }
+    
+    // Check if geolocation is supported
+    isGeolocationSupported() {
+        return this.isSupported;
+    }
+    
+    // Get current position once
+    async getCurrentPosition(options = {}) {
+        const defaultOptions = {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
+        };
+        
+        const finalOptions = { ...defaultOptions, ...options };
+        
+        return new Promise((resolve, reject) => {
+            if (!this.isSupported) {
+                reject(new Error('Geolocation not supported'));
+                return;
+            }
+            
+            navigator.geolocation.getCurrentPosition(
+                (position) => resolve(this.formatPosition(position)),
+                (error) => reject(this.handleError(error)),
+                finalOptions
+            );
+        });
+    }
+    
+    // Watch position continuously
+    watchPosition(onSuccess, onError, options = {}) {
+        if (!this.isSupported) {
+            onError(new Error('Geolocation not supported'));
+            return null;
+        }
+        
+        const defaultOptions = {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
+        };
+        
+        const finalOptions = { ...defaultOptions, ...options };
+        
+        this.watchId = navigator.geolocation.watchPosition(
+            (position) => onSuccess(this.formatPosition(position)),
+            (error) => onError(this.handleError(error)),
+            finalOptions
+        );
+        
+        return this.watchId;
+    }
+    
+    // Stop watching position
+    stopWatching() {
+        if (this.watchId !== null) {
+            navigator.geolocation.clearWatch(this.watchId);
+            this.watchId = null;
+        }
+    }
+    
+    // Format position data
+    formatPosition(position) {
+        return {
+            coords: {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+                accuracy: position.coords.accuracy,
+                altitude: position.coords.altitude,
+                altitudeAccuracy: position.coords.altitudeAccuracy,
+                heading: position.coords.heading,
+                speed: position.coords.speed
+            },
+            timestamp: position.timestamp,
+            formattedTime: new Date(position.timestamp).toISOString()
+        };
+    }
+    
+    // Handle geolocation errors
+    handleError(error) {
+        const errorMessages = {
+            [error.PERMISSION_DENIED]: 'User denied geolocation permission',
+            [error.POSITION_UNAVAILABLE]: 'Location information unavailable',
+            [error.TIMEOUT]: 'Location request timed out'
+        };
+        
+        const message = errorMessages[error.code] || 'Unknown geolocation error';
+        return new Error(message);
+    }
+    
+    // Calculate distance between two points (Haversine formula)
+    calculateDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371; // Earth's radius in kilometers
+        const dLat = this.toRadians(lat2 - lat1);
+        const dLon = this.toRadians(lon2 - lon1);
+        
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                  Math.cos(this.toRadians(lat1)) * Math.cos(this.toRadians(lat2)) *
+                  Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        const distance = R * c;
+        
+        return distance; // Distance in kilometers
+    }
+    
+    toRadians(degrees) {
+        return degrees * (Math.PI / 180);
+    }
+    
+    // Get formatted address from coordinates (requires reverse geocoding API)
+    async getAddressFromCoords(latitude, longitude) {
+        try {
+            const response = await fetch(
+                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+            );
+            const data = await response.json();
+            return data.display_name;
+        } catch (error) {
+            throw new Error('Failed to get address from coordinates');
+        }
+    }
+}
+
+// Usage examples
+const geoManager = new GeolocationManager();
+
+// Get current position once
+try {
+    const position = await geoManager.getCurrentPosition();
+    console.log('Current position:', position);
+    
+    // Get address
+    const address = await geoManager.getAddressFromCoords(
+        position.coords.latitude,
+        position.coords.longitude
+    );
+    console.log('Address:', address);
+} catch (error) {
+    console.error('Error:', error.message);
+}
+
+// Watch position continuously
+const watchId = geoManager.watchPosition(
+    (position) => {
+        console.log('Position updated:', position);
+    },
+    (error) => {
+        console.error('Watch error:', error.message);
+    },
+    {
+        enableHighAccuracy: true,
+        maximumAge: 30000, // 30 seconds
+        timeout: 27000
+    }
+);
+
+// Stop watching after 60 seconds
+setTimeout(() => {
+    geoManager.stopWatching();
+    console.log('Stopped watching position');
+}, 60000);
+```
+
+**3. Real-World Applications:**
+
+```javascript
+// Location-based app features
+class LocationApp {
+    constructor() {
+        this.geoManager = new GeolocationManager();
+        this.userLocation = null;
+    }
+    
+    // Initialize and get permission
+    async initialize() {
+        try {
+            this.userLocation = await this.geoManager.getCurrentPosition();
+            return true;
+        } catch (error) {
+            console.error('Failed to get location:', error);
+            return false;
+        }
+    }
+    
+    // Find nearby places
+    findNearbyPlaces(places) {
+        if (!this.userLocation) {
+            throw new Error('User location not available');
+        }
+        
+        return places
+            .map(place => ({
+                ...place,
+                distance: this.geoManager.calculateDistance(
+                    this.userLocation.coords.latitude,
+                    this.userLocation.coords.longitude,
+                    place.latitude,
+                    place.longitude
+                )
+            }))
+            .sort((a, b) => a.distance - b.distance);
+    }
+    
+    // Track user movement
+    startTracking(onLocationChange) {
+        return this.geoManager.watchPosition(
+            (position) => {
+                const previousLocation = this.userLocation;
+                this.userLocation = position;
+                
+                if (previousLocation) {
+                    const distance = this.geoManager.calculateDistance(
+                        previousLocation.coords.latitude,
+                        previousLocation.coords.longitude,
+                        position.coords.latitude,
+                        position.coords.longitude
+                    );
+                    
+                    onLocationChange({
+                        position,
+                        distanceMoved: distance
+                    });
+                }
+            },
+            (error) => {
+                console.error('Tracking error:', error);
+            }
+        );
+    }
+    
+    // Geofencing - check if user is within area
+    isWithinGeofence(centerLat, centerLon, radiusKm) {
+        if (!this.userLocation) return false;
+        
+        const distance = this.geoManager.calculateDistance(
+            this.userLocation.coords.latitude,
+            this.userLocation.coords.longitude,
+            centerLat,
+            centerLon
+        );
+        
+        return distance <= radiusKm;
+    }
+}
+
+// Usage
+const app = new LocationApp();
+
+await app.initialize();
+
+// Find nearby restaurants
+const restaurants = [
+    { name: 'Restaurant A', latitude: 40.7128, longitude: -74.0060 },
+    { name: 'Restaurant B', latitude: 40.7589, longitude: -73.9851 },
+    { name: 'Restaurant C', latitude: 40.7484, longitude: -73.9857 }
+];
+
+const nearbyRestaurants = app.findNearbyPlaces(restaurants);
+console.log('Nearby restaurants:', nearbyRestaurants);
+
+// Start tracking movement
+app.startTracking((update) => {
+    console.log('Location updated:', update.position);
+    console.log('Distance moved:', update.distanceMoved, 'km');
+});
+
+// Check geofence
+const isNearOffice = app.isWithinGeofence(40.7128, -74.0060, 1); // Within 1km
+console.log('Is near office:', isNearOffice);
+```
+
+**Best Practices:**
+1. Always request permission explicitly
+2. Provide clear explanation for location access
+3. Handle permission denial gracefully
+4. Use appropriate accuracy settings
+5. Implement timeout handling
+6. Cache location data when appropriate
+7. Clear watchers when not needed
+8. Handle errors comprehensively
+9. Respect user privacy
+10. Test on real devices
+
+**Related Questions:** [Fetch API](#74-what-is-the-fetch-api), [Web Workers](#75-what-are-web-workers), [History API](#77-what-is-the-history-api)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 77. What is the History API?
+
+**History API** allows manipulation of the browser session history, enabling single-page applications (SPAs) to update the URL without full page reloads. It provides methods to navigate through history and modify the history stack.
+
+**1. Basic History Operations:**
+
+```javascript
+// Navigate through history
+class HistoryManager {
+    // Go back one page
+    static goBack() {
+        window.history.back();
+    }
+    
+    // Go forward one page
+    static goForward() {
+        window.history.forward();
+    }
+    
+    // Go to specific history entry
+    static go(delta) {
+        window.history.go(delta);
+        // delta: -1 = back, 1 = forward, -2 = back twice, etc.
+    }
+    
+    // Get history length
+    static getHistoryLength() {
+        return window.history.length;
+    }
+}
+
+// Usage
+HistoryManager.goBack();     // Go to previous page
+HistoryManager.goForward();  // Go to next page
+HistoryManager.go(-2);       // Go back 2 pages
+```
+
+**2. pushState and replaceState:**
+
+```javascript
+// Modern SPA routing with History API
+class Router {
+    constructor() {
+        this.routes = new Map();
+        this.currentPath = window.location.pathname;
+        
+        // Listen for popstate event (back/forward buttons)
+        window.addEventListener('popstate', (event) => {
+            this.handleRouteChange(window.location.pathname, event.state);
+        });
+    }
+    
+    // Register a route
+    addRoute(path, handler) {
+        this.routes.set(path, handler);
+    }
+    
+    // Navigate to a route (adds to history)
+    navigateTo(path, state = {}) {
+        if (this.currentPath === path) return;
+        
+        // Push new state to history
+        window.history.pushState(
+            state,
+            '', // Title (ignored by most browsers)
+            path
+        );
+        
+        this.currentPath = path;
+        this.handleRouteChange(path, state);
+    }
+    
+    // Replace current history entry
+    replaceTo(path, state = {}) {
+        // Replace current state without adding new entry
+        window.history.replaceState(
+            state,
+            '',
+            path
+        );
+        
+        this.currentPath = path;
+        this.handleRouteChange(path, state);
+    }
+    
+    // Handle route changes
+    handleRouteChange(path, state) {
+        const handler = this.routes.get(path);
+        
+        if (handler) {
+            handler(state);
+        } else {
+            // Handle 404
+            this.handle404();
+        }
+        
+        // Update UI
+        this.updateActiveLinks();
+    }
+    
+    // Update active navigation links
+    updateActiveLinks() {
+        document.querySelectorAll('[data-route]').forEach(link => {
+            const routePath = link.getAttribute('data-route');
+            if (routePath === this.currentPath) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+    }
+    
+    // Handle 404
+    handle404() {
+        console.error('Route not found:', this.currentPath);
+        document.getElementById('app').innerHTML = '<h1>404 - Page Not Found</h1>';
+    }
+    
+    // Initialize router with click handlers
+    initialize() {
+        // Handle navigation link clicks
+        document.addEventListener('click', (e) => {
+            const link = e.target.closest('[data-route]');
+            if (link) {
+                e.preventDefault();
+                const path = link.getAttribute('data-route');
+                const state = link.dataset.state ? JSON.parse(link.dataset.state) : {};
+                this.navigateTo(path, state);
+            }
+        });
+    }
+}
+
+// Usage
+const router = new Router();
+
+// Define routes
+router.addRoute('/', (state) => {
+    document.getElementById('app').innerHTML = '<h1>Home Page</h1>';
+});
+
+router.addRoute('/about', (state) => {
+    document.getElementById('app').innerHTML = '<h1>About Page</h1>';
+});
+
+router.addRoute('/user/:id', (state) => {
+    const userId = state.userId || 'unknown';
+    document.getElementById('app').innerHTML = `<h1>User Profile: ${userId}</h1>`;
+});
+
+// Initialize router
+router.initialize();
+
+// Programmatic navigation
+router.navigateTo('/about', { from: 'home' });
+```
+
+**3. Advanced History Management:**
+
+```javascript
+// Comprehensive history manager with state management
+class AdvancedHistoryManager {
+    constructor() {
+        this.listeners = [];
+        this.setupPopStateListener();
+    }
+    
+    // Setup popstate listener
+    setupPopStateListener() {
+        window.addEventListener('popstate', (event) => {
+            this.notifyListeners({
+                type: 'popstate',
+                path: window.location.pathname,
+                state: event.state
+            });
+        });
+    }
+    
+    // Add history entry
+    push(path, state = {}, title = '') {
+        const fullState = {
+            ...state,
+            timestamp: Date.now(),
+            scrollPosition: { x: window.scrollX, y: window.scrollY }
+        };
+        
+        window.history.pushState(fullState, title, path);
+        
+        this.notifyListeners({
+            type: 'push',
+            path,
+            state: fullState
+        });
+    }
+    
+    // Replace current entry
+    replace(path, state = {}, title = '') {
+        const fullState = {
+            ...state,
+            timestamp: Date.now()
+        };
+        
+        window.history.replaceState(fullState, title, path);
+        
+        this.notifyListeners({
+            type: 'replace',
+            path,
+            state: fullState
+        });
+    }
+    
+    // Get current state
+    getState() {
+        return window.history.state;
+    }
+    
+    // Subscribe to history changes
+    subscribe(listener) {
+        this.listeners.push(listener);
+        
+        // Return unsubscribe function
+        return () => {
+            const index = this.listeners.indexOf(listener);
+            if (index > -1) {
+                this.listeners.splice(index, 1);
+            }
+        };
+    }
+    
+    // Notify all listeners
+    notifyListeners(event) {
+        this.listeners.forEach(listener => listener(event));
+    }
+    
+    // Save and restore scroll position
+    saveScrollPosition() {
+        const state = this.getState() || {};
+        this.replace(window.location.pathname, {
+            ...state,
+            scrollPosition: { x: window.scrollX, y: window.scrollY }
+        });
+    }
+    
+    restoreScrollPosition() {
+        const state = this.getState();
+        if (state && state.scrollPosition) {
+            window.scrollTo(state.scrollPosition.x, state.scrollPosition.y);
+        }
+    }
+    
+    // Confirmation before leaving
+    setBeforeUnloadHandler(handler) {
+        window.addEventListener('beforeunload', (e) => {
+            if (handler()) {
+                e.preventDefault();
+                e.returnValue = ''; // Required for Chrome
+            }
+        });
+    }
+}
+
+// Usage
+const historyManager = new AdvancedHistoryManager();
+
+// Subscribe to history changes
+const unsubscribe = historyManager.subscribe((event) => {
+    console.log('History changed:', event);
+    
+    if (event.type === 'popstate') {
+        console.log('User clicked back/forward');
+    }
+});
+
+// Navigate with state
+historyManager.push('/products/123', {
+    productId: 123,
+    from: 'search',
+    filters: { category: 'electronics' }
+});
+
+// Replace current entry
+historyManager.replace('/products/123', {
+    productId: 123,
+    viewed: true
+});
+
+// Save scroll position before navigating
+window.addEventListener('scroll', () => {
+    historyManager.saveScrollPosition();
+});
+
+// Restore scroll position after navigation
+historyManager.restoreScrollPosition();
+```
+
+**4. Real-World SPA Router:**
+
+```javascript
+// Complete SPA router implementation
+class SPARouter {
+    constructor(options = {}) {
+        this.routes = [];
+        this.notFoundHandler = options.notFoundHandler || this.defaultNotFound;
+        this.beforeNavigate = options.beforeNavigate || null;
+        this.afterNavigate = options.afterNavigate || null;
+        
+        this.init();
+    }
+    
+    init() {
+        // Handle popstate (browser back/forward)
+        window.addEventListener('popstate', (event) => {
+            this.handleRoute(window.location.pathname, event.state);
+        });
+        
+        // Handle link clicks
+        document.addEventListener('click', (e) => {
+            const link = e.target.closest('a[data-router-link]');
+            if (link && link.hostname === window.location.hostname) {
+                e.preventDefault();
+                this.navigate(link.pathname, { trigger: 'click' });
+            }
+        });
+        
+        // Handle initial route
+        this.handleRoute(window.location.pathname, window.history.state);
+    }
+    
+    // Add route with pattern matching
+    addRoute(pattern, handler) {
+        const paramNames = [];
+        const regexPattern = pattern.replace(/:([^/]+)/g, (_, paramName) => {
+            paramNames.push(paramName);
+            return '([^/]+)';
+        });
+        
+        this.routes.push({
+            pattern,
+            regex: new RegExp(`^${regexPattern}$`),
+            paramNames,
+            handler
+        });
+    }
+    
+    // Navigate to path
+    async navigate(path, state = {}) {
+        // Call beforeNavigate hook
+        if (this.beforeNavigate) {
+            const shouldNavigate = await this.beforeNavigate(path, state);
+            if (shouldNavigate === false) return;
+        }
+        
+        // Update history
+        window.history.pushState(state, '', path);
+        
+        // Handle route
+        await this.handleRoute(path, state);
+        
+        // Call afterNavigate hook
+        if (this.afterNavigate) {
+            this.afterNavigate(path, state);
+        }
+    }
+    
+    // Handle route matching
+    async handleRoute(path, state) {
+        for (const route of this.routes) {
+            const match = path.match(route.regex);
+            
+            if (match) {
+                const params = {};
+                route.paramNames.forEach((name, index) => {
+                    params[name] = match[index + 1];
+                });
+                
+                await route.handler({ params, state, path });
+                return;
+            }
+        }
+        
+        // No route matched
+        this.notFoundHandler(path);
+    }
+    
+    // Default 404 handler
+    defaultNotFound(path) {
+        document.getElementById('app').innerHTML = `
+            <h1>404 - Page Not Found</h1>
+            <p>The page "${path}" does not exist.</p>
+        `;
+    }
+}
+
+// Usage
+const router = new SPARouter({
+    beforeNavigate: async (path, state) => {
+        // Check if user has unsaved changes
+        if (hasUnsavedChanges()) {
+            return confirm('You have unsaved changes. Do you want to leave?');
+        }
+        return true;
+    },
+    afterNavigate: (path, state) => {
+        // Track page view
+        analytics.track('page_view', { path });
+    }
+});
+
+// Define routes
+router.addRoute('/', async ({ params, state, path }) => {
+    document.getElementById('app').innerHTML = '<h1>Home</h1>';
+});
+
+router.addRoute('/products', async ({ params, state, path }) => {
+    const products = await fetchProducts();
+    renderProducts(products);
+});
+
+router.addRoute('/products/:id', async ({ params, state, path }) => {
+    const product = await fetchProduct(params.id);
+    renderProduct(product);
+});
+
+router.addRoute('/user/:userId/posts/:postId', async ({ params, state, path }) => {
+    const { userId, postId } = params;
+    const post = await fetchUserPost(userId, postId);
+    renderPost(post);
+});
+
+// Navigate programmatically
+router.navigate('/products/123', { from: 'home' });
+```
+
+**Best Practices:**
+1. Always use pushState/replaceState for SPAs
+2. Handle popstate events properly
+3. Update page title with each route
+4. Implement proper error handling
+5. Save scroll positions
+6. Handle browser back/forward buttons
+7. Implement route guards for authentication
+8. Use meaningful state objects
+9. Test with browser navigation
+10. Provide fallback for older browsers
+
+**Related Questions:** [Geolocation API](#76-what-is-the-geolocation-api), [Fetch API](#74-what-is-the-fetch-api), [Single Page Applications](#115-what-is-the-difference-between-spa-mpa-and-ssg)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 78. What is the Service Worker API?
+
+**Service Workers** are scripts that run in the background, separate from web pages, enabling features like push notifications, background sync, and offline functionality.
+
+**1. Basic Service Worker:**
+```javascript
+// sw.js
+self.addEventListener('install', event => {
+    console.log('Service Worker installing');
+    event.waitUntil(
+        caches.open('v1').then(cache => {
+            return cache.addAll([
+                '/',
+                '/index.html',
+                '/styles.css',
+                '/script.js'
+            ]);
+        })
+    );
+});
+
+self.addEventListener('fetch', event => {
+    event.respondWith(
+        caches.match(event.request)
+            .then(response => {
+                if (response) {
+                    return response;
+                }
+                return fetch(event.request);
+            })
+    );
+});
+
+// main.js
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js')
+        .then(registration => {
+            console.log('SW registered: ', registration);
+        })
+        .catch(registrationError => {
+            console.log('SW registration failed: ', registrationError);
+        });
+}
+```
+
+**2. Push Notifications:**
+```javascript
+// Request permission
+async function requestNotificationPermission() {
+    if (!('Notification' in window)) {
+        console.log('This browser does not support notifications');
+        return false;
+    }
+    
+    if (Notification.permission === 'granted') {
+        return true;
+    }
+    
+    if (Notification.permission !== 'denied') {
+        const permission = await Notification.requestPermission();
+        return permission === 'granted';
+    }
+    
+    return false;
+}
+
+// Show notification
+async function showNotification(title, options = {}) {
+    const hasPermission = await requestNotificationPermission();
+    
+    if (hasPermission) {
+        const notification = new Notification(title, {
+            body: options.body || 'You have a new notification',
+            icon: options.icon || '/icon.png',
+            badge: options.badge || '/badge.png',
+            tag: options.tag || 'default'
+        });
+        
+        notification.onclick = () => {
+            window.focus();
+            notification.close();
+        };
+        
+        return notification;
+    }
+}
+```
+
+**Best Practices:**
+1. Implement proper caching strategies
+2. Handle offline scenarios
+3. Use appropriate cache policies
+4. Implement background sync
+5. Handle push notifications
+6. Test offline functionality
+7. Monitor service worker performance
+8. Implement proper error handling
+9. Use appropriate lifecycle events
+10. Consider user experience
+
+**Related Questions:** [Browser APIs](#68-what-are-browser-apis-and-how-do-you-use-them), [Performance](#71-what-is-performance-optimization)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 79. What are Progressive Web Apps (PWAs)?
+
+**Progressive Web Apps** are web applications that use modern web capabilities to deliver a native app-like experience to users.
+
+**1. PWA Features:**
+```javascript
+// Manifest file (manifest.json)
+{
+    "name": "My PWA",
+    "short_name": "PWA",
+    "description": "A Progressive Web App",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#000000",
+    "icons": [
+        {
+            "src": "/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
+
+// Install prompt
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    
+    // Show install button
+    const installButton = document.getElementById('install-button');
+    installButton.style.display = 'block';
+    
+    installButton.addEventListener('click', async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log(`User response to the install prompt: ${outcome}`);
+            deferredPrompt = null;
+        }
+    });
+});
+```
+
+**2. Offline Functionality:**
+```javascript
+// Service Worker for offline support
+self.addEventListener('fetch', event => {
+    event.respondWith(
+        caches.match(event.request)
+            .then(response => {
+                if (response) {
+                    return response;
+                }
+                
+                return fetch(event.request).then(response => {
+                    if (!response || response.status !== 200 || response.type !== 'basic') {
+                        return response;
+                    }
+                    
+                    const responseToCache = response.clone();
+                    caches.open('v1')
+                        .then(cache => {
+                            cache.put(event.request, responseToCache);
+                        });
+                    
+                    return response;
+                });
+            })
+    );
+});
+```
+
+**Best Practices:**
+1. Implement proper manifest file
+2. Use service workers for offline support
+3. Implement install prompts
+4. Use appropriate icons and themes
+5. Test on different devices
+6. Implement proper caching
+7. Consider user experience
+8. Use modern web APIs
+9. Test offline functionality
+10. Monitor performance metrics
+
+**Related Questions:** [Service Workers](#73-what-is-the-service-worker-api), [Browser APIs](#68-what-are-browser-apis-and-how-do-you-use-them)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 80. What is the Intersection Observer API?
+
+**Intersection Observer API** provides a way to asynchronously observe changes in the intersection of a target element with an ancestor element or with the top-level document's viewport.
+
+**1. Basic Intersection Observer:**
+```javascript
+// Create intersection observer
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            // Load content when element comes into view
+            loadContent(entry.target);
+        }
+    });
+}, {
+    root: null, // Use viewport as root
+    rootMargin: '0px',
+    threshold: 0.1 // Trigger when 10% visible
+});
+
+// Observe elements
+document.querySelectorAll('.lazy-load').forEach(el => {
+    observer.observe(el);
+});
+```
+
+**2. Lazy Loading Images:**
+```javascript
+// Lazy loading images
+function setupLazyLoading() {
+    const imageObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                img.src = img.dataset.src;
+                img.classList.remove('lazy');
+                imageObserver.unobserve(img);
+            }
+        });
+    });
+    
+    document.querySelectorAll('img[data-src]').forEach(img => {
+        imageObserver.observe(img);
+    });
+}
+```
+
+**3 Most Common Practical Use Cases:**
+
+**1. Lazy Loading Images/Content (Most Popular):**
+```javascript
+// HTML: <img data-src="image.jpg" class="lazy-image" />
+const imgObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const img = entry.target;
+            img.src = img.dataset.src;
+            img.onload = () => img.classList.add('loaded');
+            imgObserver.unobserve(img); // Stop observing after load
+        }
+    });
+}, { rootMargin: '50px' }); // Load 50px before entering viewport
+
+document.querySelectorAll('.lazy-image').forEach(img => imgObserver.observe(img));
+```
+
+**2. Infinite Scrolling:**
+```javascript
+// Detect when user reaches bottom and load more content
+const sentinel = document.querySelector('#sentinel'); // Element at bottom of list
+const infiniteObserver = new IntersectionObserver(async (entries) => {
+    const entry = entries[0];
+    if (entry.isIntersecting && !isLoading) {
+        isLoading = true;
+        const newItems = await fetchMoreItems();
+        appendItems(newItems);
+        isLoading = false;
+    }
+}, { rootMargin: '100px' }); // Trigger 100px before reaching sentinel
+
+infiniteObserver.observe(sentinel);
+```
+
+**3. Scroll Animations/Fade-in Effects:**
+```javascript
+// Animate elements when they enter viewport
+const animateObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('fade-in');
+            // Optional: unobserve if animation should only happen once
+            animateObserver.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.2 }); // Trigger when 20% visible
+
+document.querySelectorAll('.animate-on-scroll').forEach(el => {
+    animateObserver.observe(el);
+});
+
+// CSS: .fade-in { animation: fadeIn 0.5s ease-in; }
+```
+
+**Best Practices:**
+1. Use appropriate thresholds
+2. Implement proper cleanup
+3. Consider performance implications
+4. Use modern alternatives when available
+5. Test across different browsers
+6. Implement proper error handling
+7. Consider user experience
+8. Use appropriate root margins
+9. Monitor performance metrics
+10. Document usage patterns
+
+**Related Questions:** [Performance](#71-what-is-performance-optimization), [Browser APIs](#68-what-are-browser-apis-and-how-do-you-use-them)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 81. What are Web APIs and how do you use them?
+
+**Web APIs** are interfaces provided by web browsers that allow JavaScript to interact with browser features and system resources. They enable web applications to access device capabilities, storage, and other browser functionality.
+
+**1. Geolocation API:**
+```javascript
+// Get current position
+function getCurrentLocation() {
+    return new Promise((resolve, reject) => {
+        if (!navigator.geolocation) {
+            reject(new Error('Geolocation is not supported'));
+            return;
+        }
+        
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                resolve({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                    accuracy: position.coords.accuracy
+                });
+            },
+            (error) => {
+                reject(error);
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 300000
+            }
+        );
+    });
+}
+```
+
+**2. Notification API:**
+```javascript
+// Request permission
+async function requestNotificationPermission() {
+    if (!('Notification' in window)) {
+        console.log('This browser does not support notifications');
+        return false;
+    }
+    
+    if (Notification.permission === 'granted') {
+        return true;
+    }
+    
+    if (Notification.permission !== 'denied') {
+        const permission = await Notification.requestPermission();
+        return permission === 'granted';
+    }
+    
+    return false;
+}
+```
+
+**Best Practices:**
+1. Always check for API support
+2. Handle errors gracefully
+3. Use appropriate error messages
+4. Consider fallbacks for older browsers
+5. Implement proper cleanup
+6. Use modern APIs when available
+7. Test across different browsers
+8. Consider performance implications
+9. Follow security best practices
+10. Document API usage
+
+**Related Questions:** [Browser APIs](#68-what-are-browser-apis-and-how-do-you-use-them), [Security](#69-what-are-common-security-vulnerabilities)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 82. What is the difference between Web Workers and Service Workers?
+
+Both **Web Workers** and **Service Workers** are JavaScript APIs that run scripts in background threads, but they serve **very different purposes** and have distinct characteristics.
+
+**Overview Comparison:**
+
+Both run JavaScript code in background threads separate from the main UI thread, but:
+- **Web Workers**: Run computationally expensive tasks to keep UI responsive
+- **Service Workers**: Act as network proxy enabling offline functionality and advanced caching
+
+---
+
+**1. Web Workers - Purpose and Characteristics:**
+
+**Purpose**: Run computationally expensive tasks in background threads to keep the UI responsive.
+
+**Key Characteristics:**
+- **Scope**: Tied to a specific page/tab
+- **Lifecycle**: Lives only while the page is open
+- **Access**: Can be created by any script on the page
+- **Communication**: Direct two-way messaging with the page
+- **Network**: Cannot intercept network requests
+- **Use Case**: Heavy computation, data processing
+
+```javascript
+// main.js - Creating a Web Worker
+const worker = new Worker('worker.js');
+
+// Send data to worker
+worker.postMessage({ data: [1, 2, 3, 4, 5] });
+
+// Receive result from worker
+worker.onmessage = (event) => {
+  console.log('Result from worker:', event.data);
+};
+
+worker.onerror = (error) => {
+  console.error('Worker error:', error);
+};
+
+// worker.js - Worker thread code
+self.onmessage = (event) => {
+  const result = event.data.data.reduce((sum, num) => sum + num, 0);
+  // Heavy computation doesn't block UI
+  self.postMessage(result);
+};
+```
+
+**Common Web Worker Use Cases:**
+- Image/video processing
+- Large data parsing (CSV, JSON)
+- Complex calculations and algorithms
+- Encryption/decryption
+- Real-time data analysis
+- Canvas rendering operations
+
+---
+
+**2. Service Workers - Purpose and Characteristics:**
+
+**Purpose**: Act as a network proxy between your app and the network, enabling offline functionality and advanced caching.
+
+**Key Characteristics:**
+- **Scope**: Works across all tabs/windows for a domain
+- **Lifecycle**: Persists even when no pages are open
+- **Access**: Requires HTTPS (except localhost)
+- **Communication**: Intercepts network requests
+- **Network**: Full control over fetch requests
+- **Use Case**: Offline functionality, PWAs, background sync
+
+```javascript
+// Register service worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js')
+    .then(reg => console.log('SW registered', reg))
+    .catch(err => console.log('SW registration failed', err));
+}
+
+// sw.js - Service Worker
+const CACHE_NAME = 'my-cache-v1';
+
+// Install event - cache resources
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll([
+        '/',
+        '/styles.css',
+        '/app.js',
+        '/offline.html'
+      ]);
+    })
+  );
+});
+
+// Fetch event - intercept network requests
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request)
+      .then((response) => {
+        // Return cached version or fetch from network
+        return response || fetch(event.request);
+      })
+      .catch(() => {
+        // Return offline page if both fail
+        return caches.match('/offline.html');
+      })
+  );
+});
+
+// Activate event - clean up old caches
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames
+          .filter(name => name !== CACHE_NAME)
+          .map(name => caches.delete(name))
+      );
+    })
+  );
+});
+```
+
+**Common Service Worker Use Cases:**
+- Progressive Web Apps (PWAs)
+- Offline functionality
+- Advanced caching strategies
+- Background sync
+- Push notifications
+- Network request optimization
+- App shell architecture
+
+---
+
+**3. Side-by-Side Comparison:**
+
+```javascript
+// Detailed comparison object
+const workerComparison = {
+  webWorker: {
+    purpose: 'Heavy computation',
+    scope: 'Single page',
+    lifetime: 'Page session',
+    networkInterception: false,
+    cacheAPI: 'Limited',
+    domAccess: false,
+    multipleInstances: true,
+    httpsRequired: false,
+    registration: 'Direct instantiation',
+    communication: 'postMessage()',
+    debugging: 'Console/Debugger',
+    useCases: [
+      'CPU-intensive tasks',
+      'Data processing',
+      'Complex calculations',
+      'Image manipulation'
+    ]
+  },
+  serviceWorker: {
+    purpose: 'Network proxy / offline',
+    scope: 'Entire origin',
+    lifetime: 'Persistent (terminates when idle)',
+    networkInterception: true,
+    cacheAPI: 'Full access',
+    domAccess: false,
+    multipleInstances: false, // Shared across tabs
+    httpsRequired: true, // Except localhost
+    registration: 'Async registration',
+    communication: 'postMessage() + events',
+    debugging: 'DevTools > Application',
+    useCases: [
+      'PWAs',
+      'Offline support',
+      'Caching strategies',
+      'Push notifications'
+    ]
+  }
+};
+```
+
+**Comparison Table:**
+
+| Feature | Web Worker | Service Worker |
+|---------|------------|----------------|
+| **Purpose** | Heavy computation | Network proxy / offline |
+| **Scope** | Single page | Entire origin |
+| **Lifetime** | Page session | Persistent (terminates when idle) |
+| **Network Interception** | ❌ No | ✅ Yes |
+| **Cache API** | Limited | Full access |
+| **DOM Access** | ❌ No | ❌ No |
+| **Multiple Instances** | ✅ Yes (per page) | ❌ No (shared across tabs) |
+| **HTTPS Required** | ❌ No | ✅ Yes (except localhost) |
+| **Registration** | Direct instantiation | Async registration |
+| **Communication** | `postMessage()` | `postMessage()` + events |
+| **Debugging** | Console/Debugger | Chrome DevTools > Application |
+
+---
+
+**4. Shared Limitations:**
+
+Both types of workers share certain limitations:
+
+```javascript
+// What BOTH workers CANNOT do:
+const sharedLimitations = {
+  domAccess: false,        // Cannot access the DOM
+  windowObject: false,     // Cannot use window object
+  documentObject: false,   // Cannot use document object
+  localStorage: false,     // Limited access to localStorage
+  
+  // What BOTH workers CAN do:
+  fetch: true,            // Can use fetch()
+  indexedDB: true,        // Can use IndexedDB
+  cacheAPI: true,         // Can use Cache API
+  timers: true,           // Can use setTimeout/setInterval
+  importScripts: true     // Can import external scripts
+};
+```
+
+---
+
+**5. When to Use Which:**
+
+```javascript
+// Decision helper
+class WorkerDecisionHelper {
+  static shouldUseWebWorker(task) {
+    return (
+      task.isCPUIntensive ||
+      task.requiresParallelProcessing ||
+      task.scopedToSinglePage ||
+      task.needsRealTimeResults
+    );
+  }
+  
+  static shouldUseServiceWorker(task) {
+    return (
+      task.requiresOfflineSupport ||
+      task.needsCaching ||
+      task.interceptsNetworkRequests ||
+      task.implementsPWA ||
+      task.needsBackgroundSync ||
+      task.handlesPushNotifications
+    );
+  }
+}
+
+// Example usage
+const imageProcessing = {
+  isCPUIntensive: true,
+  scopedToSinglePage: true
+};
+console.log(WorkerDecisionHelper.shouldUseWebWorker(imageProcessing)); // true
+
+const offlineApp = {
+  requiresOfflineSupport: true,
+  needsCaching: true,
+  implementsPWA: true
+};
+console.log(WorkerDecisionHelper.shouldUseServiceWorker(offlineApp)); // true
+```
+
+**Use Web Workers when:**
+- You need to perform CPU-intensive tasks
+- You want to keep the UI thread responsive
+- You're processing large amounts of data
+- You need parallel computation
+- Task is scoped to a single page
+
+**Use Service Workers when:**
+- Building a Progressive Web App
+- Need offline functionality
+- Want to implement caching strategies
+- Need background sync
+- Want to send push notifications
+- Need to intercept and modify network requests
+
+---
+
+**6. Using Both Together:**
+
+Web Workers and Service Workers complement each other and can be used together:
+
+```javascript
+// Service Worker can create Web Workers
+// sw.js - Service Worker file
+self.addEventListener('fetch', (event) => {
+  if (event.request.url.includes('/heavy-processing')) {
+    event.respondWith(
+      (async () => {
+        // Service Worker creates a Web Worker for heavy processing
+        const worker = new Worker('/processing-worker.js');
+        
+        return new Promise((resolve, reject) => {
+          worker.postMessage({ data: event.request.url });
+          
+          worker.onmessage = (e) => {
+            resolve(new Response(JSON.stringify(e.data), {
+              headers: { 'Content-Type': 'application/json' }
+            }));
+            worker.terminate();
+          };
+          
+          worker.onerror = reject;
+        });
+      })()
+    );
+  }
+});
+
+// Real-world example: PWA with computation
+class HybridWorkerApp {
+  constructor() {
+    this.registerServiceWorker();
+    this.initWebWorkers();
+  }
+  
+  async registerServiceWorker() {
+    if ('serviceWorker' in navigator) {
+      try {
+        const registration = await navigator.serviceWorker.register('/sw.js');
+        console.log('Service Worker registered:', registration);
+      } catch (error) {
+        console.error('Service Worker registration failed:', error);
+      }
+    }
+  }
+  
+  initWebWorkers() {
+    // Create worker pool for heavy tasks
+    this.workerPool = [];
+    for (let i = 0; i < 4; i++) {
+      this.workerPool.push(new Worker('compute-worker.js'));
+    }
+  }
+  
+  async processData(data) {
+    // Use Web Worker for computation
+    const worker = this.workerPool[0];
+    return new Promise((resolve) => {
+      worker.postMessage(data);
+      worker.onmessage = (e) => resolve(e.data);
+    });
+  }
+}
+```
+
+---
+
+**7. Modern Alternatives:**
+
+```javascript
+// Other worker types
+const workerTypes = {
+  // Shared Workers - Like Web Workers but shared across tabs
+  sharedWorker: {
+    description: 'Web Workers that can be shared across multiple tabs/windows',
+    instantiation: 'new SharedWorker("worker.js")',
+    useCase: 'Cross-tab communication'
+  },
+  
+  // Worklets - Lightweight workers for specific tasks
+  worklets: {
+    audio: 'AudioWorklet - Custom audio processing',
+    paint: 'PaintWorklet - Custom CSS paint',
+    animation: 'AnimationWorklet - Custom animations',
+    layout: 'LayoutWorklet - Custom layout algorithms'
+  }
+};
+
+// Example: Shared Worker
+const sharedWorker = new SharedWorker('shared-worker.js');
+sharedWorker.port.start();
+sharedWorker.port.postMessage('Hello from tab!');
+sharedWorker.port.onmessage = (event) => {
+  console.log('Message from shared worker:', event.data);
+};
+```
+
+---
+
+**Best Practices:**
+
+**For Web Workers:**
+1. Use for CPU-intensive tasks only
+2. Minimize data transfer between threads
+3. Use Transferable Objects for large data
+4. Implement proper error handling
+5. Terminate workers when done
+6. Use worker pools for multiple tasks
+7. Avoid frequent worker creation/destruction
+8. Monitor memory usage
+
+**For Service Workers:**
+1. Implement proper caching strategies
+2. Handle offline scenarios gracefully
+3. Version your caches properly
+4. Clean up old caches on activation
+5. Test offline functionality thoroughly
+6. Use appropriate cache policies
+7. Implement proper error handling
+8. Monitor service worker lifecycle
+9. Use HTTPS in production
+10. Implement proper update mechanisms
+
+**Common Pitfalls:**
+
+```javascript
+// ❌ BAD: Creating workers repeatedly
+button.addEventListener('click', () => {
+  const worker = new Worker('worker.js'); // Creates new worker each time
+  worker.postMessage(data);
+});
+
+// ✅ GOOD: Reuse worker instances
+const worker = new Worker('worker.js');
+button.addEventListener('click', () => {
+  worker.postMessage(data); // Reuses same worker
+});
+
+// ❌ BAD: Service Worker caching everything
+self.addEventListener('fetch', (event) => {
+  event.respondWith(caches.match(event.request)); // Caches all requests
+});
+
+// ✅ GOOD: Selective caching with strategies
+self.addEventListener('fetch', (event) => {
+  if (event.request.url.includes('/api/')) {
+    // Network first for API calls
+    event.respondWith(fetch(event.request).catch(() => caches.match(event.request)));
+  } else {
+    // Cache first for static assets
+    event.respondWith(caches.match(event.request).then(r => r || fetch(event.request)));
+  }
+});
+```
+
+---
+
+**Performance Considerations:**
+
+```javascript
+// Measuring worker performance
+class WorkerPerformance {
+  static measureWebWorkerPerformance(worker, data) {
+    const start = performance.now();
+    
+    return new Promise((resolve) => {
+      worker.postMessage(data);
+      worker.onmessage = (event) => {
+        const end = performance.now();
+        resolve({
+          result: event.data,
+          duration: end - start,
+          type: 'Web Worker'
+        });
+      };
+    });
+  }
+  
+  static async measureServiceWorkerPerformance() {
+    const start = performance.now();
+    const response = await fetch('/api/data');
+    const end = performance.now();
+    
+    const fromCache = response.headers.get('X-Cache') === 'HIT';
+    
+    return {
+      duration: end - start,
+      fromCache,
+      type: 'Service Worker'
+    };
+  }
+}
+```
+
+**Related Questions:** [Web Workers](#75-what-are-web-workers), [Service Worker API](#73-what-is-the-service-worker-api), [Performance Optimization](#71-what-is-performance-optimization), [Progressive Web Apps](#74-what-are-progressive-web-apps-pwas)
 
 [⬆️ Back to Top](#table-of-contents)
 
 ## Security
-75. What is Cross-Site Scripting (XSS)?
-76. What is Cross-Site Request Forgery (CSRF)?
-77. How do you sanitize user input?
-78. What is Content Security Policy (CSP)?
+
+### 83. What is Cross-Site Scripting (XSS)?
+
+**Cross-Site Scripting (XSS)** is a security vulnerability that allows attackers to inject malicious scripts into web pages viewed by other users. These scripts can steal sensitive information, manipulate page content, or perform actions on behalf of the user.
+
+**1. Types of XSS:**
+
+**Reflected XSS:**
+```javascript
+// Vulnerable code - reflected XSS
+function searchResults(query) {
+    const results = performSearch(query);
+    // Dangerous - directly inserting user input
+    document.getElementById('results').innerHTML = 
+        `<h2>Search results for: ${query}</h2>`;
+}
+
+// Safe code - proper escaping
+function searchResults(query) {
+    const results = performSearch(query);
+    const element = document.getElementById('results');
+    element.innerHTML = `<h2>Search results for: ${escapeHtml(query)}</h2>`;
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+```
+
+**Stored XSS:**
+```javascript
+// Vulnerable code - stored XSS
+function saveComment(comment) {
+    // Dangerous - storing raw HTML
+    const commentData = {
+        text: comment,
+        timestamp: Date.now()
+    };
+    comments.push(commentData);
+    displayComments();
+}
+
+// Safe code - sanitize before storing
+function saveComment(comment) {
+    const commentData = {
+        text: sanitizeInput(comment),
+        timestamp: Date.now()
+    };
+    comments.push(commentData);
+    displayComments();
+}
+
+function sanitizeInput(input) {
+    return input
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#x27;')
+        .replace(/\//g, '&#x2F;');
+}
+```
+
+**2. XSS Prevention Techniques:**
+
+**Input Validation:**
+```javascript
+class InputValidator {
+    static validateEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+    
+    static validateUsername(username) {
+        const usernameRegex = /^[a-zA-Z0-9_-]{3,20}$/;
+        return usernameRegex.test(username);
+    }
+    
+    static sanitizeHTML(html, allowedTags) {
+        const div = document.createElement('div');
+        div.innerHTML = html;
+        
+        const walker = document.createTreeWalker(
+            div,
+            NodeFilter.SHOW_ELEMENT,
+            null,
+            false
+        );
+        
+        const elementsToRemove = [];
+        let node;
+        
+        while (node = walker.nextNode()) {
+            if (!allowedTags.includes(node.tagName.toLowerCase())) {
+                elementsToRemove.push(node);
+            }
+        }
+        
+        elementsToRemove.forEach(el => el.remove());
+        return div.innerHTML;
+    }
+}
+```
+
+**Best Practices:**
+1. Always validate and sanitize user input
+2. Use proper output encoding
+3. Implement Content Security Policy
+4. Use textContent instead of innerHTML
+5. Validate data on both client and server
+6. Use HTTPS everywhere
+7. Implement proper session management
+8. Regular security audits
+9. Use security headers
+10. Keep dependencies updated
+
+**Related Questions:** [CSRF](#74-what-is-cross-site-request-forgery-csrf), [Input Sanitization](#75-how-do-you-sanitize-user-input)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 84. What is Cross-Site Request Forgery (CSRF)?
+
+**Cross-Site Request Forgery (CSRF)** is an attack that tricks users into performing unwanted actions on a web application where they are authenticated. The attack exploits the trust that a site has in the user's browser.
+
+**1. CSRF Attack Examples:**
+
+**Basic CSRF Attack:**
+```html
+<!-- Malicious website trying to perform CSRF attack -->
+<form action="https://bank.com/transfer" method="POST" id="csrf-form">
+    <input type="hidden" name="to" value="attacker-account">
+    <input type="hidden" name="amount" value="1000">
+</form>
+<script>
+    document.getElementById('csrf-form').submit();
+</script>
+```
+
+**2. CSRF Protection Techniques:**
+
+**CSRF Tokens:**
+```javascript
+class CSRFProtection {
+    static generateToken() {
+        return crypto.randomUUID();
+    }
+    
+    static setToken() {
+        const token = this.generateToken();
+        sessionStorage.setItem('csrf-token', token);
+        return token;
+    }
+    
+    static getToken() {
+        return sessionStorage.getItem('csrf-token');
+    }
+    
+    static validateToken(token) {
+        return token === this.getToken();
+    }
+    
+    static addTokenToForm(form) {
+        const token = this.getToken();
+        if (token) {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'csrf-token';
+            input.value = token;
+            form.appendChild(input);
+        }
+    }
+}
+```
+
+**SameSite Cookies:**
+```javascript
+// Set SameSite cookie attribute
+function setSecureCookie(name, value, days) {
+    const expires = new Date();
+    expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+    
+    document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Strict;Secure`;
+}
+```
+
+**Best Practices:**
+1. Use CSRF tokens for state-changing operations
+2. Implement SameSite cookie attributes
+3. Validate Origin and Referer headers
+4. Use custom headers for AJAX requests
+5. Implement proper session management
+6. Use HTTPS everywhere
+7. Implement rate limiting
+8. Validate tokens on both client and server
+9. Use secure random token generation
+10. Regular security testing
+
+**Related Questions:** [XSS](#83-what-is-cross-site-scripting-xss), [Input Sanitization](#85-how-do-you-sanitize-user-input)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 85. How do you sanitize user input?
+
+**Input sanitization** is the process of cleaning and validating user input to prevent security vulnerabilities like XSS, injection attacks, and other malicious activities.
+
+**1. HTML Sanitization:**
+
+**Basic HTML Escaping:**
+```javascript
+class HTMLSanitizer {
+    static escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+    
+    static sanitizeHTML(html, allowedTags = []) {
+        const div = document.createElement('div');
+        div.innerHTML = html;
+        
+        const walker = document.createTreeWalker(
+            div,
+            NodeFilter.SHOW_ELEMENT,
+            null,
+            false
+        );
+        
+        const elementsToRemove = [];
+        let node;
+        
+        while (node = walker.nextNode()) {
+            if (!allowedTags.includes(node.tagName.toLowerCase())) {
+                elementsToRemove.push(node);
+            }
+        }
+        
+        elementsToRemove.forEach(el => el.remove());
+        return div.innerHTML;
+    }
+}
+```
+
+**2. Input Validation:**
+
+**Email Validation:**
+```javascript
+class InputValidator {
+    static validateEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+    
+    static validatePassword(password) {
+        const errors = [];
+        
+        if (!password || password.length < 8) {
+            errors.push('Password must be at least 8 characters');
+        }
+        
+        if (!/[A-Z]/.test(password)) {
+            errors.push('Password must contain uppercase letter');
+        }
+        
+        if (!/[a-z]/.test(password)) {
+            errors.push('Password must contain lowercase letter');
+        }
+        
+        if (!/\d/.test(password)) {
+            errors.push('Password must contain number');
+        }
+        
+        return {
+            isValid: errors.length === 0,
+            errors
+        };
+    }
+}
+```
+
+**Best Practices:**
+1. Validate input on both client and server
+2. Use whitelist approach instead of blacklist
+3. Escape output based on context
+4. Implement proper error handling
+5. Use established libraries when possible
+6. Regular security testing
+7. Keep sanitization rules updated
+8. Log suspicious input attempts
+9. Implement rate limiting
+10. Use Content Security Policy
+
+**Related Questions:** [XSS](#83-what-is-cross-site-scripting-xss), [CSRF](#84-what-is-cross-site-request-forgery-csrf)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+
+### 86. What is Content Security Policy (CSP)?
+
+**Content Security Policy (CSP)** is a security feature that helps prevent Cross-Site Scripting (XSS) attacks by allowing developers to specify which resources the browser should be allowed to load and execute.
+
+**1. Basic CSP Implementation:**
+
+**Meta Tag CSP:**
+```html
+<!-- Basic CSP via meta tag -->
+<meta http-equiv="Content-Security-Policy" 
+      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
+```
+
+**HTTP Header CSP:**
+```javascript
+// Express.js CSP middleware
+function setCSPHeaders(req, res, next) {
+    const csp = [
+        "default-src 'self'",
+        "script-src 'self' 'unsafe-inline' https://trusted-cdn.com",
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+        "img-src 'self' data: https:",
+        "font-src 'self' https://fonts.gstatic.com",
+        "connect-src 'self' https://api.example.com",
+        "object-src 'none'",
+        "base-uri 'self'",
+        "form-action 'self'",
+        "frame-ancestors 'none'"
+    ].join('; ');
+    
+    res.setHeader('Content-Security-Policy', csp);
+    next();
+}
+```
+
+**2. Advanced CSP Features:**
+
+**Nonce-based CSP:**
+```javascript
+class CSPNonce {
+    static generateNonce() {
+        return crypto.randomBytes(16).toString('base64');
+    }
+    
+    static setNonceInCSP(nonce) {
+        const csp = `script-src 'self' 'nonce-${nonce}'; style-src 'self' 'nonce-${nonce}'`;
+        return csp;
+    }
+    
+    static addNonceToScript(script, nonce) {
+        script.setAttribute('nonce', nonce);
+        return script;
+    }
+}
+
+// Usage
+const nonce = CSPNonce.generateNonce();
+const script = document.createElement('script');
+script.textContent = 'console.log("Safe inline script");';
+CSPNonce.addNonceToScript(script, nonce);
+document.head.appendChild(script);
+```
+
+**Best Practices:**
+1. Start with strict policies and relax as needed
+2. Use nonces or hashes for inline scripts/styles
+3. Implement CSP reporting for monitoring
+4. Test CSP policies thoroughly
+5. Use report-only mode for testing
+6. Keep policies up to date
+7. Monitor violation reports
+8. Use HTTPS with CSP
+9. Implement proper fallbacks
+10. Regular security audits
+
+**Related Questions:** [XSS](#83-what-is-cross-site-scripting-xss), [Input Sanitization](#85-how-do-you-sanitize-user-input)
 
 [⬆️ Back to Top](#table-of-contents)
 
 ## Testing
-79. How do you write unit tests in JavaScript?
-80. What is test-driven development (TDD)?
-81. What are mocks and stubs?
-82. How do you test asynchronous code?
+### 87. How do you write unit tests in JavaScript?
+
+**Unit testing** is a software testing method where individual units or components of a software application are tested in isolation. It helps ensure that each part of the code works correctly.
+
+**1. Basic Unit Testing Framework:**
+
+**Simple Test Framework:**
+```javascript
+class TestFramework {
+    constructor() {
+        this.tests = [];
+        this.beforeEach = null;
+        this.afterEach = null;
+        this.passed = 0;
+        this.failed = 0;
+    }
+    
+    describe(description, fn) {
+        console.log(`\n📁 ${description}`);
+        fn();
+    }
+    
+    it(description, fn) {
+        this.tests.push({ description, fn });
+    }
+    
+    beforeEach(fn) {
+        this.beforeEach = fn;
+    }
+    
+    afterEach(fn) {
+        this.afterEach = fn;
+    }
+    
+    run() {
+        this.tests.forEach(test => {
+            try {
+                if (this.beforeEach) this.beforeEach();
+                test.fn();
+                console.log(`  ✅ ${test.description}`);
+                this.passed++;
+            } catch (error) {
+                console.log(`  ❌ ${test.description}: ${error.message}`);
+                this.failed++;
+            } finally {
+                if (this.afterEach) this.afterEach();
+            }
+        });
+        
+        console.log(`\n📊 Results: ${this.passed} passed, ${this.failed} failed`);
+    }
+}
+
+// Usage
+const testFramework = new TestFramework();
+
+testFramework.describe('Math Utils', () => {
+    let mathUtils;
+    
+    testFramework.beforeEach(() => {
+        mathUtils = new MathUtils();
+    });
+    
+    testFramework.it('should add two numbers', () => {
+        assertEqual(mathUtils.add(2, 3), 5);
+    });
+    
+    testFramework.it('should multiply two numbers', () => {
+        assertEqual(mathUtils.multiply(4, 5), 20);
+    });
+});
+
+testFramework.run();
+```
+
+**2. Assertion Functions:**
+
+**Basic Assertions:**
+```javascript
+// Assertion functions
+function assert(condition, message) {
+    if (!condition) {
+        throw new Error(message || 'Assertion failed');
+    }
+}
+
+function assertEqual(actual, expected, message) {
+    if (actual !== expected) {
+        throw new Error(message || `Expected ${expected}, but got ${actual}`);
+    }
+}
+
+function assertNotEqual(actual, expected, message) {
+    if (actual === expected) {
+        throw new Error(message || `Expected not to be ${expected}, but got ${actual}`);
+    }
+}
+
+function assertTrue(actual, message) {
+    if (actual !== true) {
+        throw new Error(message || `Expected true, but got ${actual}`);
+    }
+}
+
+function assertFalse(actual, message) {
+    if (actual !== false) {
+        throw new Error(message || `Expected false, but got ${actual}`);
+    }
+}
+
+function assertThrows(fn, expectedError, message) {
+    try {
+        fn();
+        throw new Error(message || 'Expected function to throw');
+    } catch (error) {
+        if (expectedError && !(error instanceof expectedError)) {
+            throw new Error(message || `Expected ${expectedError.name}, but got ${error.constructor.name}`);
+        }
+    }
+}
+```
+
+**3. Testing Different Types of Functions:**
+
+**Testing Pure Functions:**
+```javascript
+// Pure function to test
+function calculateTax(amount, rate) {
+    if (amount < 0) throw new Error('Amount cannot be negative');
+    if (rate < 0 || rate > 1) throw new Error('Rate must be between 0 and 1');
+    return amount * rate;
+}
+
+// Tests for pure function
+testFramework.describe('calculateTax', () => {
+    testFramework.it('should calculate tax correctly', () => {
+        assertEqual(calculateTax(100, 0.1), 10);
+        assertEqual(calculateTax(200, 0.15), 30);
+        assertEqual(calculateTax(0, 0.1), 0);
+    });
+    
+    testFramework.it('should throw error for negative amount', () => {
+        assertThrows(() => calculateTax(-100, 0.1), Error);
+    });
+    
+    testFramework.it('should throw error for invalid rate', () => {
+        assertThrows(() => calculateTax(100, 1.5), Error);
+        assertThrows(() => calculateTax(100, -0.1), Error);
+    });
+});
+```
+
+**Best Practices:**
+1. Write tests before or alongside code
+2. Test edge cases and error conditions
+3. Keep tests simple and focused
+4. Use descriptive test names
+5. Mock external dependencies
+6. Test async code properly
+7. Maintain good test coverage
+8. Keep tests fast and reliable
+9. Refactor tests when refactoring code
+10. Use appropriate assertions
+
+**Related Questions:** [TDD](#88-what-is-test-driven-development-tdd), [Mocks and Stubs](#89-what-are-mocks-and-stubs)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+### 88. What is test-driven development (TDD)?
+
+**Test-Driven Development (TDD)** is a software development approach where you write tests before writing the actual code. It follows a cycle of Red-Green-Refactor to ensure code quality and reliability.
+
+**1. TDD Cycle (Red-Green-Refactor):**
+
+**Red Phase - Write Failing Test:**
+```javascript
+// Step 1: Write a failing test
+describe('Calculator', () => {
+    it('should add two numbers', () => {
+        const calculator = new Calculator();
+        const result = calculator.add(2, 3);
+        assertEqual(result, 5);
+    });
+});
+
+// This test will fail because Calculator doesn't exist yet
+```
+
+**Green Phase - Write Minimal Code:**
+```javascript
+// Step 2: Write minimal code to make test pass
+class Calculator {
+    add(a, b) {
+        return a + b;
+    }
+}
+
+// Test now passes
+```
+
+**Refactor Phase - Improve Code:**
+```javascript
+// Step 3: Refactor while keeping tests green
+class Calculator {
+    add(a, b) {
+        if (typeof a !== 'number' || typeof b !== 'number') {
+            throw new Error('Both arguments must be numbers');
+        }
+        return a + b;
+    }
+}
+
+// Add more tests
+describe('Calculator', () => {
+    it('should add two numbers', () => {
+        const calculator = new Calculator();
+        const result = calculator.add(2, 3);
+        assertEqual(result, 5);
+    });
+    
+    it('should throw error for non-numeric inputs', () => {
+        const calculator = new Calculator();
+        assertThrows(() => calculator.add('2', 3), Error);
+    });
+});
+```
+
+**2. TDD Example - Building a Stack:**
+
+**Red Phase:**
+```javascript
+describe('Stack', () => {
+    let stack;
+    
+    beforeEach(() => {
+        stack = new Stack();
+    });
+    
+    it('should be empty when created', () => {
+        assertTrue(stack.isEmpty());
+        assertEqual(stack.size(), 0);
+    });
+    
+    it('should push elements', () => {
+        stack.push(1);
+        assertFalse(stack.isEmpty());
+        assertEqual(stack.size(), 1);
+    });
+    
+    it('should pop elements', () => {
+        stack.push(1);
+        stack.push(2);
+        assertEqual(stack.pop(), 2);
+        assertEqual(stack.size(), 1);
+    });
+    
+    it('should throw error when popping from empty stack', () => {
+        assertThrows(() => stack.pop(), Error);
+    });
+});
+```
+
+**Green Phase:**
+```javascript
+class Stack {
+    constructor() {
+        this.items = [];
+    }
+    
+    isEmpty() {
+        return this.items.length === 0;
+    }
+    
+    size() {
+        return this.items.length;
+    }
+    
+    push(item) {
+        this.items.push(item);
+    }
+    
+    pop() {
+        if (this.isEmpty()) {
+            throw new Error('Cannot pop from empty stack');
+        }
+        return this.items.pop();
+    }
+}
+```
+
+**Best Practices:**
+1. Write tests before writing code
+2. Follow Red-Green-Refactor cycle
+3. Write one test at a time
+4. Keep tests simple and focused
+5. Use descriptive test names
+6. Test edge cases and error conditions
+7. Refactor frequently
+8. Maintain high test coverage
+9. Keep tests fast
+10. Use proper test structure (AAA pattern)
+
+**Related Questions:** [Unit Testing](#87-how-do-you-write-unit-tests-in-javascript), [Mocks and Stubs](#89-what-are-mocks-and-stubs)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+### 89. What are mocks and stubs?
+
+**Mocks and stubs** are testing techniques that replace real dependencies with fake implementations to isolate the code under test and control its behavior.
+
+**1. Stubs:**
+
+**Basic Stub:**
+```javascript
+// Function to test
+function processOrder(order, paymentService) {
+    const payment = paymentService.processPayment(order.amount);
+    if (payment.success) {
+        return { status: 'success', orderId: order.id };
+    } else {
+        return { status: 'failed', error: payment.error };
+    }
+}
+
+// Stub for payment service
+function createPaymentStub(shouldSucceed = true) {
+    return {
+        processPayment: (amount) => {
+            if (shouldSucceed) {
+                return { success: true, transactionId: 'txn_123' };
+            } else {
+                return { success: false, error: 'Payment failed' };
+            }
+        }
+    };
+}
+
+// Tests using stub
+describe('processOrder', () => {
+    it('should process order successfully', () => {
+        const order = { id: 1, amount: 100 };
+        const paymentStub = createPaymentStub(true);
+        
+        const result = processOrder(order, paymentStub);
+        
+        assertEqual(result.status, 'success');
+        assertEqual(result.orderId, 1);
+    });
+    
+    it('should handle payment failure', () => {
+        const order = { id: 1, amount: 100 };
+        const paymentStub = createPaymentStub(false);
+        
+        const result = processOrder(order, paymentStub);
+        
+        assertEqual(result.status, 'failed');
+        assertEqual(result.error, 'Payment failed');
+    });
+});
+```
+
+**2. Mocks:**
+
+**Basic Mock:**
+```javascript
+// Mock function that tracks calls
+function createMock() {
+    const calls = [];
+    const mockFn = function(...args) {
+        calls.push(args);
+        return mockFn.returnValue;
+    };
+    
+    mockFn.calls = calls;
+    mockFn.returnValue = undefined;
+    mockFn.mockReturnValue = (value) => {
+        mockFn.returnValue = value;
+        return mockFn;
+    };
+    
+    mockFn.mockImplementation = (fn) => {
+        mockFn.implementation = fn;
+        return mockFn;
+    };
+    
+    return mockFn;
+}
+
+// Usage
+describe('UserService', () => {
+    it('should call fetch with correct URL', () => {
+        const mockFetch = createMock();
+        mockFetch.mockReturnValue(Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({ id: 1, name: 'John' })
+        }));
+        
+        global.fetch = mockFetch;
+        
+        const userService = new UserService();
+        userService.getUser(1);
+        
+        assertEqual(mockFetch.calls.length, 1);
+        assertEqual(mockFetch.calls[0][0], '/api/users/1');
+    });
+});
+```
+
+**3. Spy Functions:**
+
+**Function Spying:**
+```javascript
+function createSpy(originalFn) {
+    const calls = [];
+    
+    const spy = function(...args) {
+        calls.push(args);
+        if (originalFn) {
+            return originalFn.apply(this, args);
+        }
+    };
+    
+    spy.calls = calls;
+    spy.callCount = () => calls.length;
+    spy.calledWith = (...args) => {
+        return calls.some(call => 
+            call.length === args.length && 
+            call.every((arg, index) => arg === args[index])
+        );
+    };
+    
+    return spy;
+}
+
+// Usage
+describe('EventEmitter', () => {
+    it('should call all listeners', () => {
+        const emitter = new EventEmitter();
+        const listener1 = createSpy();
+        const listener2 = createSpy();
+        
+        emitter.on('test', listener1);
+        emitter.on('test', listener2);
+        emitter.emit('test', 'data');
+        
+        assertEqual(listener1.callCount(), 1);
+        assertEqual(listener2.callCount(), 1);
+        assertTrue(listener1.calledWith('data'));
+        assertTrue(listener2.calledWith('data'));
+    });
+});
+```
+
+**Best Practices:**
+1. Use mocks to isolate units under test
+2. Mock external dependencies
+3. Use stubs for simple replacements
+4. Use spies to verify behavior
+5. Keep mocks simple and focused
+6. Reset mocks between tests
+7. Use descriptive mock names
+8. Mock at the right level of abstraction
+9. Avoid over-mocking
+10. Test mock behavior separately
+
+**Related Questions:** [Unit Testing](#87-how-do-you-write-unit-tests-in-javascript), [TDD](#88-what-is-test-driven-development-tdd)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+### 90. How do you test asynchronous code?
+
+**Testing asynchronous code** requires special handling because async operations don't complete immediately. You need to wait for promises to resolve or reject, and handle timing issues.
+
+**1. Testing Promises:**
+
+**Basic Promise Testing:**
+```javascript
+// Function to test
+async function fetchUserData(userId) {
+    if (!userId) throw new Error('User ID is required');
+    
+    const response = await fetch(`/api/users/${userId}`);
+    if (!response.ok) throw new Error('Failed to fetch user data');
+    
+    return response.json();
+}
+
+// Tests for async function
+describe('fetchUserData', () => {
+    let mockFetch;
+    
+    beforeEach(() => {
+        mockFetch = jest.fn();
+        global.fetch = mockFetch;
+    });
+    
+    it('should fetch user data successfully', async () => {
+        // Arrange
+        const mockUser = { id: 1, name: 'John' };
+        mockFetch.mockResolvedValue({
+            ok: true,
+            json: () => Promise.resolve(mockUser)
+        });
+        
+        // Act
+        const result = await fetchUserData(1);
+        
+        // Assert
+        assertEqual(result.id, 1);
+        assertEqual(result.name, 'John');
+        assertEqual(mockFetch).toHaveBeenCalledWith('/api/users/1');
+    });
+    
+    it('should throw error for missing user ID', async () => {
+        // Act & Assert
+        try {
+            await fetchUserData();
+            assert(false, 'Expected function to throw');
+        } catch (error) {
+            assertEqual(error.message, 'User ID is required');
+        }
+    });
+});
+```
+
+**2. Testing Callbacks:**
+
+**Callback Testing:**
+```javascript
+// Function with callback
+function processData(data, callback) {
+    setTimeout(() => {
+        if (data.error) {
+            callback(new Error(data.error));
+        } else {
+            callback(null, data.result);
+        }
+    }, 100);
+}
+
+// Test with callback
+describe('processData', () => {
+    it('should call callback with result', (done) => {
+        const testData = { result: 'success' };
+        
+        processData(testData, (error, result) => {
+            try {
+                assertEqual(error, null);
+                assertEqual(result, 'success');
+                done();
+            } catch (err) {
+                done(err);
+            }
+        });
+    });
+    
+    it('should call callback with error', (done) => {
+        const testData = { error: 'Something went wrong' };
+        
+        processData(testData, (error, result) => {
+            try {
+                assertNotEqual(error, null);
+                assertEqual(error.message, 'Something went wrong');
+                assertEqual(result, undefined);
+                done();
+            } catch (err) {
+                done(err);
+            }
+        });
+    });
+});
+```
+
+**3. Testing with Jest:**
+
+**Jest Async Testing:**
+```javascript
+// Using Jest for async testing
+describe('UserService', () => {
+    let userService;
+    let mockFetch;
+    
+    beforeEach(() => {
+        userService = new UserService();
+        mockFetch = jest.fn();
+        global.fetch = mockFetch;
+    });
+    
+    it('should fetch user data', async () => {
+        // Arrange
+        const mockUser = { id: 1, name: 'John' };
+        mockFetch.mockResolvedValue({
+            ok: true,
+            json: () => Promise.resolve(mockUser)
+        });
+        
+        // Act
+        const result = await userService.getUser(1);
+        
+        // Assert
+        expect(result).toEqual(mockUser);
+        expect(mockFetch).toHaveBeenCalledWith('/api/users/1');
+    });
+    
+    it('should handle fetch errors', async () => {
+        // Arrange
+        mockFetch.mockRejectedValue(new Error('Network error'));
+        
+        // Act & Assert
+        await expect(userService.getUser(1)).rejects.toThrow('Network error');
+    });
+});
+```
+
+**4. Testing Timeouts and Delays:**
+
+**Timeout Testing:**
+```javascript
+// Function with timeout
+function fetchWithTimeout(url, timeout = 5000) {
+    return new Promise((resolve, reject) => {
+        const timer = setTimeout(() => {
+            reject(new Error('Request timeout'));
+        }, timeout);
+        
+        fetch(url)
+            .then(response => {
+                clearTimeout(timer);
+                resolve(response);
+            })
+            .catch(error => {
+                clearTimeout(timer);
+                reject(error);
+            });
+    });
+}
+
+// Test with timeout
+describe('fetchWithTimeout', () => {
+    it('should resolve before timeout', async () => {
+        const mockFetch = jest.fn().mockResolvedValue({ ok: true });
+        global.fetch = mockFetch;
+        
+        const result = await fetchWithTimeout('/api/data', 1000);
+        
+        expect(result.ok).toBe(true);
+    });
+    
+    it('should reject on timeout', async () => {
+        const mockFetch = jest.fn().mockImplementation(() => 
+            new Promise(resolve => setTimeout(resolve, 2000))
+        );
+        global.fetch = mockFetch;
+        
+        await expect(fetchWithTimeout('/api/data', 1000))
+            .rejects.toThrow('Request timeout');
+    });
+});
+```
+
+**Best Practices:**
+1. Use async/await for cleaner async tests
+2. Always await async operations in tests
+3. Use proper error handling in async tests
+4. Mock external dependencies
+5. Test both success and error cases
+6. Use timeouts appropriately
+7. Test event emitters properly
+8. Use done callback for callback-based code
+9. Avoid testing implementation details
+10. Keep async tests focused and simple
+
+**Related Questions:** [Unit Testing](#87-how-do-you-write-unit-tests-in-javascript), [Mocks and Stubs](#89-what-are-mocks-and-stubs)
+
+[⬆️ Back to Top](#table-of-contents)
 
 [⬆️ Back to Top](#table-of-contents)
 
 ## Modern JavaScript Tools
-83. What is npm and package.json?
-84. What are build tools like Webpack, Vite?
-85. What is Babel and why is it used?
-86. What are linters like ESLint?
-87. What is the difference between development and production builds?
+### 91. What is npm and package.json?
+
+**npm (Node Package Manager)** is the default package manager for Node.js and the world's largest software registry. It allows developers to install, manage, and share JavaScript packages and dependencies.
+
+**1. What is npm:**
+
+**Package Manager:**
+```bash
+# Install a package globally
+npm install -g create-react-app
+
+# Install a package locally
+npm install lodash
+
+# Install as dev dependency
+npm install --save-dev webpack
+
+# Install specific version
+npm install react@18.2.0
+
+# Install latest version
+npm install react@latest
+```
+
+**2. package.json:**
+
+**Basic Structure:**
+```json
+{
+  "name": "my-javascript-project",
+  "version": "1.0.0",
+  "description": "A sample JavaScript project",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "build": "webpack --mode production",
+    "test": "jest",
+    "lint": "eslint src/"
+  },
+  "keywords": ["javascript", "node", "web"],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "webpack": "^5.88.0",
+    "jest": "^29.5.0",
+    "eslint": "^8.42.0"
+  },
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  }
+}
+```
+
+**3. Scripts and Commands:**
+
+**Common Scripts:**
+```json
+{
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "build": "webpack --mode production",
+    "build:dev": "webpack --mode development",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "format": "prettier --write src/",
+    "clean": "rimraf dist/",
+    "prebuild": "npm run clean",
+    "postbuild": "echo 'Build completed'"
+  }
+}
+```
+
+**4. Dependency Management:**
+
+**Semantic Versioning:**
+```json
+{
+  "dependencies": {
+    "react": "^18.2.0",     // Compatible with 18.2.0, <19.0.0
+    "lodash": "~4.17.21",   // Compatible with 4.17.21, <4.18.0
+    "express": "4.18.2",    // Exact version
+    "axios": "*"             // Any version (not recommended)
+  }
+}
+```
+
+**Best Practices:**
+1. Use exact versions for critical dependencies
+2. Keep devDependencies separate from dependencies
+3. Use npm ci for production builds
+4. Regularly update dependencies
+5. Use .npmrc for configuration
+6. Lock dependency versions with package-lock.json
+7. Use semantic versioning
+8. Document scripts clearly
+9. Use engines field for Node.js version requirements
+10. Keep package.json clean and organized
+
+**Related Questions:** [Build Tools](#92-what-are-build-tools-like-webpack-vite), [Babel](#93-what-is-babel-and-why-is-it-used)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+### 92. What are build tools like Webpack, Vite?
+
+**Build tools** are essential for modern JavaScript development, helping bundle, transpile, optimize, and manage assets for production deployment.
+
+**1. Webpack:**
+
+**Basic Configuration:**
+```javascript
+// webpack.config.js
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.[contenthash].js',
+    clean: true
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env']
+          }
+        }
+      },
+      {
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, 'css-loader']
+      },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: 'asset/resource'
+      }
+    ]
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/index.html'
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'styles.[contenthash].css'
+    })
+  ],
+  devServer: {
+    static: './dist',
+    hot: true,
+    port: 3000
+  }
+};
+```
+
+**2. Vite:**
+
+**Basic Vite Configuration:**
+```javascript
+// vite.config.js
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { resolve } from 'path';
+
+export default defineConfig({
+  plugins: [react()],
+  root: './src',
+  build: {
+    outDir: '../dist',
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, 'src/index.html')
+      }
+    }
+  },
+  server: {
+    port: 3000,
+    open: true,
+    cors: true
+  },
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, 'src'),
+      '@components': resolve(__dirname, 'src/components')
+    }
+  }
+});
+```
+
+**3. Build Tool Comparison:**
+
+**Feature Comparison:**
+```javascript
+// Webpack - Most features, complex config
+const webpackConfig = {
+  // Extensive configuration options
+  // Plugin ecosystem
+  // Code splitting
+  // Hot module replacement
+  // Tree shaking
+};
+
+// Vite - Fast, modern, simple
+const viteConfig = {
+  // Fast dev server
+  // ES modules in dev
+  // Rollup for production
+  // Built-in TypeScript support
+};
+
+// Rollup - Library focused
+const rollupConfig = {
+  // Tree shaking
+  // ES modules output
+  // Plugin system
+  // Library bundling
+};
+
+// Parcel - Zero config
+const parcelConfig = {
+  // Zero configuration
+  // Automatic asset handling
+  // Built-in optimizations
+  // Fast builds
+};
+```
+
+**Best Practices:**
+1. Choose the right tool for your project size
+2. Use code splitting for large applications
+3. Optimize bundle size with tree shaking
+4. Use source maps for debugging
+5. Implement caching strategies
+6. Monitor bundle analysis
+7. Use environment-specific configurations
+8. Implement proper error handling
+9. Use plugins judiciously
+10. Keep build times fast
+
+**Related Questions:** [npm](#91-what-is-npm-and-package-json), [Babel](#93-what-is-babel-and-why-is-it-used)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+### 93. What is Babel and why is it used?
+
+**Babel** is a JavaScript compiler that transforms modern JavaScript code into a version that can run in older browsers or environments. It's essential for using cutting-edge JavaScript features while maintaining compatibility.
+
+**1. What is Babel:**
+
+**Core Purpose:**
+```javascript
+// Modern JavaScript (ES2022+)
+const user = {
+  name: 'John',
+  age: 30,
+  greet() {
+    return `Hello, I'm ${this.name}`;
+  }
+};
+
+// Transformed to ES5
+var user = {
+  name: 'John',
+  age: 30,
+  greet: function greet() {
+    return 'Hello, I\'m ' + this.name;
+  }
+};
+```
+
+**2. Babel Configuration:**
+
+**Basic Setup:**
+```json
+// package.json
+{
+  "devDependencies": {
+    "@babel/core": "^7.22.0",
+    "@babel/cli": "^7.22.0",
+    "@babel/preset-env": "^7.22.0"
+  },
+  "scripts": {
+    "build": "babel src -d lib",
+    "watch": "babel src -d lib --watch"
+  }
+}
+```
+
+**Babel Configuration File:**
+```javascript
+// babel.config.js
+module.exports = {
+  presets: [
+    [
+      '@babel/preset-env',
+      {
+        targets: {
+          browsers: ['> 1%', 'last 2 versions', 'not dead']
+        },
+        useBuiltIns: 'usage',
+        corejs: 3
+      }
+    ]
+  ],
+  plugins: [
+    '@babel/plugin-proposal-class-properties',
+    '@babel/plugin-proposal-optional-chaining'
+  ]
+};
+```
+
+**3. Transform Examples:**
+
+**Arrow Functions:**
+```javascript
+// Input
+const add = (a, b) => a + b;
+
+// Output (ES5)
+var add = function add(a, b) {
+  return a + b;
+};
+```
+
+**Template Literals:**
+```javascript
+// Input
+const name = 'John';
+const message = `Hello, ${name}!`;
+
+// Output (ES5)
+var name = 'John';
+var message = 'Hello, ' + name + '!';
+```
+
+**4. Integration with Build Tools:**
+
+**Webpack Integration:**
+```javascript
+// webpack.config.js
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
+            plugins: ['@babel/plugin-proposal-class-properties']
+          }
+        }
+      }
+    ]
+  }
+};
+```
+
+**Best Practices:**
+1. Use .browserslistrc for target configuration
+2. Enable useBuiltIns for polyfills
+3. Use @babel/plugin-transform-runtime for libraries
+4. Configure environment-specific settings
+5. Use babel-loader with webpack
+6. Keep Babel updated
+7. Use specific plugins instead of presets when possible
+8. Configure source maps for debugging
+9. Use babel-plugin-import for tree shaking
+10. Test transformed code in target environments
+
+**Related Questions:** [Build Tools](#92-what-are-build-tools-like-webpack-vite), [ESLint](#94-what-are-linters-like-eslint)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+### 94. What are linters like ESLint?
+
+**Linters** are tools that analyze code for potential errors, bugs, stylistic issues, and enforce coding standards. ESLint is the most popular JavaScript linter.
+
+**1. What is ESLint:**
+
+**Core Purpose:**
+```javascript
+// Code with issues
+var unused = 'not used';
+if (true) {
+  console.log('always true');
+}
+function badFunction() {
+  return
+    'this will return undefined';
+}
+
+// ESLint catches:
+// - unused variables
+// - unreachable code
+// - missing semicolons
+// - inconsistent formatting
+```
+
+**2. ESLint Configuration:**
+
+**Basic Configuration:**
+```javascript
+// .eslintrc.js
+module.exports = {
+  env: {
+    browser: true,
+    es2021: true,
+    node: true
+  },
+  extends: [
+    'eslint:recommended',
+    '@typescript-eslint/recommended',
+    'plugin:react/recommended'
+  ],
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+    ecmaFeatures: {
+      jsx: true
+    }
+  },
+  plugins: ['react', '@typescript-eslint'],
+  rules: {
+    'no-console': 'warn',
+    'no-unused-vars': 'error',
+    'prefer-const': 'error',
+    'no-var': 'error'
+  }
+};
+```
+
+**3. Common Rules:**
+
+**Code Quality Rules:**
+```javascript
+// .eslintrc.js
+module.exports = {
+  rules: {
+    // Possible Errors
+    'no-console': 'warn',
+    'no-debugger': 'error',
+    'no-alert': 'error',
+    'no-unused-vars': 'error',
+    
+    // Best Practices
+    'eqeqeq': 'error',
+    'no-eval': 'error',
+    'no-implied-eval': 'error',
+    'no-new-func': 'error',
+    'prefer-const': 'error',
+    'no-var': 'error',
+    
+    // Stylistic Issues
+    'indent': ['error', 2],
+    'quotes': ['error', 'single'],
+    'semi': ['error', 'always'],
+    'comma-dangle': ['error', 'never'],
+    'no-trailing-spaces': 'error',
+    
+    // ES6+
+    'arrow-spacing': 'error',
+    'prefer-arrow-callback': 'error',
+    'prefer-template': 'error',
+    'template-curly-spacing': 'error'
+  }
+};
+```
+
+**4. Scripts and Automation:**
+```json
+// package.json
+{
+  "scripts": {
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "lint:report": "eslint src/ --format html -o lint-report.html",
+    "lint:ci": "eslint src/ --format json -o lint-results.json"
+  }
+}
+```
+
+**Best Practices:**
+1. Use consistent configuration across team
+2. Enable auto-fix for formatting issues
+3. Use pre-commit hooks for linting
+4. Configure IDE integration
+5. Use specific rules for different file types
+6. Regularly update ESLint and plugins
+7. Use ignore files appropriately
+8. Integrate with CI/CD pipeline
+9. Use custom rules for project-specific needs
+10. Combine with Prettier for formatting
+
+**Related Questions:** [Build Tools](#92-what-are-build-tools-like-webpack-vite), [Development vs Production](#95-what-is-the-difference-between-development-and-production-builds)
+
+[⬆️ Back to Top](#table-of-contents)
+
+---
+### 95. What is the difference between development and production builds?
+
+**Development and production builds** serve different purposes in the software development lifecycle, with distinct optimizations, configurations, and features.
+
+**1. Development Builds:**
+
+**Characteristics:**
+```javascript
+// webpack.config.js - Development
+module.exports = {
+  mode: 'development',
+  devtool: 'eval-source-map',
+  devServer: {
+    hot: true,
+    liveReload: true,
+    port: 3000,
+    open: true
+  },
+  optimization: {
+    minimize: false,
+    splitChunks: false
+  },
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoEmitOnErrorsPlugin()
+  ]
+};
+```
+
+**2. Production Builds:**
+
+**Characteristics:**
+```javascript
+// webpack.config.js - Production
+module.exports = {
+  mode: 'production',
+  devtool: 'source-map',
+  optimization: {
+    minimize: true,
+    splitChunks: {
+      chunks: 'all',
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all'
+        }
+      }
+    }
+  },
+  plugins: [
+    new TerserPlugin({
+      terserOptions: {
+        compress: {
+          drop_console: true,
+          drop_debugger: true
+        }
+      }
+    }),
+    new CssMinimizerPlugin()
+  ]
+};
+```
+
+**3. Key Differences:**
+
+**Bundle Size:**
+```javascript
+// Development
+// - Unminified code
+// - Source maps included
+// - Debug information
+// - Larger bundle size
+
+// Production
+// - Minified code
+// - Tree shaking
+// - Dead code elimination
+// - Smaller bundle size
+```
+
+**Performance:**
+```javascript
+// Development
+const config = {
+  // Fast rebuild times
+  // Hot module replacement
+  // Source maps for debugging
+  // Verbose error messages
+};
+
+// Production
+const config = {
+  // Optimized for runtime performance
+  // Code splitting
+  // Lazy loading
+  // Caching strategies
+};
+```
+
+**4. Environment Variables:**
+```javascript
+// .env.development
+NODE_ENV=development
+API_URL=http://localhost:3000/api
+DEBUG=true
+LOG_LEVEL=debug
+
+// .env.production
+NODE_ENV=production
+API_URL=https://api.myapp.com
+DEBUG=false
+LOG_LEVEL=error
+```
+
+**5. Build Scripts:**
+```json
+// package.json
+{
+  "scripts": {
+    "dev": "webpack serve --mode development",
+    "build": "webpack --mode production",
+    "build:dev": "webpack --mode development",
+    "build:analyze": "webpack --mode production --analyze",
+    "start": "node dist/server.js",
+    "start:dev": "nodemon src/server.js"
+  }
+}
+```
+
+**Best Practices:**
+1. Use different configurations for each environment
+2. Enable source maps in development only
+3. Implement proper error handling for production
+4. Use environment variables for configuration
+5. Optimize bundle size for production
+6. Implement proper caching strategies
+7. Remove debug code in production
+8. Use code splitting for large applications
+9. Monitor bundle size and performance
+10. Test both development and production builds
+
+**Related Questions:** [Build Tools](#92-what-are-build-tools-like-webpack-vite), [ESLint](#94-what-are-linters-like-eslint)
+
+[⬆️ Back to Top](#table-of-contents)
 
 [⬆️ Back to Top](#table-of-contents)
 

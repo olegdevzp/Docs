@@ -4155,7 +4155,7 @@ export class WebVitalsService {
 **Answer:**
 Change Detection (CD) cycles are the process Angular uses to check for changes in component data and update the DOM. Understanding and analyzing these cycles is crucial for optimizing application performance.
 
-**What are CD Cycles:**
+**What are CD Cycles:** 
 
 A change detection cycle involves:
 1. **Triggering event** (user interaction, HTTP response, timer)
@@ -40145,61 +40145,4482 @@ const modernCachingMatrix = {
 
 ### 171. How do you structure a large Angular application?
 
+**Answer:**
+Structuring a large Angular application requires careful planning and adherence to architectural patterns. Here are the key principles and folder structure approaches:
+
+**Folder Structure Approaches:**
+
+**1. Feature-based Structure (Recommended):**
+```
+src/
+├── app/
+│   ├── core/                    # Singleton services, guards, interceptors
+│   │   ├── services/
+│   │   ├── guards/
+│   │   ├── interceptors/
+│   │   └── models/
+│   ├── shared/                  # Reusable components, directives, pipes
+│   │   ├── components/
+│   │   ├── directives/
+│   │   ├── pipes/
+│   │   └── utils/
+│   ├── features/                # Feature modules
+│   │   ├── user-management/
+│   │   │   ├── components/
+│   │   │   ├── services/
+│   │   │   ├── models/
+│   │   │   └── user-management.routes.ts
+│   │   ├── products/
+│   │   └── orders/
+│   ├── layout/                  # Layout components (header, footer, sidebar)
+│   │   ├── header/
+│   │   ├── footer/
+│   │   └── sidebar/
+│   └── app.routes.ts
+├── assets/
+├── environments/
+└── styles/
+```
+
+**2. Standalone Components Structure (Modern Angular 14+):**
+```typescript
+// Feature with standalone components
+export const USER_ROUTES: Routes = [
+  {
+    path: '',
+    loadComponent: () => import('./user-list/user-list.component')
+      .then(m => m.UserListComponent)
+  },
+  {
+    path: ':id',
+    loadComponent: () => import('./user-detail/user-detail.component')
+      .then(m => m.UserDetailComponent)
+  }
+];
+```
+
+**Key Architectural Principles:**
+
+**1. Core Module Pattern:**
+```typescript
+// core/services/auth.service.ts
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+  private readonly http = inject(HttpClient);
+  private readonly userSignal = signal<User | null>(null);
+  
+  readonly user = this.userSignal.asReadonly();
+  readonly isAuthenticated = computed(() => !!this.userSignal());
+}
+```
+
+**2. Smart and Dumb Components:**
+```typescript
+// Smart (Container) Component
+@Component({
+  selector: 'app-user-container',
+  template: `
+    <app-user-list 
+      [users]="users()" 
+      (userSelected)="onUserSelected($event)"
+    />
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class UserContainerComponent {
+  private readonly userService = inject(UserService);
+  readonly users = this.userService.users;
+  
+  onUserSelected(user: User): void {
+    this.userService.selectUser(user);
+  }
+}
+
+// Dumb (Presentational) Component
+@Component({
+  selector: 'app-user-list',
+  template: `
+    @for (user of users; track user.id) {
+      <div (click)="userSelected.emit(user)">
+        {{user.name}}
+      </div>
+    }
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class UserListComponent {
+  users = input.required<User[]>();
+  userSelected = output<User>();
+}
+```
+
+**3. Feature Module Organization:**
+```typescript
+// features/products/products.routes.ts
+export const PRODUCT_ROUTES: Routes = [
+  {
+    path: '',
+    providers: [ProductService, ProductFacade],
+    children: [
+      { path: '', component: ProductListComponent },
+      { path: ':id', component: ProductDetailComponent }
+    ]
+  }
+];
+```
+
+**4. Shared Module Pattern:**
+```typescript
+// shared/components/index.ts (Barrel export)
+export * from './button/button.component';
+export * from './card/card.component';
+export * from './modal/modal.component';
+
+// Usage
+import { ButtonComponent, CardComponent } from '@shared/components';
+```
+
+**Best Practices:**
+
+1. **Lazy Loading:** Load features on demand
+2. **Single Responsibility:** Each module/component has one purpose
+3. **Don't Repeat Yourself (DRY):** Reuse common functionality
+4. **Separation of Concerns:** Business logic in services, presentation in components
+5. **Dependency Management:** Use path aliases in `tsconfig.json`
+
+```json
+// tsconfig.json
+{
+  "compilerOptions": {
+    "paths": {
+      "@core/*": ["src/app/core/*"],
+      "@shared/*": ["src/app/shared/*"],
+      "@features/*": ["src/app/features/*"],
+      "@env/*": ["src/environments/*"]
+    }
+  }
+}
+```
+
+**State Management Organization:**
+```
+features/products/
+├── state/
+│   ├── products.store.ts      # NgRx or Signal Store
+│   ├── products.actions.ts
+│   ├── products.effects.ts
+│   └── products.selectors.ts
+```
+
+**Documentation:**
+- README.md in each feature
+- Architecture decision records (ADRs)
+- Component documentation with JSDoc
+
+**Resources:**
+- [Angular Style Guide](https://angular.dev/style-guide)
+- [Angular Architecture Patterns](https://angular.dev/tutorials/learn-angular/28-architecture-patterns)
+
 [Back to Architecture and Best Practices](#architecture-and-best-practices)
 
 ### 172. What are Angular best practices for component communication?
+
+**Answer:**
+Angular provides multiple ways for components to communicate. Choosing the right approach depends on the relationship between components and the complexity of your application.
+
+**1. Parent to Child Communication - Input Properties:**
+```typescript
+// Modern approach with input() function
+@Component({
+  selector: 'app-child',
+  template: `<p>{{message()}}</p>`
+})
+export class ChildComponent {
+  message = input.required<string>();
+  optionalData = input<number>(0); // with default
+}
+
+// Parent
+@Component({
+  selector: 'app-parent',
+  template: `<app-child [message]="parentMessage" />`
+})
+export class ParentComponent {
+  parentMessage = 'Hello from parent';
+}
+```
+
+**2. Child to Parent Communication - Output Events:**
+```typescript
+// Modern approach with output() function
+@Component({
+  selector: 'app-child',
+  template: `<button (click)="handleClick()">Click me</button>`
+})
+export class ChildComponent {
+  dataEmit = output<string>();
+  
+  handleClick(): void {
+    this.dataEmit.emit('Data from child');
+  }
+}
+
+// Parent
+@Component({
+  selector: 'app-parent',
+  template: `<app-child (dataEmit)="handleChildData($event)" />`
+})
+export class ParentComponent {
+  handleChildData(data: string): void {
+    console.log(data);
+  }
+}
+```
+
+**3. ViewChild for Parent-Child Communication:**
+```typescript
+@Component({
+  selector: 'app-parent',
+  template: `
+    <app-child />
+    <button (click)="callChildMethod()">Call Child</button>
+  `
+})
+export class ParentComponent {
+  @ViewChild(ChildComponent) child!: ChildComponent;
+  
+  callChildMethod(): void {
+    this.child.someMethod();
+  }
+}
+```
+
+**4. Service-Based Communication (Sibling Components):**
+```typescript
+// Shared service with signals
+@Injectable({
+  providedIn: 'root'
+})
+export class DataSharingService {
+  private readonly dataSignal = signal<string>('');
+  
+  readonly data = this.dataSignal.asReadonly();
+  
+  updateData(newData: string): void {
+    this.dataSignal.set(newData);
+  }
+}
+
+// Component A
+@Component({
+  selector: 'app-component-a'
+})
+export class ComponentA {
+  private readonly dataService = inject(DataSharingService);
+  
+  sendData(): void {
+    this.dataService.updateData('Data from A');
+  }
+}
+
+// Component B
+@Component({
+  selector: 'app-component-b',
+  template: `<p>{{data()}}</p>`
+})
+export class ComponentB {
+  private readonly dataService = inject(DataSharingService);
+  readonly data = this.dataService.data;
+}
+```
+
+**5. State Management (Complex Applications):**
+```typescript
+// Using SignalStore (NgRx Signals)
+export const ProductStore = signalStore(
+  { providedIn: 'root' },
+  withState<ProductState>({
+    products: [],
+    loading: false
+  }),
+  withMethods((store) => ({
+    addProduct(product: Product): void {
+      patchState(store, {
+        products: [...store.products(), product]
+      });
+    }
+  }))
+);
+
+// Component usage
+@Component({
+  selector: 'app-products'
+})
+export class ProductsComponent {
+  readonly store = inject(ProductStore);
+  
+  addNew(): void {
+    this.store.addProduct({ id: 1, name: 'Product' });
+  }
+}
+```
+
+**6. Content Projection for Flexible Communication:**
+```typescript
+@Component({
+  selector: 'app-card',
+  template: `
+    <div class="card">
+      <div class="header">
+        <ng-content select="[card-header]" />
+      </div>
+      <div class="body">
+        <ng-content />
+      </div>
+      <div class="footer">
+        <ng-content select="[card-footer]" />
+      </div>
+    </div>
+  `
+})
+export class CardComponent {}
+
+// Usage
+@Component({
+  template: `
+    <app-card>
+      <h2 card-header>Title</h2>
+      <p>Content</p>
+      <button card-footer>Action</button>
+    </app-card>
+  `
+})
+export class ParentComponent {}
+```
+
+**7. Router State for Navigation Communication:**
+```typescript
+// Passing data via router
+this.router.navigate(['/details'], {
+  state: { data: complexObject }
+});
+
+// Receiving in target component
+constructor() {
+  const navigation = this.router.getCurrentNavigation();
+  const state = navigation?.extras.state as { data: any };
+}
+```
+
+**Best Practices:**
+
+1. **Use Input/Output for direct parent-child communication** - Simple and type-safe
+2. **Use Services for sibling or distant component communication** - Maintains separation of concerns
+3. **Use State Management for complex state** - When multiple components need the same data
+4. **Avoid overusing EventEmitters** - Don't use for non-parent-child communication
+5. **Prefer Signals over RxJS for simple state** - Better performance and simpler API
+6. **Keep communication patterns consistent** - Don't mix approaches unnecessarily
+7. **Use TypeScript interfaces** - Ensure type safety in communication
+
+**Anti-patterns to Avoid:**
+- Using services for simple parent-child communication
+- Creating deeply nested component hierarchies for data passing
+- Global state for component-specific data
+- Two-way binding without good reason
+- Complex EventEmitter chains
+
+**Resources:**
+- [Component Interaction](https://angular.dev/guide/components/inputs)
+- [Component Communication Patterns](https://angular.dev/guide/components/output-fn)
 
 [Back to Architecture and Best Practices](#architecture-and-best-practices)
 
 ### 173. How do you implement error handling in Angular applications?
 
+**Answer:**
+Comprehensive error handling in Angular involves multiple layers: global error handlers, HTTP interceptors, and component-level error handling.
+
+**1. Global Error Handler:**
+```typescript
+// core/errors/global-error-handler.ts
+@Injectable()
+export class GlobalErrorHandler implements ErrorHandler {
+  private readonly logger = inject(LoggerService);
+  private readonly notificationService = inject(NotificationService);
+  
+  handleError(error: Error | HttpErrorResponse): void {
+    if (error instanceof HttpErrorResponse) {
+      // Server or connection error
+      this.handleHttpError(error);
+    } else {
+      // Client-side error
+      this.handleClientError(error);
+    }
+  }
+  
+  private handleHttpError(error: HttpErrorResponse): void {
+    const message = this.getHttpErrorMessage(error);
+    this.logger.error('HTTP Error', error);
+    this.notificationService.showError(message);
+  }
+  
+  private handleClientError(error: Error): void {
+    this.logger.error('Client Error', error);
+    this.notificationService.showError('An unexpected error occurred');
+  }
+  
+  private getHttpErrorMessage(error: HttpErrorResponse): string {
+    switch (error.status) {
+      case 401:
+        return 'Unauthorized. Please log in.';
+      case 403:
+        return 'You do not have permission to perform this action.';
+      case 404:
+        return 'Resource not found.';
+      case 500:
+        return 'Internal server error. Please try again later.';
+      default:
+        return error.error?.message || 'An error occurred.';
+    }
+  }
+}
+
+// Provide in app.config.ts
+export const appConfig: ApplicationConfig = {
+  providers: [
+    { provide: ErrorHandler, useClass: GlobalErrorHandler }
+  ]
+};
+```
+
+**2. HTTP Error Interceptor:**
+```typescript
+// core/interceptors/error.interceptor.ts
+export const errorInterceptor: HttpInterceptorFn = (req, next) => {
+  const router = inject(Router);
+  const authService = inject(AuthService);
+  
+  return next(req).pipe(
+    catchError((error: HttpErrorResponse) => {
+      // Handle specific HTTP errors
+      switch (error.status) {
+        case 401:
+          // Redirect to login
+          authService.logout();
+          router.navigate(['/login']);
+          break;
+        case 403:
+          // Redirect to forbidden page
+          router.navigate(['/forbidden']);
+          break;
+        case 404:
+          // Handle not found
+          break;
+        default:
+          // Let global error handler manage it
+          break;
+      }
+      
+      return throwError(() => error);
+    })
+  );
+};
+
+// Provide in app.config.ts
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideHttpClient(
+      withInterceptors([errorInterceptor])
+    )
+  ]
+};
+```
+
+**3. Component-Level Error Handling:**
+```typescript
+@Component({
+  selector: 'app-user-list',
+  template: `
+    @if (error()) {
+      <div class="error-message">
+        {{error()}}
+        <button (click)="retry()">Retry</button>
+      </div>
+    }
+    
+    @if (loading()) {
+      <app-spinner />
+    } @else if (users().length > 0) {
+      @for (user of users(); track user.id) {
+        <app-user-card [user]="user" />
+      }
+    }
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class UserListComponent {
+  private readonly userService = inject(UserService);
+  
+  readonly users = signal<User[]>([]);
+  readonly loading = signal(false);
+  readonly error = signal<string | null>(null);
+  
+  ngOnInit(): void {
+    this.loadUsers();
+  }
+  
+  loadUsers(): void {
+    this.loading.set(true);
+    this.error.set(null);
+    
+    this.userService.getUsers().pipe(
+      catchError(err => {
+        this.error.set('Failed to load users');
+        this.loading.set(false);
+        return of([]);
+      })
+    ).subscribe(users => {
+      this.users.set(users);
+      this.loading.set(false);
+    });
+  }
+  
+  retry(): void {
+    this.loadUsers();
+  }
+}
+```
+
+**4. Service-Level Error Handling:**
+```typescript
+@Injectable({
+  providedIn: 'root'
+})
+export class UserService {
+  private readonly http = inject(HttpClient);
+  private readonly logger = inject(LoggerService);
+  
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>('/api/users').pipe(
+      retry({
+        count: 3,
+        delay: (error, retryCount) => {
+          // Exponential backoff
+          return timer(Math.pow(2, retryCount) * 1000);
+        }
+      }),
+      catchError(error => {
+        this.logger.error('Failed to fetch users', error);
+        return throwError(() => 
+          new Error('Unable to load users. Please try again.')
+        );
+      })
+    );
+  }
+}
+```
+
+**5. Custom Error Classes:**
+```typescript
+// core/errors/app-error.ts
+export class AppError extends Error {
+  constructor(
+    message: string,
+    public code?: string,
+    public statusCode?: number
+  ) {
+    super(message);
+    this.name = 'AppError';
+  }
+}
+
+export class ValidationError extends AppError {
+  constructor(
+    message: string,
+    public fields: Record<string, string>
+  ) {
+    super(message, 'VALIDATION_ERROR', 400);
+    this.name = 'ValidationError';
+  }
+}
+
+export class AuthenticationError extends AppError {
+  constructor(message: string = 'Authentication failed') {
+    super(message, 'AUTH_ERROR', 401);
+    this.name = 'AuthenticationError';
+  }
+}
+```
+
+**6. Async Error Handling with Signals:**
+```typescript
+export function toSignal<T>(
+  observable: Observable<T>,
+  options?: { initialValue?: T }
+) {
+  const dataSignal = signal<T | undefined>(options?.initialValue);
+  const errorSignal = signal<Error | null>(null);
+  const loadingSignal = signal(false);
+  
+  loadingSignal.set(true);
+  
+  observable.pipe(
+    catchError(err => {
+      errorSignal.set(err);
+      loadingSignal.set(false);
+      return of(undefined);
+    })
+  ).subscribe(value => {
+    if (value !== undefined) {
+      dataSignal.set(value);
+    }
+    loadingSignal.set(false);
+  });
+  
+  return {
+    data: dataSignal.asReadonly(),
+    error: errorSignal.asReadonly(),
+    loading: loadingSignal.asReadonly()
+  };
+}
+```
+
+**7. Form Error Handling:**
+```typescript
+@Component({
+  selector: 'app-login-form'
+})
+export class LoginFormComponent {
+  readonly loginForm = new FormGroup({
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [Validators.required, Validators.minLength(8)])
+  });
+  
+  getErrorMessage(controlName: string): string {
+    const control = this.loginForm.get(controlName);
+    
+    if (control?.hasError('required')) {
+      return `${controlName} is required`;
+    }
+    if (control?.hasError('email')) {
+      return 'Invalid email format';
+    }
+    if (control?.hasError('minlength')) {
+      const minLength = control.errors?.['minlength'].requiredLength;
+      return `Minimum length is ${minLength} characters`;
+    }
+    
+    return '';
+  }
+}
+```
+
+**Best Practices:**
+
+1. **Use Global Error Handler** - Catch all unhandled errors
+2. **Implement HTTP Interceptors** - Centralize HTTP error handling
+3. **Provide User Feedback** - Show meaningful error messages
+4. **Log Errors** - Send errors to logging service
+5. **Graceful Degradation** - Provide fallback UI
+6. **Retry Mechanisms** - For transient errors
+7. **Error Boundaries** - Isolate error impact
+8. **Type-Safe Errors** - Use custom error classes
+
+**Resources:**
+- [Angular Error Handling](https://angular.dev/api/core/ErrorHandler)
+- [HTTP Error Handling](https://angular.dev/guide/http-handle-request-errors)
+
 [Back to Architecture and Best Practices](#architecture-and-best-practices)
 
 ### 174. What is the difference between smart and dumb components?
+
+**Answer:**
+Smart and dumb components (also called container and presentational components) is an architectural pattern that separates business logic from presentation.
+
+**Smart Components (Container Components):**
+
+**Characteristics:**
+- Handle business logic and state management
+- Connect to services and stores
+- Manage data fetching and mutations
+- Handle routing and navigation
+- Minimal or no template code
+- Know about the application structure
+
+```typescript
+// Smart Component Example
+@Component({
+  selector: 'app-user-container',
+  template: `
+    <app-user-search 
+      [searchTerm]="searchTerm()"
+      (search)="onSearch($event)"
+    />
+    
+    @if (loading()) {
+      <app-spinner />
+    } @else {
+      <app-user-list 
+        [users]="filteredUsers()"
+        (userSelect)="onUserSelect($event)"
+        (userDelete)="onUserDelete($event)"
+      />
+    }
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class UserContainerComponent {
+  private readonly userService = inject(UserService);
+  private readonly router = inject(Router);
+  
+  // State management
+  readonly users = signal<User[]>([]);
+  readonly searchTerm = signal('');
+  readonly loading = signal(false);
+  
+  // Computed state
+  readonly filteredUsers = computed(() => {
+    const term = this.searchTerm().toLowerCase();
+    return this.users().filter(user => 
+      user.name.toLowerCase().includes(term)
+    );
+  });
+  
+  ngOnInit(): void {
+    this.loadUsers();
+  }
+  
+  // Business logic
+  loadUsers(): void {
+    this.loading.set(true);
+    this.userService.getUsers().subscribe({
+      next: (users) => {
+        this.users.set(users);
+        this.loading.set(false);
+      },
+      error: (err) => {
+        console.error('Failed to load users', err);
+        this.loading.set(false);
+      }
+    });
+  }
+  
+  onSearch(term: string): void {
+    this.searchTerm.set(term);
+  }
+  
+  onUserSelect(user: User): void {
+    this.router.navigate(['/users', user.id]);
+  }
+  
+  onUserDelete(user: User): void {
+    this.userService.deleteUser(user.id).subscribe(() => {
+      this.loadUsers();
+    });
+  }
+}
+```
+
+**Dumb Components (Presentational Components):**
+
+**Characteristics:**
+- Pure presentation logic only
+- Receive data via inputs
+- Emit events via outputs
+- No service dependencies
+- Highly reusable
+- Easy to test
+- OnPush change detection
+
+```typescript
+// Dumb Component Example
+@Component({
+  selector: 'app-user-list',
+  template: `
+    <div class="user-list">
+      @for (user of users(); track user.id) {
+        <div class="user-card">
+          <img [src]="user.avatar" [alt]="user.name">
+          <h3>{{user.name}}</h3>
+          <p>{{user.email}}</p>
+          <button (click)="userSelect.emit(user)">View</button>
+          <button (click)="userDelete.emit(user)">Delete</button>
+        </div>
+      }
+      
+      @if (users().length === 0) {
+        <p class="empty-state">No users found</p>
+      }
+    </div>
+  `,
+  styleUrls: ['./user-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class UserListComponent {
+  // Inputs - receive data
+  users = input.required<User[]>();
+  
+  // Outputs - emit events
+  userSelect = output<User>();
+  userDelete = output<User>();
+}
+
+// Another Dumb Component
+@Component({
+  selector: 'app-user-search',
+  template: `
+    <div class="search-box">
+      <input 
+        type="text"
+        [value]="searchTerm()"
+        (input)="onInputChange($event)"
+        placeholder="Search users..."
+      >
+      <button (click)="onClear()">Clear</button>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class UserSearchComponent {
+  searchTerm = input<string>('');
+  search = output<string>();
+  
+  onInputChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.search.emit(input.value);
+  }
+  
+  onClear(): void {
+    this.search.emit('');
+  }
+}
+```
+
+**Comparison Table:**
+
+| Aspect | Smart Components | Dumb Components |
+|--------|-----------------|-----------------|
+| **Purpose** | Business logic & orchestration | Presentation only |
+| **Dependencies** | Services, stores, router | None (only inputs/outputs) |
+| **State** | Manages state | Stateless or local UI state |
+| **Reusability** | Low (specific to feature) | High (generic) |
+| **Testing** | Complex (mock services) | Simple (inputs/outputs) |
+| **Change Detection** | Default or OnPush | OnPush |
+| **Location** | Feature modules | Shared module |
+
+**Best Practices:**
+
+**1. Keep Dumb Components Pure:**
+```typescript
+// Good - Pure dumb component
+@Component({
+  selector: 'app-button',
+  template: `
+    <button 
+      [class]="buttonClass()" 
+      [disabled]="disabled()"
+      (click)="clicked.emit()"
+    >
+      <ng-content />
+    </button>
+  `
+})
+export class ButtonComponent {
+  variant = input<'primary' | 'secondary'>('primary');
+  disabled = input(false);
+  clicked = output<void>();
+  
+  buttonClass = computed(() => `btn btn-${this.variant()}`);
+}
+```
+
+**2. Avoid Business Logic in Dumb Components:**
+```typescript
+// Bad - Dumb component with service dependency
+@Component({
+  selector: 'app-user-card'
+})
+export class UserCardComponent {
+  private userService = inject(UserService); // ❌ Don't do this
+}
+
+// Good - Let smart component handle it
+@Component({
+  selector: 'app-user-card'
+})
+export class UserCardComponent {
+  user = input.required<User>();
+  deleteUser = output<User>(); // ✅ Emit event instead
+}
+```
+
+**3. Smart Component Composition:**
+```typescript
+@Component({
+  selector: 'app-dashboard',
+  template: `
+    <app-header [user]="currentUser()" (logout)="onLogout()" />
+    
+    <div class="content">
+      <app-sidebar [menuItems]="menuItems()" />
+      
+      <main>
+        <app-stats [data]="statistics()" />
+        <app-recent-activity [activities]="activities()" />
+      </main>
+    </div>
+  `
+})
+export class DashboardComponent {
+  // Smart component orchestrates multiple dumb components
+}
+```
+
+**Benefits:**
+
+1. **Better Testability** - Dumb components are easy to test
+2. **Improved Reusability** - Dumb components work anywhere
+3. **Clearer Separation** - Business logic vs presentation
+4. **Performance** - OnPush works better with dumb components
+5. **Maintainability** - Changes are localized
+6. **Team Collaboration** - Clear boundaries between logic and UI
+
+**When to Use:**
+
+- **Smart Components:** For pages, complex features, data management
+- **Dumb Components:** For UI elements, reusable widgets, styling
+
+**Resources:**
+- [Component Architecture](https://angular.dev/guide/components)
+- [Presentational and Container Components](https://angular.dev/tutorials/learn-angular/28-architecture-patterns)
 
 [Back to Architecture and Best Practices](#architecture-and-best-practices)
 
 ### 175. How do you implement authentication and authorization?
 
+**Answer:**
+Authentication and authorization are critical security features in Angular applications. Here's a comprehensive implementation approach:
+
+**1. Authentication Service:**
+```typescript
+// core/services/auth.service.ts
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+  private readonly http = inject(HttpClient);
+  private readonly router = inject(Router);
+  
+  private readonly userSignal = signal<User | null>(null);
+  private readonly tokenKey = 'auth_token';
+  
+  readonly user = this.userSignal.asReadonly();
+  readonly isAuthenticated = computed(() => !!this.userSignal());
+  readonly userRoles = computed(() => this.userSignal()?.roles ?? []);
+  
+  constructor() {
+    this.loadUserFromStorage();
+  }
+  
+  login(credentials: LoginCredentials): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>('/api/auth/login', credentials).pipe(
+      tap(response => {
+        this.setSession(response);
+      })
+    );
+  }
+  
+  logout(): void {
+    localStorage.removeItem(this.tokenKey);
+    this.userSignal.set(null);
+    this.router.navigate(['/login']);
+  }
+  
+  refreshToken(): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>('/api/auth/refresh', {}).pipe(
+      tap(response => this.setSession(response))
+    );
+  }
+  
+  hasRole(role: string): boolean {
+    return this.userRoles().includes(role);
+  }
+  
+  hasAnyRole(roles: string[]): boolean {
+    return roles.some(role => this.hasRole(role));
+  }
+  
+  hasAllRoles(roles: string[]): boolean {
+    return roles.every(role => this.hasRole(role));
+  }
+  
+  private setSession(authResult: AuthResponse): void {
+    localStorage.setItem(this.tokenKey, authResult.token);
+    this.userSignal.set(authResult.user);
+  }
+  
+  private loadUserFromStorage(): void {
+    const token = localStorage.getItem(this.tokenKey);
+    if (token && !this.isTokenExpired(token)) {
+      this.fetchCurrentUser().subscribe();
+    }
+  }
+  
+  private isTokenExpired(token: string): boolean {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.exp * 1000 < Date.now();
+    } catch {
+      return true;
+    }
+  }
+  
+  private fetchCurrentUser(): Observable<User> {
+    return this.http.get<User>('/api/auth/me').pipe(
+      tap(user => this.userSignal.set(user))
+    );
+  }
+}
+```
+
+**2. Auth Interceptor (JWT Token):**
+```typescript
+// core/interceptors/auth.interceptor.ts
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const token = localStorage.getItem('auth_token');
+  
+  if (token && !isTokenExpired(token)) {
+    req = req.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+  }
+  
+  return next(req).pipe(
+    catchError((error: HttpErrorResponse) => {
+      if (error.status === 401) {
+        // Handle token refresh or redirect to login
+        const authService = inject(AuthService);
+        authService.logout();
+      }
+      return throwError(() => error);
+    })
+  );
+};
+
+function isTokenExpired(token: string): boolean {
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.exp * 1000 < Date.now();
+  } catch {
+    return true;
+  }
+}
+```
+
+**3. Route Guards:**
+
+**a) Authentication Guard:**
+```typescript
+// core/guards/auth.guard.ts
+export const authGuard: CanActivateFn = (route, state) => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+  
+  if (authService.isAuthenticated()) {
+    return true;
+  }
+  
+  // Store attempted URL for redirecting after login
+  return router.createUrlTree(['/login'], {
+    queryParams: { returnUrl: state.url }
+  });
+};
+```
+
+**b) Role-Based Guard:**
+```typescript
+// core/guards/role.guard.ts
+export function roleGuard(allowedRoles: string[]): CanActivateFn {
+  return (route, state) => {
+    const authService = inject(AuthService);
+    const router = inject(Router);
+    
+    if (!authService.isAuthenticated()) {
+      return router.createUrlTree(['/login']);
+    }
+    
+    if (authService.hasAnyRole(allowedRoles)) {
+      return true;
+    }
+    
+    // User doesn't have required role
+    return router.createUrlTree(['/forbidden']);
+  };
+}
+
+// Usage in routes
+export const routes: Routes = [
+  {
+    path: 'admin',
+    canActivate: [authGuard, roleGuard(['ADMIN'])],
+    loadComponent: () => import('./admin/admin.component')
+  }
+];
+```
+
+**c) Permission Guard:**
+```typescript
+// core/guards/permission.guard.ts
+export function permissionGuard(permission: string): CanActivateFn {
+  return (route, state) => {
+    const authService = inject(AuthService);
+    const permissionService = inject(PermissionService);
+    
+    if (!authService.isAuthenticated()) {
+      return inject(Router).createUrlTree(['/login']);
+    }
+    
+    return permissionService.hasPermission(permission);
+  };
+}
+```
+
+**4. Authorization Directive:**
+```typescript
+// shared/directives/has-role.directive.ts
+@Directive({
+  selector: '[appHasRole]'
+})
+export class HasRoleDirective {
+  private readonly authService = inject(AuthService);
+  private readonly templateRef = inject(TemplateRef);
+  private readonly viewContainer = inject(ViewContainerRef);
+  
+  private currentRoles: string[] = [];
+  
+  @Input() set appHasRole(roles: string | string[]) {
+    this.currentRoles = Array.isArray(roles) ? roles : [roles];
+    this.updateView();
+  }
+  
+  constructor() {
+    // React to auth changes
+    effect(() => {
+      this.authService.user(); // Track user changes
+      this.updateView();
+    });
+  }
+  
+  private updateView(): void {
+    if (this.authService.hasAnyRole(this.currentRoles)) {
+      this.viewContainer.createEmbeddedView(this.templateRef);
+    } else {
+      this.viewContainer.clear();
+    }
+  }
+}
+
+// Usage
+@Component({
+  template: `
+    <button *appHasRole="'ADMIN'">Admin Only</button>
+    <button *appHasRole="['ADMIN', 'EDITOR']">Admin or Editor</button>
+  `
+})
+export class MyComponent {}
+```
+
+**5. Login Component:**
+```typescript
+@Component({
+  selector: 'app-login',
+  template: `
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <input formControlName="email" placeholder="Email">
+      <input formControlName="password" type="password" placeholder="Password">
+      
+      @if (errorMessage()) {
+        <div class="error">{{errorMessage()}}</div>
+      }
+      
+      <button type="submit" [disabled]="loading()">
+        @if (loading()) {
+          <span>Logging in...</span>
+        } @else {
+          <span>Login</span>
+        }
+      </button>
+    </form>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class LoginComponent {
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  
+  readonly loading = signal(false);
+  readonly errorMessage = signal<string | null>(null);
+  
+  readonly loginForm = new FormGroup({
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [Validators.required])
+  });
+  
+  onSubmit(): void {
+    if (this.loginForm.invalid) return;
+    
+    this.loading.set(true);
+    this.errorMessage.set(null);
+    
+    const credentials = this.loginForm.value as LoginCredentials;
+    
+    this.authService.login(credentials).subscribe({
+      next: () => {
+        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+        this.router.navigateByUrl(returnUrl);
+      },
+      error: (error) => {
+        this.errorMessage.set('Invalid credentials');
+        this.loading.set(false);
+      }
+    });
+  }
+}
+```
+
+**6. Route Configuration:**
+```typescript
+export const routes: Routes = [
+  { path: 'login', component: LoginComponent },
+  {
+    path: '',
+    canActivate: [authGuard],
+    children: [
+      { path: 'dashboard', component: DashboardComponent },
+      {
+        path: 'admin',
+        canActivate: [roleGuard(['ADMIN'])],
+        loadChildren: () => import('./admin/admin.routes')
+      },
+      {
+        path: 'editor',
+        canActivate: [roleGuard(['ADMIN', 'EDITOR'])],
+        loadChildren: () => import('./editor/editor.routes')
+      }
+    ]
+  },
+  { path: 'forbidden', component: ForbiddenComponent }
+];
+```
+
+**7. Secure Storage (Alternative to localStorage):**
+```typescript
+@Injectable({
+  providedIn: 'root'
+})
+export class SecureStorageService {
+  private readonly encryptionKey = 'your-encryption-key';
+  
+  setItem(key: string, value: string): void {
+    const encrypted = this.encrypt(value);
+    sessionStorage.setItem(key, encrypted);
+  }
+  
+  getItem(key: string): string | null {
+    const encrypted = sessionStorage.getItem(key);
+    return encrypted ? this.decrypt(encrypted) : null;
+  }
+  
+  private encrypt(data: string): string {
+    // Use a proper encryption library like crypto-js
+    return btoa(data); // Simplified example
+  }
+  
+  private decrypt(data: string): string {
+    return atob(data); // Simplified example
+  }
+}
+```
+
+**Best Practices:**
+
+1. **Use HTTP-only cookies** for tokens when possible
+2. **Implement token refresh** before expiration
+3. **Store minimal data** in localStorage
+4. **Use HTTPS** in production
+5. **Implement CSRF protection**
+6. **Add rate limiting** for login attempts
+7. **Use secure password requirements**
+8. **Implement multi-factor authentication (MFA)**
+9. **Log security events**
+10. **Handle token expiration gracefully**
+
+**Resources:**
+- [Angular Security Guide](https://angular.dev/best-practices/security)
+- [JWT Best Practices](https://tools.ietf.org/html/rfc8725)
+
 [Back to Architecture and Best Practices](#architecture-and-best-practices)
 
 ### 176. What are Angular style guides and why are they important?
+
+**Answer:**
+Angular style guides are official coding conventions and best practices established by the Angular team to maintain consistency, readability, and maintainability across Angular projects.
+
+**Official Angular Style Guide Key Principles:**
+
+**1. Single Responsibility:**
+- One component per file
+- One service per file
+- Keep functions small and focused
+
+```typescript
+// ✅ Good - Single responsibility
+@Component({
+  selector: 'app-user-profile'
+})
+export class UserProfileComponent {
+  // Only handles user profile display
+}
+
+// ❌ Bad - Multiple responsibilities
+@Component({
+  selector: 'app-user-profile'
+})
+export class UserProfileComponent {
+  // Handles profile, billing, settings, notifications...
+}
+```
+
+**2. Naming Conventions:**
+
+```typescript
+// Components: feature.type.ts
+user-list.component.ts
+user-detail.component.ts
+
+// Services: feature.service.ts
+user.service.ts
+auth.service.ts
+
+// Pipes: feature.pipe.ts
+currency-format.pipe.ts
+
+// Directives: feature.directive.ts
+highlight.directive.ts
+
+// Guards: feature.guard.ts
+auth.guard.ts
+
+// Interfaces: feature.interface.ts or feature.model.ts
+user.model.ts
+```
+
+**3. File Structure:**
+```
+src/
+├── app/
+│   ├── core/                 # Singleton services, one-time modules
+│   │   ├── services/
+│   │   ├── guards/
+│   │   ├── interceptors/
+│   │   └── models/
+│   ├── shared/               # Reusable components, directives, pipes
+│   │   ├── components/
+│   │   ├── directives/
+│   │   ├── pipes/
+│   │   └── utils/
+│   ├── features/             # Feature-specific modules
+│   │   ├── users/
+│   │   ├── products/
+│   │   └── orders/
+│   └── app.component.ts
+├── assets/
+├── environments/
+└── styles/
+```
+
+**4. Coding Style:**
+
+```typescript
+// Use const and let, avoid var
+const API_URL = 'https://api.example.com';
+let counter = 0;
+
+// Use single quotes for strings
+const message = 'Hello World';
+
+// Use template literals for string interpolation
+const greeting = `Hello, ${name}!`;
+
+// Use arrow functions
+const add = (a: number, b: number): number => a + b;
+
+// Use optional chaining and nullish coalescing
+const userName = user?.profile?.name ?? 'Guest';
+
+// Use TypeScript strict mode
+// tsconfig.json
+{
+  "compilerOptions": {
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
+  }
+}
+```
+
+**5. Component Guidelines:**
+
+```typescript
+// Use OnPush change detection
+@Component({
+  selector: 'app-user-card',
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class UserCardComponent {}
+
+// Use modern input/output functions
+@Component({
+  selector: 'app-child'
+})
+export class ChildComponent {
+  data = input.required<string>();
+  dataChange = output<string>();
+}
+
+// Implement lifecycle hooks interfaces
+export class MyComponent implements OnInit, OnDestroy {
+  ngOnInit(): void {}
+  ngOnDestroy(): void {}
+}
+
+// Use signals for reactive state
+@Component({
+  selector: 'app-counter'
+})
+export class CounterComponent {
+  count = signal(0);
+  doubled = computed(() => this.count() * 2);
+}
+```
+
+**6. Service Guidelines:**
+
+```typescript
+// Use providedIn for tree-shakeable services
+@Injectable({
+  providedIn: 'root'
+})
+export class UserService {}
+
+// Use inject() function
+@Injectable({
+  providedIn: 'root'
+})
+export class UserService {
+  private readonly http = inject(HttpClient);
+}
+
+// Keep services focused
+@Injectable({
+  providedIn: 'root'
+})
+export class UserService {
+  // Only user-related operations
+  getUsers(): Observable<User[]> {}
+  getUser(id: string): Observable<User> {}
+  updateUser(user: User): Observable<User> {}
+}
+```
+
+**7. Template Guidelines:**
+
+```typescript
+// Use modern control flow (@if, @for, @switch)
+@Component({
+  template: `
+    @if (isLoggedIn()) {
+      <p>Welcome back!</p>
+    } @else {
+      <p>Please log in</p>
+    }
+    
+    @for (item of items(); track item.id) {
+      <div>{{item.name}}</div>
+    }
+  `
+})
+
+// Use async pipe for observables
+@Component({
+  template: `
+    @if (user$ | async; as user) {
+      <p>{{user.name}}</p>
+    }
+  `
+})
+
+// Use trackBy with *ngFor (legacy) or track with @for
+@Component({
+  template: `
+    @for (item of items(); track item.id) {
+      <div>{{item.name}}</div>
+    }
+  `
+})
+```
+
+**8. Testing Guidelines:**
+
+```typescript
+// Follow Arrange-Act-Assert pattern
+it('should add two numbers', () => {
+  // Arrange
+  const a = 5;
+  const b = 3;
+  
+  // Act
+  const result = add(a, b);
+  
+  // Assert
+  expect(result).toBe(8);
+});
+
+// Use descriptive test names
+describe('UserService', () => {
+  it('should fetch users from API', () => {});
+  it('should handle errors when API fails', () => {});
+  it('should cache user data after first fetch', () => {});
+});
+```
+
+**Why Style Guides Are Important:**
+
+1. **Consistency:** Code looks uniform across the project and team
+2. **Readability:** Easy for developers to understand code
+3. **Maintainability:** Easier to update and refactor
+4. **Scalability:** Supports growth without technical debt
+5. **Onboarding:** New developers can get up to speed faster
+6. **Quality:** Reduces bugs through consistent patterns
+7. **Collaboration:** Team members work cohesively
+8. **Best Practices:** Leverages community knowledge
+9. **Tooling:** ESLint, Prettier work better with consistent style
+10. **Performance:** Encourages performance best practices
+
+**Enforcement Tools:**
+
+```json
+// .eslintrc.json
+{
+  "extends": [
+    "plugin:@angular-eslint/recommended",
+    "plugin:@angular-eslint/template/process-inline-templates"
+  ],
+  "rules": {
+    "@angular-eslint/directive-selector": [
+      "error",
+      { "type": "attribute", "prefix": "app", "style": "camelCase" }
+    ],
+    "@angular-eslint/component-selector": [
+      "error",
+      { "type": "element", "prefix": "app", "style": "kebab-case" }
+    ]
+  }
+}
+
+// .prettierrc
+{
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "semi": true,
+  "printWidth": 100,
+  "tabWidth": 2
+}
+```
+
+**Resources:**
+- [Official Angular Style Guide](https://angular.dev/style-guide)
+- [Angular CLI Documentation](https://angular.dev/tools/cli)
 
 [Back to Architecture and Best Practices](#architecture-and-best-practices)
 
 ### 177. How do you handle environment-specific configurations?
 
+**Answer:**
+Environment-specific configurations allow you to manage different settings for development, staging, and production environments.
+
+**Modern Approach (Angular 15+):**
+
+**1. Configuration Files:**
+```typescript
+// src/environments/environment.development.ts
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:3000/api',
+  apiKey: 'dev-api-key',
+  features: {
+    enableAnalytics: false,
+    enableLogging: true,
+    enableDebugMode: true
+  },
+  auth: {
+    clientId: 'dev-client-id',
+    redirectUrl: 'http://localhost:4200/callback'
+  }
+};
+
+// src/environments/environment.ts (production)
+export const environment = {
+  production: true,
+  apiUrl: 'https://api.production.com',
+  apiKey: 'prod-api-key',
+  features: {
+    enableAnalytics: true,
+    enableLogging: false,
+    enableDebugMode: false
+  },
+  auth: {
+    clientId: 'prod-client-id',
+    redirectUrl: 'https://myapp.com/callback'
+  }
+};
+```
+
+**2. Angular Configuration (angular.json):**
+```json
+{
+  "projects": {
+    "my-app": {
+      "architect": {
+        "build": {
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.production.ts"
+                }
+              ],
+              "optimization": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                }
+              ]
+            },
+            "staging": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.staging.ts"
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+**3. Using Environment Variables:**
+```typescript
+// core/services/api.service.ts
+import { environment } from '@env/environment';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ApiService {
+  private readonly http = inject(HttpClient);
+  private readonly baseUrl = environment.apiUrl;
+  
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.baseUrl}/users`);
+  }
+}
+
+// core/services/analytics.service.ts
+import { environment } from '@env/environment';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AnalyticsService {
+  constructor() {
+    if (environment.features.enableAnalytics) {
+      this.initializeAnalytics();
+    }
+  }
+  
+  private initializeAnalytics(): void {
+    // Initialize analytics only in production
+  }
+}
+```
+
+**4. Runtime Configuration (APP_INITIALIZER):**
+```typescript
+// core/services/config.service.ts
+@Injectable({
+  providedIn: 'root'
+})
+export class ConfigService {
+  private readonly http = inject(HttpClient);
+  private config!: AppConfig;
+  
+  loadConfig(): Observable<AppConfig> {
+    return this.http.get<AppConfig>('/assets/config/config.json').pipe(
+      tap(config => this.config = config)
+    );
+  }
+  
+  getConfig(): AppConfig {
+    return this.config;
+  }
+}
+
+// app.config.ts
+export function initializeApp(configService: ConfigService) {
+  return (): Observable<AppConfig> => configService.loadConfig();
+}
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeApp,
+      deps: [ConfigService],
+      multi: true
+    }
+  ]
+};
+```
+
+**5. Feature Flags:**
+```typescript
+// core/services/feature-flag.service.ts
+@Injectable({
+  providedIn: 'root'
+})
+export class FeatureFlagService {
+  private readonly features = signal<Record<string, boolean>>({
+    newDashboard: environment.features.enableNewDashboard,
+    betaFeatures: environment.features.enableBetaFeatures
+  });
+  
+  isEnabled(featureName: string): boolean {
+    return this.features()[featureName] ?? false;
+  }
+  
+  enable(featureName: string): void {
+    this.features.update(features => ({
+      ...features,
+      [featureName]: true
+    }));
+  }
+}
+
+// Usage in component
+@Component({
+  template: `
+    @if (showNewDashboard()) {
+      <app-new-dashboard />
+    } @else {
+      <app-old-dashboard />
+    }
+  `
+})
+export class DashboardComponent {
+  private readonly featureFlags = inject(FeatureFlagService);
+  
+  readonly showNewDashboard = computed(() => 
+    this.featureFlags.isEnabled('newDashboard')
+  );
+}
+```
+
+**6. InjectionToken for Configuration:**
+```typescript
+// core/config/app-config.token.ts
+export interface AppConfig {
+  apiUrl: string;
+  apiKey: string;
+  timeout: number;
+}
+
+export const APP_CONFIG = new InjectionToken<AppConfig>('app.config');
+
+// app.config.ts
+export const appConfig: ApplicationConfig = {
+  providers: [
+    {
+      provide: APP_CONFIG,
+      useValue: {
+        apiUrl: environment.apiUrl,
+        apiKey: environment.apiKey,
+        timeout: 30000
+      }
+    }
+  ]
+};
+
+// Usage in service
+@Injectable({
+  providedIn: 'root'
+})
+export class ApiService {
+  private readonly config = inject(APP_CONFIG);
+  
+  getData(): Observable<any> {
+    return this.http.get(`${this.config.apiUrl}/data`);
+  }
+}
+```
+
+**7. Build Commands:**
+```bash
+# Development
+ng serve
+
+# Production
+ng build --configuration=production
+
+# Staging
+ng build --configuration=staging
+
+# Custom environment
+ng build --configuration=qa
+```
+
+**8. Environment-Based Logging:**
+```typescript
+// core/services/logger.service.ts
+@Injectable({
+  providedIn: 'root'
+})
+export class LoggerService {
+  private readonly isProduction = environment.production;
+  
+  log(message: string, ...args: any[]): void {
+    if (!this.isProduction) {
+      console.log(message, ...args);
+    }
+  }
+  
+  error(message: string, error?: any): void {
+    console.error(message, error);
+    
+    if (this.isProduction) {
+      // Send to error tracking service
+      this.sendToErrorTracking(message, error);
+    }
+  }
+  
+  private sendToErrorTracking(message: string, error: any): void {
+    // Send to Sentry, LogRocket, etc.
+  }
+}
+```
+
+**Best Practices:**
+
+1. **Never commit secrets** - Use environment variables for sensitive data
+2. **Use .gitignore** - Ignore environment files with secrets
+3. **Validate configuration** - Check required values on app start
+4. **Document environment variables** - Create README with all vars
+5. **Use type-safe configs** - Define interfaces for configuration
+6. **Separate concerns** - Different files for different environments
+7. **Runtime configuration** - For values that change without rebuild
+8. **Feature flags** - Toggle features without deployment
+
+**Resources:**
+- [Angular Environment Configuration](https://angular.dev/tools/cli/environments)
+- [APP_INITIALIZER](https://angular.dev/api/core/APP_INITIALIZER)
+
 [Back to Architecture and Best Practices](#architecture-and-best-practices)
 
 ### 178. What are micro-frontends and how to implement them?
+
+**Answer:**
+Micro-frontends extend the microservices concept to front-end development, allowing independent teams to build, deploy, and maintain different parts of a web application independently.
+
+**Concepts and Benefits:**
+
+**Key Characteristics:**
+- Independent deployment
+- Technology agnostic (can mix Angular, React, Vue)
+- Team autonomy
+- Isolated development
+- Incremental upgrades
+
+**Implementation Approaches:**
+
+**1. Module Federation (Webpack 5):**
+
+```typescript
+// Host Application (Shell)
+// webpack.config.js
+const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
+
+module.exports = {
+  plugins: [
+    new ModuleFederationPlugin({
+      name: 'host',
+      remotes: {
+        users: 'users@http://localhost:4201/remoteEntry.js',
+        products: 'products@http://localhost:4202/remoteEntry.js'
+      },
+      shared: {
+        '@angular/core': { singleton: true, strictVersion: true },
+        '@angular/common': { singleton: true, strictVersion: true },
+        '@angular/router': { singleton: true, strictVersion: true }
+      }
+    })
+  ]
+};
+
+// Host routes
+export const routes: Routes = [
+  {
+    path: 'users',
+    loadChildren: () => import('users/Module').then(m => m.UsersModule)
+  },
+  {
+    path: 'products',
+    loadChildren: () => import('products/Module').then(m => m.ProductsModule)
+  }
+];
+
+// Remote Application (Micro-frontend)
+// webpack.config.js
+module.exports = {
+  plugins: [
+    new ModuleFederationPlugin({
+      name: 'users',
+      filename: 'remoteEntry.js',
+      exposes: {
+        './Module': './src/app/users/users.module.ts'
+      },
+      shared: {
+        '@angular/core': { singleton: true, strictVersion: true },
+        '@angular/common': { singleton: true, strictVersion: true }
+      }
+    })
+  ]
+};
+```
+
+**2. Web Components (Angular Elements):**
+
+```typescript
+// Micro-frontend as Web Component
+@Component({
+  selector: 'app-user-widget',
+  template: `<div>User Widget Content</div>`,
+  encapsulation: ViewEncapsulation.ShadowDom
+})
+export class UserWidgetComponent {
+  @Input() userId!: string;
+  @Output() userSelected = new EventEmitter<string>();
+}
+
+// main.ts - Convert to Web Component
+import { createCustomElement } from '@angular/elements';
+
+@NgModule({
+  declarations: [UserWidgetComponent],
+  entryComponents: [UserWidgetComponent]
+})
+export class AppModule {
+  constructor(private injector: Injector) {
+    const element = createCustomElement(UserWidgetComponent, { injector });
+    customElements.define('user-widget', element);
+  }
+  
+  ngDoBootstrap() {}
+}
+
+// Host application uses the web component
+@Component({
+  template: `
+    <user-widget 
+      [userId]="currentUserId" 
+      (userSelected)="onUserSelected($event)"
+    ></user-widget>
+  `
+})
+export class HostComponent {}
+```
+
+**3. iFrame-Based Approach:**
+
+```typescript
+// Shell component
+@Component({
+  selector: 'app-shell',
+  template: `
+    <nav>
+      <a (click)="loadMicroFrontend('users')">Users</a>
+      <a (click)="loadMicroFrontend('products')">Products</a>
+    </nav>
+    
+    <iframe 
+      [src]="currentUrl | safe" 
+      width="100%" 
+      height="100%"
+      (load)="onIframeLoad()"
+    ></iframe>
+  `
+})
+export class ShellComponent {
+  currentUrl = signal<string>('');
+  
+  loadMicroFrontend(app: string): void {
+    const urls: Record<string, string> = {
+      users: 'http://localhost:4201',
+      products: 'http://localhost:4202'
+    };
+    this.currentUrl.set(urls[app]);
+  }
+  
+  onIframeLoad(): void {
+    // Post message to iframe
+    const iframe = document.querySelector('iframe');
+    iframe?.contentWindow?.postMessage({ type: 'INIT' }, '*');
+  }
+}
+
+// Micro-frontend listens for messages
+window.addEventListener('message', (event) => {
+  if (event.data.type === 'INIT') {
+    // Initialize micro-frontend
+  }
+});
+```
+
+**4. Route-Based Micro-Frontends:**
+
+```typescript
+// Shell application
+export const routes: Routes = [
+  {
+    path: 'users',
+    loadChildren: () => import('@users-mfe/app').then(m => m.UsersModule)
+  },
+  {
+    path: 'products',
+    loadChildren: () => import('@products-mfe/app').then(m => m.ProductsModule)
+  },
+  {
+    path: 'orders',
+    loadChildren: () => import('@orders-mfe/app').then(m => m.OrdersModule)
+  }
+];
+```
+
+**5. Shared State Management:**
+
+```typescript
+// Shared event bus service
+@Injectable({
+  providedIn: 'root'
+})
+export class MicroFrontendEventBus {
+  private readonly events$ = new Subject<MfeEvent>();
+  
+  emit(event: MfeEvent): void {
+    this.events$.next(event);
+  }
+  
+  on(eventType: string): Observable<MfeEvent> {
+    return this.events$.pipe(
+      filter(event => event.type === eventType)
+    );
+  }
+}
+
+// Usage in micro-frontend A
+@Component({})
+export class MfeAComponent {
+  private readonly eventBus = inject(MicroFrontendEventBus);
+  
+  sendEvent(): void {
+    this.eventBus.emit({
+      type: 'USER_SELECTED',
+      payload: { userId: '123' }
+    });
+  }
+}
+
+// Usage in micro-frontend B
+@Component({})
+export class MfeBComponent {
+  private readonly eventBus = inject(MicroFrontendEventBus);
+  
+  ngOnInit(): void {
+    this.eventBus.on('USER_SELECTED').subscribe(event => {
+      console.log('User selected:', event.payload);
+    });
+  }
+}
+```
+
+**6. Shared Component Library:**
+
+```typescript
+// shared-library/button/button.component.ts
+@Component({
+  selector: 'lib-button',
+  template: `<button [class]="variant()"><ng-content /></button>`
+})
+export class ButtonComponent {
+  variant = input<'primary' | 'secondary'>('primary');
+}
+
+// Used in all micro-frontends
+import { ButtonComponent } from '@shared/components';
+
+@Component({
+  imports: [ButtonComponent],
+  template: `<lib-button variant="primary">Click me</lib-button>`
+})
+export class MyComponent {}
+```
+
+**Best Practices:**
+
+1. **Define clear boundaries** - Each micro-frontend should be independent
+2. **Share dependencies carefully** - Use Module Federation for common libs
+3. **Establish communication protocols** - Event bus or custom events
+4. **Version management** - Handle different versions of shared libraries
+5. **Performance** - Monitor bundle sizes and loading times
+6. **Error handling** - Isolate errors to prevent cascade failures
+7. **Routing strategy** - Coordinate navigation between micro-frontends
+8. **Testing** - Test micro-frontends independently and integrated
+9. **CI/CD** - Independent deployment pipelines
+10. **Monitoring** - Track performance of each micro-frontend
+
+**Challenges:**
+
+- Increased complexity
+- Shared state management
+- Styling conflicts
+- Performance overhead
+- Testing complexity
+- Version conflicts
+
+**When to Use Micro-Frontends:**
+
+✅ Large teams working on different features
+✅ Need for independent deployments
+✅ Legacy system migration
+✅ Different technology stacks
+
+❌ Small applications
+❌ Limited team resources
+❌ Tight coupling between features
+
+**Resources:**
+- [Micro-Frontends](https://micro-frontends.org/)
+- [Angular Module Federation](https://www.angulararchitects.io/aktuelles/the-microfrontend-revolution-module-federation-in-webpack-5/)
+- [Angular Elements](https://angular.dev/guide/elements)
 
 [Back to Architecture and Best Practices](#architecture-and-best-practices)
 
 ### 179. How do you implement feature modules?
 
+**Answer:**
+Feature modules organize code by specific application features, improving maintainability and enabling lazy loading.
+
+**Traditional NgModule Approach:**
+
+```typescript
+// features/users/users.module.ts
+@NgModule({
+  declarations: [
+    UserListComponent,
+    UserDetailComponent,
+    UserFormComponent
+  ],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    SharedModule,
+    UsersRoutingModule
+  ],
+  providers: [
+    UserService,
+    UserResolver
+  ]
+})
+export class UsersModule {}
+
+// features/users/users-routing.module.ts
+const routes: Routes = [
+  {
+    path: '',
+    component: UserListComponent
+  },
+  {
+    path: ':id',
+    component: UserDetailComponent,
+    resolve: { user: UserResolver }
+  },
+  {
+    path: 'edit/:id',
+    component: UserFormComponent,
+    canActivate: [AuthGuard]
+  }
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class UsersRoutingModule {}
+```
+
+**Modern Standalone Components Approach:**
+
+```typescript
+// features/users/users.routes.ts
+export const USER_ROUTES: Routes = [
+  {
+    path: '',
+    providers: [UserService], // Feature-scoped service
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./user-list/user-list.component')
+          .then(m => m.UserListComponent)
+      },
+      {
+        path: ':id',
+        loadComponent: () => import('./user-detail/user-detail.component')
+          .then(m => m.UserDetailComponent),
+        resolve: { user: userResolver }
+      },
+      {
+        path: 'edit/:id',
+        loadComponent: () => import('./user-form/user-form.component')
+          .then(m => m.UserFormComponent),
+        canActivate: [authGuard]
+      }
+    ]
+  }
+];
+
+// Main app routes
+export const routes: Routes = [
+  {
+    path: 'users',
+    loadChildren: () => import('./features/users/users.routes')
+      .then(m => m.USER_ROUTES)
+  }
+];
+```
+
+**Feature Module Structure:**
+
+```
+features/
+├── users/
+│   ├── components/
+│   │   ├── user-list/
+│   │   │   ├── user-list.component.ts
+│   │   │   ├── user-list.component.html
+│   │   │   └── user-list.component.scss
+│   │   ├── user-detail/
+│   │   └── user-form/
+│   ├── services/
+│   │   ├── user.service.ts
+│   │   └── user-http.service.ts
+│   ├── models/
+│   │   └── user.model.ts
+│   ├── resolvers/
+│   │   └── user.resolver.ts
+│   ├── guards/
+│   │   └── user-access.guard.ts
+│   └── users.routes.ts
+```
+
+**Feature Service:**
+
+```typescript
+// features/users/services/user.service.ts
+@Injectable()
+export class UserService {
+  private readonly http = inject(HttpClient);
+  
+  private readonly usersSignal = signal<User[]>([]);
+  private readonly selectedUserSignal = signal<User | null>(null);
+  
+  readonly users = this.usersSignal.asReadonly();
+  readonly selectedUser = this.selectedUserSignal.asReadonly();
+  readonly userCount = computed(() => this.usersSignal().length);
+  
+  loadUsers(): void {
+    this.http.get<User[]>('/api/users').subscribe(users => {
+      this.usersSignal.set(users);
+    });
+  }
+  
+  selectUser(id: string): void {
+    this.http.get<User>(`/api/users/${id}`).subscribe(user => {
+      this.selectedUserSignal.set(user);
+    });
+  }
+  
+  updateUser(user: User): Observable<User> {
+    return this.http.put<User>(`/api/users/${user.id}`, user).pipe(
+      tap(updatedUser => {
+        this.usersSignal.update(users =>
+          users.map(u => u.id === updatedUser.id ? updatedUser : u)
+        );
+      })
+    );
+  }
+}
+```
+
+**Feature Component:**
+
+```typescript
+// features/users/components/user-list/user-list.component.ts
+@Component({
+  selector: 'app-user-list',
+  imports: [CommonModule, RouterModule],
+  template: `
+    <div class="user-list">
+      <h2>Users ({{userCount()}})</h2>
+      
+      <button (click)="loadUsers()">Refresh</button>
+      
+      @if (loading()) {
+        <app-spinner />
+      } @else {
+        @for (user of users(); track user.id) {
+          <app-user-card 
+            [user]="user"
+            (click)="selectUser(user.id)"
+          />
+        }
+      }
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class UserListComponent {
+  private readonly userService = inject(UserService);
+  private readonly router = inject(Router);
+  
+  readonly users = this.userService.users;
+  readonly userCount = this.userService.userCount;
+  readonly loading = signal(false);
+  
+  ngOnInit(): void {
+    this.loadUsers();
+  }
+  
+  loadUsers(): void {
+    this.loading.set(true);
+    this.userService.loadUsers();
+    this.loading.set(false);
+  }
+  
+  selectUser(id: string): void {
+    this.router.navigate(['/users', id]);
+  }
+}
+```
+
+**Feature Resolver:**
+
+```typescript
+// features/users/resolvers/user.resolver.ts
+export const userResolver: ResolveFn<User> = (route) => {
+  const userService = inject(UserService);
+  const id = route.paramMap.get('id')!;
+  
+  return userService.getUser(id).pipe(
+    catchError(() => {
+      inject(Router).navigate(['/users']);
+      return EMPTY;
+    })
+  );
+};
+```
+
+**Feature Guard:**
+
+```typescript
+// features/users/guards/user-access.guard.ts
+export const userAccessGuard: CanActivateFn = (route) => {
+  const authService = inject(AuthService);
+  const userService = inject(UserService);
+  const userId = route.paramMap.get('id');
+  
+  // Check if user can access this user's details
+  return authService.user()?.id === userId || 
+         authService.hasRole('ADMIN');
+};
+```
+
+**Shared Dependencies:**
+
+```typescript
+// features/users/users.routes.ts
+export const USER_ROUTES: Routes = [
+  {
+    path: '',
+    providers: [
+      UserService,
+      UserFacade,
+      provideHttpClient(withInterceptors([authInterceptor]))
+    ],
+    children: [
+      // routes
+    ]
+  }
+];
+```
+
+**Feature Facade Pattern:**
+
+```typescript
+// features/users/services/user.facade.ts
+@Injectable()
+export class UserFacade {
+  private readonly userService = inject(UserService);
+  private readonly userHttpService = inject(UserHttpService);
+  
+  // Expose only what components need
+  readonly users$ = this.userService.users$;
+  readonly loading$ = this.userService.loading$;
+  readonly error$ = this.userService.error$;
+  
+  loadUsers(): void {
+    this.userHttpService.getUsers().subscribe(users => {
+      this.userService.setUsers(users);
+    });
+  }
+  
+  createUser(user: CreateUserDto): Observable<User> {
+    return this.userHttpService.createUser(user).pipe(
+      tap(newUser => this.userService.addUser(newUser))
+    );
+  }
+}
+```
+
+**Best Practices:**
+
+1. **Single Responsibility** - One feature per module
+2. **Lazy Loading** - Load features on demand
+3. **Scoped Services** - Provide services at feature level when needed
+4. **Clear Boundaries** - Define feature interfaces
+5. **Shared Code** - Use shared module for common functionality
+6. **Barrel Exports** - Simplify imports
+7. **Feature Flags** - Control feature availability
+8. **Documentation** - README for each feature
+
+**Resources:**
+- [Feature Modules](https://angular.dev/guide/ngmodules/feature-modules)
+- [Lazy Loading](https://angular.dev/guide/ngmodules/lazy-loading)
+
 [Back to Architecture and Best Practices](#architecture-and-best-practices)
 
 ### 180. What is the single responsibility principle in Angular?
+
+**Answer:**
+The Single Responsibility Principle (SRP) states that every class, component, service, or module should have one and only one reason to change, meaning it should do one thing well.
+
+**In Components:**
+
+```typescript
+// ❌ Bad - Multiple responsibilities
+@Component({
+  selector: 'app-user-dashboard'
+})
+export class UserDashboardComponent {
+  private readonly http = inject(HttpClient);
+  
+  users: User[] = [];
+  products: Product[] = [];
+  orders: Order[] = [];
+  
+  // HTTP logic
+  loadUsers(): void {
+    this.http.get<User[]>('/api/users').subscribe(users => {
+      this.users = users;
+    });
+  }
+  
+  // Business logic
+  calculateRevenue(): number {
+    return this.orders.reduce((sum, order) => sum + order.total, 0);
+  }
+  
+  // UI logic
+  formatCurrency(amount: number): string {
+    return `$${amount.toFixed(2)}`;
+  }
+  
+  // Validation logic
+  isValidEmail(email: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+}
+
+// ✅ Good - Single responsibility: Display dashboard
+@Component({
+  selector: 'app-user-dashboard',
+  template: `
+    <app-user-list [users]="users()" />
+    <app-revenue-summary [revenue]="revenue()" />
+    <app-order-list [orders]="orders()" />
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class UserDashboardComponent {
+  private readonly userService = inject(UserService);
+  private readonly orderService = inject(OrderService);
+  
+  readonly users = this.userService.users;
+  readonly orders = this.orderService.orders;
+  readonly revenue = this.orderService.totalRevenue;
+  
+  ngOnInit(): void {
+    this.userService.loadUsers();
+    this.orderService.loadOrders();
+  }
+}
+```
+
+**In Services:**
+
+```typescript
+// ❌ Bad - Too many responsibilities
+@Injectable({
+  providedIn: 'root'
+})
+export class UserService {
+  // HTTP operations
+  getUsers(): Observable<User[]> {}
+  createUser(user: User): Observable<User> {}
+  
+  // Validation
+  validateEmail(email: string): boolean {}
+  
+  // Business logic
+  calculateUserAge(birthDate: Date): number {}
+  
+  // UI formatting
+  formatUserName(user: User): string {}
+  
+  // Authentication
+  authenticate(credentials: Credentials): Observable<AuthToken> {}
+}
+
+// ✅ Good - Separate concerns
+@Injectable({
+  providedIn: 'root'
+})
+export class UserService {
+  private readonly http = inject(HttpClient);
+  
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>('/api/users');
+  }
+  
+  getUser(id: string): Observable<User> {
+    return this.http.get<User>(`/api/users/${id}`);
+  }
+  
+  createUser(user: CreateUserDto): Observable<User> {
+    return this.http.post<User>('/api/users', user);
+  }
+  
+  updateUser(id: string, user: UpdateUserDto): Observable<User> {
+    return this.http.put<User>(`/api/users/${id}`, user);
+  }
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class UserValidationService {
+  validateEmail(email: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+  
+  validateAge(birthDate: Date): boolean {
+    const age = this.calculateAge(birthDate);
+    return age >= 18 && age <= 120;
+  }
+  
+  private calculateAge(birthDate: Date): number {
+    const today = new Date();
+    return today.getFullYear() - birthDate.getFullYear();
+  }
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class UserFormattingService {
+  formatFullName(user: User): string {
+    return `${user.firstName} ${user.lastName}`;
+  }
+  
+  formatUserTitle(user: User): string {
+    return `${user.title} ${this.formatFullName(user)}`;
+  }
+}
+```
+
+**In Pipes:**
+
+```typescript
+// ❌ Bad - Multiple transformations
+@Pipe({ name: 'format' })
+export class FormatPipe implements PipeTransform {
+  transform(value: any, type: string): string {
+    if (type === 'currency') {
+      return `$${value.toFixed(2)}`;
+    } else if (type === 'date') {
+      return new Date(value).toLocaleDateString();
+    } else if (type === 'uppercase') {
+      return value.toUpperCase();
+    }
+    return value;
+  }
+}
+
+// ✅ Good - One transformation per pipe
+@Pipe({ name: 'currency' })
+export class CurrencyPipe implements PipeTransform {
+  transform(value: number): string {
+    return `$${value.toFixed(2)}`;
+  }
+}
+
+@Pipe({ name: 'customDate' })
+export class CustomDatePipe implements PipeTransform {
+  transform(value: string | Date): string {
+    return new Date(value).toLocaleDateString();
+  }
+}
+
+@Pipe({ name: 'uppercase' })
+export class UppercasePipe implements PipeTransform {
+  transform(value: string): string {
+    return value.toUpperCase();
+  }
+}
+```
+
+**In Directives:**
+
+```typescript
+// ❌ Bad - Multiple concerns
+@Directive({
+  selector: '[appMultiPurpose]'
+})
+export class MultiPurposeDirective {
+  // Handles click events
+  @HostListener('click') onClick() {}
+  
+  // Changes styles
+  @HostBinding('style.color') color = 'red';
+  
+  // Validates input
+  validateInput(value: string): boolean {}
+  
+  // Makes HTTP call
+  saveData(): void {}
+}
+
+// ✅ Good - Single purpose
+@Directive({
+  selector: '[appHighlight]'
+})
+export class HighlightDirective {
+  private readonly el = inject(ElementRef);
+  
+  @Input() highlightColor = 'yellow';
+  
+  @HostListener('mouseenter') onMouseEnter() {
+    this.highlight(this.highlightColor);
+  }
+  
+  @HostListener('mouseleave') onMouseLeave() {
+    this.highlight('');
+  }
+  
+  private highlight(color: string): void {
+    this.el.nativeElement.style.backgroundColor = color;
+  }
+}
+```
+
+**In Modules:**
+
+```typescript
+// ❌ Bad - Mixed concerns
+@NgModule({
+  declarations: [
+    UserComponent,
+    ProductComponent,
+    OrderComponent,
+    PaymentComponent
+  ]
+})
+export class MixedModule {}
+
+// ✅ Good - Feature-focused
+@NgModule({
+  declarations: [
+    UserListComponent,
+    UserDetailComponent,
+    UserFormComponent
+  ],
+  providers: [UserService]
+})
+export class UserModule {}
+
+@NgModule({
+  declarations: [
+    ProductListComponent,
+    ProductDetailComponent
+  ],
+  providers: [ProductService]
+})
+export class ProductModule {}
+```
+
+**Benefits of SRP:**
+
+1. **Maintainability** - Easier to understand and modify
+2. **Testability** - Simpler to test focused functionality
+3. **Reusability** - Single-purpose code is more reusable
+4. **Debugging** - Easier to locate bugs
+5. **Collaboration** - Clear ownership and boundaries
+6. **Scalability** - Easier to extend without breaking changes
+
+**How to Apply SRP:**
+
+1. **Ask: What is the single purpose?**
+2. **Identify multiple reasons to change**
+3. **Extract separate concerns**
+4. **Create focused classes/components**
+5. **Use composition over inheritance**
+6. **Keep functions small and focused**
+
+**Code Smells (Violations):**
+
+- God classes (doing too much)
+- Long methods (>20 lines)
+- Many dependencies
+- Mixed concerns (UI + business logic)
+- Hard to name (indicates multiple purposes)
+
+**Resources:**
+- [Single Responsibility Principle](https://angular.dev/style-guide#single-responsibility)
+- [SOLID Principles](https://en.wikipedia.org/wiki/SOLID)
 
 [Back to Architecture and Best Practices](#architecture-and-best-practices)
 
 ### 181. How do you handle shared modules?
 
+**Answer:**
+Shared modules contain commonly used components, directives, pipes, and utilities that are reused across multiple feature modules.
+
+**Creating a Shared Module:**
+
+```typescript
+// shared/shared.module.ts
+@NgModule({
+  declarations: [
+    // Components
+    ButtonComponent,
+    CardComponent,
+    ModalComponent,
+    SpinnerComponent,
+    
+    // Directives
+    HighlightDirective,
+    AutofocusDirective,
+    
+    // Pipes
+    TruncatePipe,
+    SafePipe,
+    TimeAgoPipe
+  ],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule
+  ],
+  exports: [
+    // Re-export commonly used Angular modules
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    
+    // Export shared components
+    ButtonComponent,
+    CardComponent,
+    ModalComponent,
+    SpinnerComponent,
+    
+    // Export shared directives
+    HighlightDirective,
+    AutofocusDirective,
+    
+    // Export shared pipes
+    TruncatePipe,
+    SafePipe,
+    TimeAgoPipe
+  ]
+})
+export class SharedModule {}
+```
+
+**Modern Standalone Components Approach:**
+
+```typescript
+// shared/components/button/button.component.ts
+@Component({
+  selector: 'app-button',
+  imports: [CommonModule],
+  template: `
+    <button 
+      [class]="buttonClass()"
+      [disabled]="disabled()"
+      [type]="type()"
+    >
+      <ng-content />
+    </button>
+  `,
+  styles: [`/* styles */`],
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class ButtonComponent {
+  variant = input<'primary' | 'secondary' | 'danger'>('primary');
+  disabled = input(false);
+  type = input<'button' | 'submit' | 'reset'>('button');
+  
+  buttonClass = computed(() => `btn btn-${this.variant()}`);
+}
+
+// Usage in feature component
+@Component({
+  selector: 'app-user-list',
+  imports: [ButtonComponent, CardComponent], // Direct imports
+  template: `
+    <app-card>
+      <app-button variant="primary">Add User</app-button>
+    </app-card>
+  `
+})
+export class UserListComponent {}
+```
+
+**Barrel Exports:**
+
+```typescript
+// shared/components/index.ts
+export * from './button/button.component';
+export * from './card/card.component';
+export * from './modal/modal.component';
+export * from './spinner/spinner.component';
+
+// shared/directives/index.ts
+export * from './highlight.directive';
+export * from './autofocus.directive';
+
+// shared/pipes/index.ts
+export * from './truncate.pipe';
+export * from './safe.pipe';
+export * from './time-ago.pipe';
+
+// shared/index.ts
+export * from './components';
+export * from './directives';
+export * from './pipes';
+export * from './utils';
+
+// Usage
+import { ButtonComponent, CardComponent } from '@shared/components';
+import { HighlightDirective } from '@shared/directives';
+```
+
+**Shared Components:**
+
+```typescript
+// shared/components/card/card.component.ts
+@Component({
+  selector: 'app-card',
+  imports: [CommonModule],
+  template: `
+    <div class="card" [class.elevated]="elevated()">
+      @if (title()) {
+        <div class="card-header">
+          <h3>{{title()}}</h3>
+        </div>
+      }
+      
+      <div class="card-body">
+        <ng-content />
+      </div>
+      
+      @if (hasFooter) {
+        <div class="card-footer">
+          <ng-content select="[footer]" />
+        </div>
+      }
+    </div>
+  `,
+  styleUrls: ['./card.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class CardComponent {
+  title = input<string>();
+  elevated = input(false);
+  hasFooter = contentChild('[footer]');
+}
+```
+
+**Shared Directives:**
+
+```typescript
+// shared/directives/autofocus.directive.ts
+@Directive({
+  selector: '[appAutofocus]'
+})
+export class AutofocusDirective {
+  private readonly el = inject(ElementRef);
+  
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.el.nativeElement.focus();
+    }, 0);
+  }
+}
+
+// Usage
+@Component({
+  template: `<input appAutofocus type="text">`
+})
+export class MyComponent {}
+```
+
+**Shared Pipes:**
+
+```typescript
+// shared/pipes/truncate.pipe.ts
+@Pipe({
+  name: 'truncate'
+})
+export class TruncatePipe implements PipeTransform {
+  transform(value: string, limit: number = 50, ellipsis: string = '...'): string {
+    if (!value) return '';
+    if (value.length <= limit) return value;
+    return value.substring(0, limit) + ellipsis;
+  }
+}
+
+// Usage
+@Component({
+  template: `<p>{{ longText | truncate:100 }}</p>`
+})
+export class MyComponent {}
+```
+
+**Shared Utilities:**
+
+```typescript
+// shared/utils/date.utils.ts
+export class DateUtils {
+  static formatDate(date: Date | string): string {
+    return new Date(date).toLocaleDateString();
+  }
+  
+  static isToday(date: Date | string): boolean {
+    const today = new Date();
+    const checkDate = new Date(date);
+    return today.toDateString() === checkDate.toDateString();
+  }
+  
+  static getDaysDifference(date1: Date, date2: Date): number {
+    const diff = Math.abs(date1.getTime() - date2.getTime());
+    return Math.ceil(diff / (1000 * 60 * 60 * 24));
+  }
+}
+
+// shared/utils/array.utils.ts
+export class ArrayUtils {
+  static groupBy<T>(array: T[], key: keyof T): Record<string, T[]> {
+    return array.reduce((result, item) => {
+      const group = String(item[key]);
+      result[group] = result[group] || [];
+      result[group].push(item);
+      return result;
+    }, {} as Record<string, T[]>);
+  }
+  
+  static unique<T>(array: T[]): T[] {
+    return [...new Set(array)];
+  }
+}
+```
+
+**Shared Models:**
+
+```typescript
+// shared/models/api-response.model.ts
+export interface ApiResponse<T> {
+  data: T;
+  message: string;
+  success: boolean;
+  timestamp: Date;
+}
+
+export interface PaginatedResponse<T> extends ApiResponse<T[]> {
+  page: number;
+  pageSize: number;
+  total: number;
+  totalPages: number;
+}
+
+// shared/models/base-entity.model.ts
+export interface BaseEntity {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+```
+
+**Path Aliases:**
+
+```json
+// tsconfig.json
+{
+  "compilerOptions": {
+    "paths": {
+      "@shared/*": ["src/app/shared/*"],
+      "@shared/components": ["src/app/shared/components"],
+      "@shared/directives": ["src/app/shared/directives"],
+      "@shared/pipes": ["src/app/shared/pipes"],
+      "@shared/utils": ["src/app/shared/utils"]
+    }
+  }
+}
+```
+
+**Best Practices:**
+
+1. **Keep it lean** - Only truly shared components
+2. **No business logic** - Keep shared components generic
+3. **Document well** - Provide examples of usage
+4. **Version carefully** - Changes affect all features
+5. **Test thoroughly** - Shared code needs high coverage
+6. **Use barrel exports** - Simplify imports
+7. **Avoid feature-specific code** - Keep it general
+8. **Consider standalone** - Modern approach with direct imports
+
+**What to Include:**
+
+✅ Generic UI components (buttons, cards, modals)
+✅ Utility directives (autofocus, tooltip)
+✅ Formatting pipes (date, currency, truncate)
+✅ Helper functions
+✅ Common models/interfaces
+✅ Constants
+
+**What NOT to Include:**
+
+❌ Feature-specific components
+❌ Business logic
+❌ Services with state
+❌ Feature-specific models
+❌ Rarely used components
+
+**Resources:**
+- [Shared Modules](https://angular.dev/guide/ngmodules/sharing)
+- [Angular Style Guide](https://angular.dev/style-guide)
+
 [Back to Architecture and Best Practices](#architecture-and-best-practices)
 
 ### 182. What are barrel exports?
+
+**Answer:**
+Barrel exports are index files that re-export multiple modules from a single entry point, simplifying imports and improving code organization.
+
+**Basic Barrel Export:**
+
+```typescript
+// shared/components/button/button.component.ts
+export class ButtonComponent {}
+
+// shared/components/card/card.component.ts
+export class CardComponent {}
+
+// shared/components/modal/modal.component.ts
+export class ModalComponent {}
+
+// shared/components/index.ts (Barrel file)
+export * from './button/button.component';
+export * from './card/card.component';
+export * from './modal/modal.component';
+
+// Usage - Clean imports
+import { ButtonComponent, CardComponent, ModalComponent } from '@shared/components';
+
+// Without barrel - Multiple imports
+import { ButtonComponent } from '@shared/components/button/button.component';
+import { CardComponent } from '@shared/components/card/card.component';
+import { ModalComponent } from '@shared/components/modal/modal.component';
+```
+
+**Hierarchical Barrel Exports:**
+
+```typescript
+// shared/components/forms/input/input.component.ts
+export class InputComponent {}
+
+// shared/components/forms/select/select.component.ts
+export class SelectComponent {}
+
+// shared/components/forms/index.ts
+export * from './input/input.component';
+export * from './select/select.component';
+
+// shared/components/index.ts
+export * from './button/button.component';
+export * from './card/card.component';
+export * from './forms'; // Re-export forms barrel
+
+// Usage
+import { ButtonComponent, InputComponent, SelectComponent } from '@shared/components';
+```
+
+**Named Exports:**
+
+```typescript
+// shared/utils/date.utils.ts
+export function formatDate(date: Date): string {}
+export function parseDate(str: string): Date {}
+export function isValidDate(date: any): boolean {}
+
+// shared/utils/string.utils.ts
+export function capitalize(str: string): string {}
+export function truncate(str: string, length: number): string {}
+
+// shared/utils/index.ts
+export { formatDate, parseDate, isValidDate } from './date.utils';
+export { capitalize, truncate } from './string.utils';
+
+// Or use wildcard
+export * from './date.utils';
+export * from './string.utils';
+
+// Usage
+import { formatDate, capitalize } from '@shared/utils';
+```
+
+**Type-Only Exports:**
+
+```typescript
+// shared/models/user.model.ts
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+export type UserRole = 'admin' | 'user' | 'guest';
+
+// shared/models/product.model.ts
+export interface Product {
+  id: string;
+  name: string;
+  price: number;
+}
+
+// shared/models/index.ts
+export type { User, UserRole } from './user.model';
+export type { Product } from './product.model';
+
+// Usage
+import type { User, Product } from '@shared/models';
+```
+
+**Selective Exports:**
+
+```typescript
+// shared/services/api.service.ts
+export class ApiService {}
+export class ApiConfig {}
+class InternalHelper {} // Not exported
+
+// shared/services/auth.service.ts
+export class AuthService {}
+export class AuthConfig {}
+
+// shared/services/index.ts
+export { ApiService } from './api.service'; // Only export ApiService
+export { AuthService, AuthConfig } from './auth.service';
+
+// ApiConfig and InternalHelper are not available through barrel
+```
+
+**Directory Structure with Barrels:**
+
+```
+src/app/
+├── shared/
+│   ├── components/
+│   │   ├── button/
+│   │   │   ├── button.component.ts
+│   │   │   └── button.component.spec.ts
+│   │   ├── card/
+│   │   │   ├── card.component.ts
+│   │   │   └── card.component.spec.ts
+│   │   └── index.ts              # Component barrel
+│   ├── directives/
+│   │   ├── highlight.directive.ts
+│   │   ├── autofocus.directive.ts
+│   │   └── index.ts              # Directive barrel
+│   ├── pipes/
+│   │   ├── truncate.pipe.ts
+│   │   ├── safe.pipe.ts
+│   │   └── index.ts              # Pipe barrel
+│   ├── utils/
+│   │   ├── date.utils.ts
+│   │   ├── string.utils.ts
+│   │   └── index.ts              # Utils barrel
+│   └── index.ts                  # Main shared barrel
+```
+
+**Main Shared Barrel:**
+
+```typescript
+// shared/index.ts
+export * from './components';
+export * from './directives';
+export * from './pipes';
+export * from './utils';
+export * from './models';
+
+// Usage - Single import point
+import { 
+  ButtonComponent, 
+  CardComponent,
+  HighlightDirective,
+  TruncatePipe,
+  formatDate
+} from '@shared';
+```
+
+**With Path Mapping:**
+
+```json
+// tsconfig.json
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@shared": ["src/app/shared/index.ts"],
+      "@shared/*": ["src/app/shared/*"],
+      "@core": ["src/app/core/index.ts"],
+      "@core/*": ["src/app/core/*"],
+      "@features/*": ["src/app/features/*"]
+    }
+  }
+}
+```
+
+**Benefits:**
+
+1. **Clean Imports** - Single import statement
+2. **Encapsulation** - Hide internal implementation
+3. **Refactoring** - Easier to reorganize files
+4. **Consistency** - Standard import patterns
+5. **Discovery** - Easy to find what's available
+6. **Maintenance** - Centralized export management
+
+**Potential Issues:**
+
+**1. Circular Dependencies:**
+```typescript
+// user.service.ts
+import { ProductService } from './product.service';
+
+export class UserService {
+  constructor(private productService: ProductService) {}
+}
+
+// product.service.ts
+import { UserService } from './user.service';
+
+export class ProductService {
+  constructor(private userService: UserService) {}
+}
+
+// index.ts - Creates circular dependency
+export * from './user.service';
+export * from './product.service';
+
+// Solution: Use forward reference or restructure
+```
+
+**2. Bundle Size:**
+```typescript
+// Importing everything (not tree-shakeable in some cases)
+import * as Utils from '@shared/utils';
+
+// Better: Import only what you need
+import { formatDate, capitalize } from '@shared/utils';
+```
+
+**3. Build Performance:**
+```typescript
+// Too many barrel files can slow down compilation
+// Consider flatter structure or direct imports for large projects
+```
+
+**Best Practices:**
+
+1. **One barrel per directory**
+2. **Don't over-nest** - Keep hierarchy simple
+3. **Explicit exports** - Consider named exports over wildcards
+4. **Document exports** - Add comments in barrel files
+5. **Avoid circular deps** - Structure imports carefully
+6. **Tree-shakeable** - Use named exports
+7. **Type-only when possible** - Use `export type` for interfaces
+
+**Alternatives:**
+
+**1. Direct Imports:**
+```typescript
+// Some prefer explicit imports
+import { ButtonComponent } from './shared/components/button/button.component';
+```
+
+**2. Standalone Components:**
+```typescript
+// Modern Angular with standalone components
+@Component({
+  selector: 'app-user-list',
+  imports: [ButtonComponent, CardComponent] // Direct imports
+})
+export class UserListComponent {}
+```
+
+**Resources:**
+- [TypeScript Module Resolution](https://www.typescriptlang.org/docs/handbook/module-resolution.html)
+- [Angular Style Guide](https://angular.dev/style-guide)
 
 [Back to Architecture and Best Practices](#architecture-and-best-practices)
 
 ### 183. How do you implement lazy loading strategies?
 
+**Answer:**
+Lazy loading is a technique to load Angular modules or components on-demand rather than at application startup, improving initial load time and performance.
+
+**1. Basic Lazy Loading (Route-based):**
+
+```typescript
+// app.routes.ts
+export const routes: Routes = [
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { 
+    path: 'home', 
+    loadComponent: () => import('./home/home.component')
+      .then(m => m.HomeComponent)
+  },
+  {
+    path: 'users',
+    loadChildren: () => import('./features/users/users.routes')
+      .then(m => m.USER_ROUTES)
+  },
+  {
+    path: 'products',
+    loadChildren: () => import('./features/products/products.routes')
+      .then(m => m.PRODUCT_ROUTES)
+  },
+  {
+    path: 'admin',
+    canActivate: [authGuard, roleGuard(['ADMIN'])],
+    loadChildren: () => import('./features/admin/admin.routes')
+      .then(m => m.ADMIN_ROUTES)
+  }
+];
+```
+
+**2. Preloading Strategies:**
+
+**a) No Preloading (Default):**
+```typescript
+// app.config.ts
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideRouter(routes) // No preloading
+  ]
+};
+```
+
+**b) Preload All Modules:**
+```typescript
+import { PreloadAllModules } from '@angular/router';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideRouter(
+      routes,
+      withPreloading(PreloadAllModules) // Preload all lazy modules
+    )
+  ]
+};
+```
+
+**c) Custom Preloading Strategy:**
+```typescript
+// core/strategies/selective-preload.strategy.ts
+@Injectable({
+  providedIn: 'root'
+})
+export class SelectivePreloadStrategy implements PreloadingStrategy {
+  preload(route: Route, load: () => Observable<any>): Observable<any> {
+    // Preload if route data has preload: true
+    if (route.data?.['preload']) {
+      console.log('Preloading: ' + route.path);
+      return load();
+    }
+    return of(null);
+  }
+}
+
+// app.routes.ts
+export const routes: Routes = [
+  {
+    path: 'users',
+    data: { preload: true }, // Will be preloaded
+    loadChildren: () => import('./features/users/users.routes')
+      .then(m => m.USER_ROUTES)
+  },
+  {
+    path: 'admin',
+    data: { preload: false }, // Won't be preloaded
+    loadChildren: () => import('./features/admin/admin.routes')
+      .then(m => m.ADMIN_ROUTES)
+  }
+];
+
+// app.config.ts
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideRouter(
+      routes,
+      withPreloading(SelectivePreloadStrategy)
+    )
+  ]
+};
+```
+
+**d) Network-Aware Preloading:**
+```typescript
+@Injectable({
+  providedIn: 'root'
+})
+export class NetworkAwarePreloadStrategy implements PreloadingStrategy {
+  preload(route: Route, load: () => Observable<any>): Observable<any> {
+    const connection = (navigator as any).connection;
+    
+    // Only preload on fast connections
+    if (connection) {
+      if (connection.effectiveType === '4g' && !connection.saveData) {
+        return load();
+      }
+    }
+    
+    return of(null);
+  }
+}
+```
+
+**e) On-Demand Preloading:**
+```typescript
+@Injectable({
+  providedIn: 'root'
+})
+export class OnDemandPreloadService {
+  private readonly router = inject(Router);
+  
+  preloadRoute(path: string): void {
+    const config = this.router.config;
+    const route = config.find(r => r.path === path);
+    
+    if (route && route.loadChildren) {
+      route.loadChildren().then(() => {
+        console.log(`Preloaded: ${path}`);
+      });
+    }
+  }
+}
+
+// Usage in component
+@Component({
+  selector: 'app-menu'
+})
+export class MenuComponent {
+  private readonly preloadService = inject(OnDemandPreloadService);
+  
+  onMenuHover(path: string): void {
+    this.preloadService.preloadRoute(path);
+  }
+}
+```
+
+**3. Component-Level Lazy Loading:**
+
+```typescript
+// Dynamic component loading
+@Component({
+  selector: 'app-dashboard',
+  template: `
+    <button (click)="loadChart()">Load Chart</button>
+    <ng-container #chartContainer />
+  `
+})
+export class DashboardComponent {
+  @ViewChild('chartContainer', { read: ViewContainerRef }) 
+  container!: ViewContainerRef;
+  
+  async loadChart(): Promise<void> {
+    const { ChartComponent } = await import('./chart/chart.component');
+    this.container.clear();
+    this.container.createComponent(ChartComponent);
+  }
+}
+```
+
+**4. Deferred Views (@defer) - Angular 17+:**
+
+```typescript
+@Component({
+  selector: 'app-dashboard',
+  template: `
+    <!-- Immediate loading -->
+    <app-header />
+    
+    <!-- Lazy load on viewport -->
+    @defer (on viewport) {
+      <app-heavy-chart [data]="chartData()" />
+    } @placeholder {
+      <div class="chart-skeleton"></div>
+    } @loading (minimum 1s) {
+      <app-spinner />
+    } @error {
+      <p>Failed to load chart</p>
+    }
+    
+    <!-- Lazy load on interaction -->
+    @defer (on interaction) {
+      <app-comments />
+    } @placeholder {
+      <button>Load Comments</button>
+    }
+    
+    <!-- Lazy load on timer -->
+    @defer (on timer(2s)) {
+      <app-analytics />
+    }
+    
+    <!-- Lazy load on hover -->
+    @defer (on hover) {
+      <app-tooltip />
+    }
+    
+    <!-- Lazy load on idle -->
+    @defer (on idle) {
+      <app-recommendations />
+    }
+  `
+})
+export class DashboardComponent {
+  chartData = signal<ChartData>([]);
+}
+```
+
+**5. Lazy Loading Images:**
+
+```typescript
+// Using NgOptimizedImage
+@Component({
+  selector: 'app-gallery',
+  imports: [NgOptimizedImage],
+  template: `
+    <img 
+      ngSrc="/images/hero.jpg"
+      width="1200"
+      height="600"
+      priority
+    >
+    
+    <img 
+      ngSrc="/images/product.jpg"
+      width="400"
+      height="300"
+      loading="lazy"
+    >
+  `
+})
+export class GalleryComponent {}
+
+// Custom lazy loading
+@Directive({
+  selector: 'img[appLazyLoad]'
+})
+export class LazyLoadDirective {
+  private readonly el = inject(ElementRef);
+  
+  ngAfterViewInit(): void {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target as HTMLImageElement;
+          img.src = img.dataset['src']!;
+          observer.unobserve(img);
+        }
+      });
+    });
+    
+    observer.observe(this.el.nativeElement);
+  }
+}
+```
+
+**6. Lazy Loading with Route Guards:**
+
+```typescript
+// Preload route based on user role
+export const roleBasedPreloadGuard: CanActivateFn = (route) => {
+  const authService = inject(AuthService);
+  const preloadService = inject(OnDemandPreloadService);
+  
+  if (authService.hasRole('ADMIN')) {
+    preloadService.preloadRoute('admin');
+  }
+  
+  return true;
+};
+```
+
+**7. Monitoring Lazy Loading:**
+
+```typescript
+@Injectable({
+  providedIn: 'root'
+})
+export class LazyLoadMonitorService {
+  private readonly router = inject(Router);
+  
+  constructor() {
+    this.router.events.pipe(
+      filter(event => event instanceof RouteConfigLoadStart ||
+                      event instanceof RouteConfigLoadEnd)
+    ).subscribe(event => {
+      if (event instanceof RouteConfigLoadStart) {
+        console.log('Loading module:', event.route.path);
+      } else if (event instanceof RouteConfigLoadEnd) {
+        console.log('Module loaded:', event.route.path);
+      }
+    });
+  }
+}
+```
+
+**Best Practices:**
+
+1. **Lazy load by feature** - Group related functionality
+2. **Preload critical routes** - Use selective preloading
+3. **Monitor bundle sizes** - Keep chunks reasonably sized
+4. **Use @defer for heavy components** - Defer non-critical UI
+5. **Implement loading states** - Show feedback during loading
+6. **Handle errors** - Gracefully handle load failures
+7. **Test performance** - Measure impact with Lighthouse
+8. **Consider network conditions** - Adapt strategy to connection
+
+**Performance Metrics:**
+
+```typescript
+// Measure lazy loading performance
+@Injectable({
+  providedIn: 'root'
+})
+export class PerformanceMonitorService {
+  measureLazyLoad(moduleName: string): void {
+    const start = performance.now();
+    
+    // After module loads
+    const end = performance.now();
+    console.log(`${moduleName} loaded in ${end - start}ms`);
+  }
+}
+```
+
+**Resources:**
+- [Lazy Loading](https://angular.dev/guide/ngmodules/lazy-loading)
+- [Preloading Strategies](https://angular.dev/guide/router#preloading)
+- [@defer Blocks](https://angular.dev/guide/defer)
+
 [Back to Architecture and Best Practices](#architecture-and-best-practices)
 
 ### 184. What are the SOLID principles in Angular?
 
+**Answer:**
+SOLID is a set of five design principles that make software designs more understandable, flexible, and maintainable. Here's how they apply to Angular:
+
+**1. Single Responsibility Principle (SRP):**
+
+*A class should have only one reason to change.*
+
+```typescript
+// ❌ Bad - Multiple responsibilities
+@Component({
+  selector: 'app-user-profile'
+})
+export class UserProfileComponent {
+  private readonly http = inject(HttpClient);
+  
+  // HTTP logic
+  loadUser(): Observable<User> {}
+  saveUser(user: User): Observable<User> {}
+  
+  // Validation logic
+  validateEmail(email: string): boolean {}
+  
+  // Formatting logic
+  formatDate(date: Date): string {}
+  
+  // Business logic
+  calculateAge(birthDate: Date): number {}
+}
+
+// ✅ Good - Single responsibility
+@Component({
+  selector: 'app-user-profile'
+})
+export class UserProfileComponent {
+  private readonly userService = inject(UserService);
+  readonly user = this.userService.currentUser;
+}
+
+@Injectable({ providedIn: 'root' })
+export class UserService {
+  private readonly http = inject(HttpClient);
+  
+  loadUser(id: string): Observable<User> {}
+  saveUser(user: User): Observable<User> {}
+}
+
+@Injectable({ providedIn: 'root' })
+export class UserValidationService {
+  validateEmail(email: string): boolean {}
+}
+```
+
+**2. Open/Closed Principle (OCP):**
+
+*Software entities should be open for extension but closed for modification.*
+
+```typescript
+// Base logger service
+@Injectable({
+  providedIn: 'root'
+})
+export abstract class Logger {
+  abstract log(message: string): void;
+  abstract error(message: string, error?: any): void;
+}
+
+// Console implementation
+@Injectable({
+  providedIn: 'root'
+})
+export class ConsoleLogger extends Logger {
+  log(message: string): void {
+    console.log(message);
+  }
+  
+  error(message: string, error?: any): void {
+    console.error(message, error);
+  }
+}
+
+// Remote implementation (extension without modification)
+@Injectable({
+  providedIn: 'root'
+})
+export class RemoteLogger extends Logger {
+  private readonly http = inject(HttpClient);
+  
+  log(message: string): void {
+    this.http.post('/api/logs', { message, level: 'info' }).subscribe();
+  }
+  
+  error(message: string, error?: any): void {
+    this.http.post('/api/logs', { message, error, level: 'error' }).subscribe();
+  }
+}
+
+// Provider configuration
+export const appConfig: ApplicationConfig = {
+  providers: [
+    { provide: Logger, useClass: ConsoleLogger }
+    // Can easily switch to RemoteLogger without changing consuming code
+  ]
+};
+```
+
+**3. Liskov Substitution Principle (LSP):**
+
+*Objects of a superclass should be replaceable with objects of a subclass without breaking the application.*
+
+```typescript
+// Base class
+export abstract class DataSource<T> {
+  abstract get All(): Observable<T[]>;
+  abstract getById(id: string): Observable<T>;
+  abstract create(item: T): Observable<T>;
+  abstract update(id: string, item: T): Observable<T>;
+  abstract delete(id: string): Observable<void>;
+}
+
+// HTTP implementation
+@Injectable({
+  providedIn: 'root'
+})
+export class HttpDataSource<T> extends DataSource<T> {
+  private readonly http = inject(HttpClient);
+  
+  constructor(private endpoint: string) {
+    super();
+  }
+  
+  getAll(): Observable<T[]> {
+    return this.http.get<T[]>(this.endpoint);
+  }
+  
+  getById(id: string): Observable<T> {
+    return this.http.get<T>(`${this.endpoint}/${id}`);
+  }
+  
+  create(item: T): Observable<T> {
+    return this.http.post<T>(this.endpoint, item);
+  }
+  
+  update(id: string, item: T): Observable<T> {
+    return this.http.put<T>(`${this.endpoint}/${id}`, item);
+  }
+  
+  delete(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.endpoint}/${id}`);
+  }
+}
+
+// Local storage implementation (can substitute HttpDataSource)
+@Injectable({
+  providedIn: 'root'
+})
+export class LocalStorageDataSource<T extends { id: string }> extends DataSource<T> {
+  constructor(private storageKey: string) {
+    super();
+  }
+  
+  getAll(): Observable<T[]> {
+    const data = localStorage.getItem(this.storageKey);
+    return of(data ? JSON.parse(data) : []);
+  }
+  
+  getById(id: string): Observable<T> {
+    return this.getAll().pipe(
+      map(items => items.find(item => item.id === id)!)
+    );
+  }
+  
+  create(item: T): Observable<T> {
+    return this.getAll().pipe(
+      map(items => {
+        items.push(item);
+        localStorage.setItem(this.storageKey, JSON.stringify(items));
+        return item;
+      })
+    );
+  }
+  
+  update(id: string, item: T): Observable<T> {
+    return this.getAll().pipe(
+      map(items => {
+        const index = items.findIndex(i => i.id === id);
+        items[index] = item;
+        localStorage.setItem(this.storageKey, JSON.stringify(items));
+        return item;
+      })
+    );
+  }
+  
+  delete(id: string): Observable<void> {
+    return this.getAll().pipe(
+      map(items => {
+        const filtered = items.filter(item => item.id !== id);
+        localStorage.setItem(this.storageKey, JSON.stringify(filtered));
+      })
+    );
+  }
+}
+
+// Component doesn't care which implementation
+@Component({})
+export class UserListComponent {
+  private readonly dataSource = inject(DataSource<User>);
+  
+  ngOnInit(): void {
+    this.dataSource.getAll().subscribe(users => {
+      // Works with any DataSource implementation
+    });
+  }
+}
+```
+
+**4. Interface Segregation Principle (ISP):**
+
+*Clients should not be forced to depend on interfaces they don't use.*
+
+```typescript
+// ❌ Bad - Fat interface
+export interface IUserService {
+  getUsers(): Observable<User[]>;
+  createUser(user: User): Observable<User>;
+  updateUser(id: string, user: User): Observable<User>;
+  deleteUser(id: string): Observable<void>;
+  exportUsers(): Observable<Blob>;
+  importUsers(file: File): Observable<void>;
+  generateReport(): Observable<Report>;
+  sendEmail(userId: string, message: string): Observable<void>;
+}
+
+// ✅ Good - Segregated interfaces
+export interface IUserReader {
+  getUsers(): Observable<User[]>;
+  getUser(id: string): Observable<User>;
+}
+
+export interface IUserWriter {
+  createUser(user: User): Observable<User>;
+  updateUser(id: string, user: User): Observable<User>;
+  deleteUser(id: string): Observable<void>;
+}
+
+export interface IUserExporter {
+  exportUsers(): Observable<Blob>;
+  importUsers(file: File): Observable<void>;
+}
+
+export interface IUserReporter {
+  generateReport(): Observable<Report>;
+}
+
+// Services implement only what they need
+@Injectable({
+  providedIn: 'root'
+})
+export class UserService implements IUserReader, IUserWriter {
+  getUsers(): Observable<User[]> { /* */ }
+  getUser(id: string): Observable<User> { /* */ }
+  createUser(user: User): Observable<User> { /* */ }
+  updateUser(id: string, user: User): Observable<User> { /* */ }
+  deleteUser(id: string): Observable<void> { /* */ }
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class UserExportService implements IUserExporter {
+  exportUsers(): Observable<Blob> { /* */ }
+  importUsers(file: File): Observable<void> { /* */ }
+}
+
+// Components depend on specific interfaces
+@Component({})
+export class UserListComponent {
+  private readonly userReader = inject(IUserReader);
+  
+  loadUsers(): void {
+    this.userReader.getUsers().subscribe();
+  }
+}
+```
+
+**5. Dependency Inversion Principle (DIP):**
+
+*High-level modules should not depend on low-level modules. Both should depend on abstractions.*
+
+```typescript
+// ❌ Bad - High-level depends on low-level
+@Component({})
+export class UserListComponent {
+  private readonly http = inject(HttpClient); // Direct dependency
+  
+  loadUsers(): void {
+    this.http.get<User[]>('/api/users').subscribe();
+  }
+}
+
+// ✅ Good - Both depend on abstraction
+export abstract class IUserRepository {
+  abstract getUsers(): Observable<User[]>;
+  abstract getUser(id: string): Observable<User>;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class HttpUserRepository implements IUserRepository {
+  private readonly http = inject(HttpClient);
+  
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>('/api/users');
+  }
+  
+  getUser(id: string): Observable<User> {
+    return this.http.get<User>(`/api/users/${id}`);
+  }
+}
+
+// High-level component depends on abstraction
+@Component({
+  providers: [
+    { provide: IUserRepository, useClass: HttpUserRepository }
+  ]
+})
+export class UserListComponent {
+  private readonly userRepo = inject(IUserRepository);
+  
+  loadUsers(): void {
+    this.userRepo.getUsers().subscribe();
+  }
+}
+```
+
+**Practical Example Combining All Principles:**
+
+```typescript
+// Abstractions (DIP)
+export abstract class INotificationService {
+  abstract send(message: string, recipient: string): Observable<void>;
+}
+
+// Low-level implementations (OCP - open for extension)
+@Injectable()
+export class EmailNotificationService implements INotificationService {
+  send(message: string, recipient: string): Observable<void> {
+    // Send email
+    return of(void 0);
+  }
+}
+
+@Injectable()
+export class SmsNotificationService implements INotificationService {
+  send(message: string, recipient: string): Observable<void> {
+    // Send SMS
+    return of(void 0);
+  }
+}
+
+@Injectable()
+export class PushNotificationService implements INotificationService {
+  send(message: string, recipient: string): Observable<void> {
+    // Send push notification
+    return of(void 0);
+  }
+}
+
+// High-level service (SRP - single responsibility)
+@Injectable({
+  providedIn: 'root'
+})
+export class NotificationManager {
+  constructor(
+    @Inject(INotificationService) private notificationService: INotificationService
+  ) {}
+  
+  notifyUser(userId: string, message: string): Observable<void> {
+    return this.notificationService.send(message, userId);
+  }
+}
+
+// Configuration
+export const appConfig: ApplicationConfig = {
+  providers: [
+    { 
+      provide: INotificationService, 
+      useClass: EmailNotificationService // Easy to swap
+    }
+  ]
+};
+```
+
+**Benefits in Angular:**
+
+1. **Maintainability** - Easy to modify and extend
+2. **Testability** - Simple to mock dependencies
+3. **Flexibility** - Swap implementations easily
+4. **Reusability** - Components work with abstractions
+5. **Scalability** - Add features without breaking existing code
+
+**Resources:**
+- [SOLID Principles](https://en.wikipedia.org/wiki/SOLID)
+- [Angular Dependency Injection](https://angular.dev/guide/di)
+
 [Back to Architecture and Best Practices](#architecture-and-best-practices)
 
 ### 185. How do you handle code organization and folder structure?
+
+**Answer:**
+Proper code organization and folder structure are crucial for maintaining large Angular applications. Here are recommended approaches:
+
+**1. Feature-Based Structure (Recommended):**
+
+```
+src/
+├── app/
+│   ├── core/                           # Singleton services, app-wide functionality
+│   │   ├── guards/
+│   │   │   ├── auth.guard.ts
+│   │   │   └── role.guard.ts
+│   │   ├── interceptors/
+│   │   │   ├── auth.interceptor.ts
+│   │   │   ├── error.interceptor.ts
+│   │   │   └── logging.interceptor.ts
+│   │   ├── services/
+│   │   │   ├── auth.service.ts
+│   │   │   ├── storage.service.ts
+│   │   │   ├── logger.service.ts
+│   │   │   └── api.service.ts
+│   │   ├── models/
+│   │   │   ├── user.model.ts
+│   │   │   └── api-response.model.ts
+│   │   ├── utils/
+│   │   │   ├── date.utils.ts
+│   │   │   └── validation.utils.ts
+│   │   └── core.config.ts
+│   │
+│   ├── shared/                         # Reusable components, directives, pipes
+│   │   ├── components/
+│   │   │   ├── button/
+│   │   │   │   ├── button.component.ts
+│   │   │   │   ├── button.component.html
+│   │   │   │   ├── button.component.scss
+│   │   │   │   └── button.component.spec.ts
+│   │   │   ├── modal/
+│   │   │   ├── card/
+│   │   │   └── index.ts
+│   │   ├── directives/
+│   │   │   ├── highlight.directive.ts
+│   │   │   ├── autofocus.directive.ts
+│   │   │   └── index.ts
+│   │   ├── pipes/
+│   │   │   ├── truncate.pipe.ts
+│   │   │   ├── safe.pipe.ts
+│   │   │   └── index.ts
+│   │   ├── models/
+│   │   │   └── common.models.ts
+│   │   └── index.ts
+│   │
+│   ├── features/                       # Feature modules
+│   │   ├── users/
+│   │   │   ├── components/
+│   │   │   │   ├── user-list/
+│   │   │   │   │   ├── user-list.component.ts
+│   │   │   │   │   ├── user-list.component.html
+│   │   │   │   │   ├── user-list.component.scss
+│   │   │   │   │   └── user-list.component.spec.ts
+│   │   │   │   ├── user-detail/
+│   │   │   │   └── user-form/
+│   │   │   ├── services/
+│   │   │   │   ├── user.service.ts
+│   │   │   │   └── user-facade.service.ts
+│   │   │   ├── models/
+│   │   │   │   └── user.model.ts
+│   │   │   ├── state/                  # NgRx or state management
+│   │   │   │   ├── user.store.ts
+│   │   │   │   ├── user.actions.ts
+│   │   │   │   ├── user.effects.ts
+│   │   │   │   └── user.selectors.ts
+│   │   │   ├── resolvers/
+│   │   │   │   └── user.resolver.ts
+│   │   │   ├── guards/
+│   │   │   │   └── user-access.guard.ts
+│   │   │   ├── users.routes.ts
+│   │   │   └── README.md
+│   │   │
+│   │   ├── products/
+│   │   │   ├── components/
+│   │   │   ├── services/
+│   │   │   ├── models/
+│   │   │   └── products.routes.ts
+│   │   │
+│   │   └── orders/
+│   │       ├── components/
+│   │       ├── services/
+│   │       ├── models/
+│   │       └── orders.routes.ts
+│   │
+│   ├── layout/                         # Layout components
+│   │   ├── header/
+│   │   │   ├── header.component.ts
+│   │   │   ├── header.component.html
+│   │   │   └── header.component.scss
+│   │   ├── footer/
+│   │   ├── sidebar/
+│   │   └── nav/
+│   │
+│   ├── app.component.ts
+│   ├── app.component.html
+│   ├── app.component.scss
+│   ├── app.config.ts
+│   └── app.routes.ts
+│
+├── assets/                             # Static files
+│   ├── images/
+│   ├── fonts/
+│   ├── icons/
+│   └── i18n/
+│       ├── en.json
+│       └── es.json
+│
+├── environments/                       # Environment configs
+│   ├── environment.ts
+│   ├── environment.development.ts
+│   └── environment.production.ts
+│
+├── styles/                             # Global styles
+│   ├── _variables.scss
+│   ├── _mixins.scss
+│   ├── _typography.scss
+│   ├── _reset.scss
+│   └── styles.scss
+│
+├── index.html
+└── main.ts
+```
+
+**2. Naming Conventions:**
+
+```typescript
+// Components
+user-list.component.ts
+user-detail.component.ts
+product-card.component.ts
+
+// Services
+user.service.ts
+auth.service.ts
+api.service.ts
+
+// Pipes
+truncate.pipe.ts
+currency-format.pipe.ts
+
+// Directives
+highlight.directive.ts
+tooltip.directive.ts
+
+// Guards
+auth.guard.ts
+role.guard.ts
+
+// Interceptors
+auth.interceptor.ts
+error.interceptor.ts
+
+// Models/Interfaces
+user.model.ts
+product.interface.ts
+api-response.model.ts
+
+// Routes
+app.routes.ts
+users.routes.ts
+```
+
+**3. Path Aliases (tsconfig.json):**
+
+```json
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@app/*": ["src/app/*"],
+      "@core/*": ["src/app/core/*"],
+      "@shared/*": ["src/app/shared/*"],
+      "@features/*": ["src/app/features/*"],
+      "@layout/*": ["src/app/layout/*"],
+      "@env/*": ["src/environments/*"],
+      "@assets/*": ["src/assets/*"]
+    }
+  }
+}
+```
+
+**Usage:**
+```typescript
+// Instead of relative paths
+import { AuthService } from '../../../core/services/auth.service';
+
+// Use aliases
+import { AuthService } from '@core/services/auth.service';
+import { ButtonComponent } from '@shared/components';
+import { User } from '@features/users/models/user.model';
+import { environment } from '@env/environment';
+```
+
+**4. Feature Module Organization:**
+
+```typescript
+// features/users/users.routes.ts
+import { Routes } from '@angular/router';
+
+export const USER_ROUTES: Routes = [
+  {
+    path: '',
+    providers: [UserService, UserFacade],
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./components/user-list/user-list.component')
+          .then(m => m.UserListComponent)
+      },
+      {
+        path: ':id',
+        loadComponent: () => import('./components/user-detail/user-detail.component')
+          .then(m => m.UserDetailComponent),
+        resolve: { user: userResolver }
+      }
+    ]
+  }
+];
+```
+
+**5. Core Module Pattern:**
+
+```typescript
+// core/core.config.ts
+export const coreProviders = [
+  // Global services
+  AuthService,
+  LoggerService,
+  StorageService,
+  
+  // HTTP interceptors
+  provideHttpClient(
+    withInterceptors([
+      authInterceptor,
+      errorInterceptor,
+      loggingInterceptor
+    ])
+  ),
+  
+  // Global error handler
+  { provide: ErrorHandler, useClass: GlobalErrorHandler }
+];
+```
+
+**6. Shared Module Pattern:**
+
+```typescript
+// shared/index.ts
+export * from './components';
+export * from './directives';
+export * from './pipes';
+export * from './models';
+
+// Usage
+import { ButtonComponent, CardComponent, TruncatePipe } from '@shared';
+```
+
+**7. State Management Organization:**
+
+```
+features/users/state/
+├── user.store.ts          # Signal Store or NgRx Store
+├── user.actions.ts        # Actions
+├── user.effects.ts        # Side effects
+├── user.selectors.ts      # Selectors
+└── user.reducer.ts        # Reducers
+```
+
+**8. Documentation Structure:**
+
+```
+docs/
+├── architecture/
+│   ├── folder-structure.md
+│   ├── coding-standards.md
+│   └── design-patterns.md
+├── features/
+│   ├── users.md
+│   ├── products.md
+│   └── orders.md
+└── README.md
+```
+
+**Best Practices:**
+
+1. **Consistent naming** - Follow Angular style guide
+2. **Flat structure** - Avoid deep nesting (max 4-5 levels)
+3. **Feature isolation** - Each feature is self-contained
+4. **Lazy loading** - Split by features for better performance
+5. **Barrel exports** - Use index.ts files
+6. **Path aliases** - Avoid relative path hell
+7. **Separate concerns** - Core, shared, features
+8. **Document structure** - README in each feature
+9. **Keep it simple** - Don't over-engineer
+10. **Team agreement** - Ensure everyone follows structure
+
+**Alternative: Domain-Driven Design (DDD):**
+
+```
+src/app/
+├── domains/
+│   ├── user/
+│   │   ├── application/      # Use cases, facades
+│   │   ├── domain/           # Business logic, entities
+│   │   ├── infrastructure/   # API, repositories
+│   │   └── presentation/     # Components, UI
+│   └── product/
+│       ├── application/
+│       ├── domain/
+│       ├── infrastructure/
+│       └── presentation/
+```
+
+**Resources:**
+- [Angular Style Guide](https://angular.dev/style-guide)
+- [Angular Folder Structure](https://angular.dev/tutorials/learn-angular/28-architecture-patterns)
 
 [Back to Architecture and Best Practices](#architecture-and-best-practices)
 

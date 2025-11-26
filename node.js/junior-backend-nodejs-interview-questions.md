@@ -20,6 +20,8 @@
 
 ### 1. What is Node.js and why is it used?
 **Answer:**
+**Literal Definition:** Node.js is a JavaScript runtime built on Chrome's V8 engine that allows JavaScript to run on the server-side.
+
 Node.js is a JavaScript runtime built on Chrome's V8 engine that allows JavaScript to run on the server-side. It's used for:
 - Building scalable network applications
 - Non-blocking I/O operations
@@ -29,6 +31,8 @@ Node.js is a JavaScript runtime built on Chrome's V8 engine that allows JavaScri
 
 ### 2. What is the Event Loop in Node.js?
 **Answer:**
+**Literal Definition:** The Event Loop is the mechanism that handles asynchronous operations in Node.js. It continuously checks the call stack and callback queue, executing callbacks when the stack is empty.
+
 The Event Loop is the mechanism that handles asynchronous operations in Node.js. It continuously checks the call stack and callback queue, executing callbacks when the stack is empty.
 
 **How it works:**
@@ -70,6 +74,10 @@ console.log('End'); // 2. Synchronous - executes immediately
 
 ### 3. What is the difference between `require()` and `import`?
 **Answer:**
+**Literal Definitions:**
+- **require()**: CommonJS module system for loading modules. Synchronous, dynamic loading.
+- **import**: ES6 module system for loading modules. Can be tree-shaken, static analysis.
+
 - **require()**: CommonJS module system, synchronous, dynamic loading
 - **import**: ES6 module system, can be tree-shaken, static analysis
 
@@ -83,6 +91,8 @@ import express from 'express';
 
 ### 4. What is `package.json` and what is its purpose?
 **Answer:**
+**Literal Definition:** `package.json` is a manifest file that defines your Node.js project's metadata, dependencies, and scripts.
+
 `package.json` is a manifest file that contains:
 - Project metadata (name, version, description)
 - Dependencies and devDependencies
@@ -91,6 +101,8 @@ import express from 'express';
 
 ### 5. What are Streams in Node.js?
 **Answer:**
+**Literal Definition:** Streams are objects for handling reading/writing data continuously in chunks rather than loading everything into memory at once. This is especially useful for large files or real-time data.
+
 Streams are objects for handling reading/writing data continuously in chunks rather than loading everything into memory at once. This is especially useful for large files or real-time data.
 
 **Why use Streams?**
@@ -179,6 +191,8 @@ process.nextTick(() => console.log('Next Tick'));
 
 ### 8. What is middleware in Node.js?
 **Answer:**
+**Literal Definition:** Middleware functions are functions that execute between receiving a request and sending a response. They have access to request, response, and next function.
+
 Middleware functions have access to request, response, and next function. They can:
 - Execute code
 - Modify request/response objects
@@ -266,6 +280,8 @@ if (cluster.isPrimary) {
 
 ### 11. What is Express.js?
 **Answer:**
+**Literal Definition:** Express.js is a minimal and flexible Node.js web application framework that simplifies building web servers and APIs.
+
 Express.js is a minimal and flexible Node.js web application framework providing:
 - Robust routing
 - HTTP utility methods and middleware
@@ -293,6 +309,8 @@ app.listen(PORT, () => {
 
 ### 13. What are Express middleware and their types?
 **Answer:**
+**Literal Definition:** Express middleware are functions that execute between receiving a request and sending a response. They have access to the request object (`req`), response object (`res`), and the `next` function.
+
 Middleware functions are functions that have access to the request object (`req`), response object (`res`), and the `next` function. They execute in the order they're defined and can:
 - Execute any code
 - Modify request/response objects
@@ -984,6 +1002,8 @@ const [rows] = await pool.query('SELECT * FROM users WHERE id = ?', [userId]);
 
 ### 31. What is TypeScript and why use it?
 **Answer:**
+**Literal Definition:** TypeScript is a typed superset of JavaScript that compiles to plain JavaScript. It adds static type checking to JavaScript.
+
 TypeScript is a typed superset of JavaScript that compiles to plain JavaScript.
 
 **Benefits:**
@@ -1019,6 +1039,10 @@ const userInput: unknown = getUserInput();
 
 ### 33. What is the difference between `interface` and `type`?
 **Answer:**
+**Literal Definitions:**
+- **Interface**: A contract that defines the shape of an object. Can be extended and merged.
+- **Type**: A type alias that can represent any type, including unions, intersections, and primitives.
+
 ```typescript
 // Interface - can be extended and merged
 interface User {
@@ -1053,6 +1077,10 @@ type Admin = User & {
 
 ### 34. What are Union and Intersection types?
 **Answer:**
+**Literal Definitions:**
+- **Union type**: A type that can be one of several types (using `|`).
+- **Intersection type**: A type that combines multiple types into one (using `&`).
+
 ```typescript
 // Union - can be one of several types
 type Status = 'pending' | 'approved' | 'rejected';
@@ -1084,6 +1112,8 @@ const staff: Staff = {
 
 ### 35. What are Generics?
 **Answer:**
+**Literal Definition:** Generics are placeholders for types in TypeScript. They allow you to create reusable code that works with different types while maintaining type safety.
+
 ```typescript
 // Generic function
 function getFirstElement<T>(arr: T[]): T | undefined {
@@ -1114,6 +1144,8 @@ const response: ApiResponse<User> = {
 
 ### 36. What is `enum` in TypeScript?
 **Answer:**
+**Literal Definition:** Enum is a way to define a set of named constants in TypeScript. It creates a type with a fixed set of values.
+
 ```typescript
 // Numeric enum
 enum UserRole {
@@ -1138,6 +1170,11 @@ function checkRole(role: UserRole) {
 
 ### 37. What is the difference between `any`, `unknown`, and `never`?
 **Answer:**
+**Literal Definitions:**
+- **any**: Disables type checking completely. Use when you don't know the type.
+- **unknown**: Type-safe version of `any`. Requires type checking before use.
+- **never**: Represents values that never occur. Used for functions that never return.
+
 ```typescript
 // any - disables type checking
 let value: any = 'hello';
@@ -1162,6 +1199,10 @@ function infiniteLoop(): never {
 
 ### 38. What are Optional and Default parameters?
 **Answer:**
+**Literal Definitions:**
+- **Optional parameter**: A parameter that may or may not be provided (marked with `?`).
+- **Default parameter**: A parameter with a default value that is used if no value is provided.
+
 ```typescript
 // Optional parameters
 function greet(name: string, greeting?: string) {
@@ -1183,6 +1224,8 @@ interface User {
 
 ### 39. What is Type Assertion?
 **Answer:**
+**Literal Definition:** Type assertion is a way to tell TypeScript that you know the type of a value better than TypeScript can infer. It doesn't change the runtime value, only the type.
+
 ```typescript
 // Type assertion - telling TypeScript you know better
 const input = document.getElementById('input') as HTMLInputElement;
@@ -1200,6 +1243,8 @@ const config = {
 
 ### 40. What are Utility Types?
 **Answer:**
+**Literal Definition:** Utility types are built-in TypeScript types that help transform existing types. They are generic types that operate on other types.
+
 ```typescript
 interface User {
   id: number;
@@ -1233,6 +1278,8 @@ type ReadonlyUser = Readonly<User>;
 
 ### 41. What is REST API?
 **Answer:**
+**Literal Definition:** REST (Representational State Transfer) is an architectural style for designing networked applications. It uses HTTP methods to perform operations on resources.
+
 REST (Representational State Transfer) is an architectural style for designing networked applications.
 
 **Principles:**
@@ -1639,6 +1686,8 @@ app.get('/api/users', async (req: Request, res: Response) => {
 
 ### 46. What is JWT (JSON Web Token)?
 **Answer:**
+**Literal Definition:** JWT (JSON Web Token) is a compact, self-contained token format for securely transmitting information between parties. It's commonly used for authentication and information exchange.
+
 JWT is a compact, self-contained token format for securely transmitting information between parties. It's commonly used for authentication and information exchange.
 
 **Why use JWT?**
@@ -2313,6 +2362,10 @@ app.post('/api/login', async (req, res) => {
 
 ### 49. What is the difference between Authentication and Authorization?
 **Answer:**
+**Literal Definitions:**
+- **Authentication**: Verifying who you are (login). The process of confirming a user's identity.
+- **Authorization**: Verifying what you can access (permissions). The process of determining what resources a user can access.
+
 - **Authentication**: Verifying who you are (login)
 - **Authorization**: Verifying what you can access (permissions)
 

@@ -1,5 +1,30 @@
 # CSS Features from the Last 10 Years (2015-2025)
 
+## Description
+
+This comprehensive guide catalogs the most significant CSS features, properties, and capabilities introduced between 2015 and 2025. It serves as a reference for modern web developers to understand the evolution of CSS and leverage cutting-edge styling techniques in their projects.
+
+**What's Covered:**
+- Modern layout systems (Grid, Container Queries, Subgrid)
+- Advanced typography and text manipulation
+- Color functions and color spaces (oklch, lab, hwb)
+- Animation and interaction improvements
+- Responsive design enhancements
+- Performance optimizations
+- Accessibility features
+- CSS custom properties and functions
+- Browser APIs and native CSS features
+
+**How to Use This Guide:**
+- **Learning**: Discover new CSS features you may not be aware of
+- **Reference**: Quick lookup for syntax and browser support
+- **Migration**: Identify modern alternatives to legacy approaches
+- **Interviews**: Prepare for technical discussions about modern CSS
+
+Each feature includes practical examples, use cases, browser compatibility notes, and best practices to help you write more efficient, maintainable, and future-proof CSS code.
+
+---
+
 ## Layout & Positioning
 
 1. CSS Grid Layout

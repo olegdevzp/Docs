@@ -2,51 +2,55 @@
 
 ## Table of Contents
 
-### General Web Questions
+### [General Web Questions](#general-web-questions)
 - [Web Page Loading](#web-page-loading)
 - [Image Optimization](#image-optimization)
-- [Performance Challenges in Frontend Applications](#performance-challenges)
+- [Performance Challenges in Frontend Applications](#performance-challenges-in-frontend-applications)
 - [XSS Attacks](#xss-attacks)
-- [CDN (Content Delivery Network)](#cdn)
+- [CDN (Content Delivery Network)](#cdn-content-delivery-network)
 - [Microfrontends](#microfrontends)
 
-### JavaScript
+### [JavaScript](#javascript)
 - [Event Loop](#event-loop)
 - [Design Patterns](#design-patterns)
 - [Call, Bind, Apply](#call-bind-apply)
 - [Lexical Environment](#lexical-environment)
 - [Closures](#closures)
 - [This Keyword](#this-keyword)
-- [How JavaScript Loads](#how-js-loads)
-- [OOP Principles & SOLID](#oop-solid)
-- [Different Methods to Create Objects in JavaScript](#create-objects-js)
+- [How JavaScript Loads](#how-javascript-loads)
+- [OOP Principles & SOLID](#oop-principles--solid)
+- [Different Methods to Create Objects in JavaScript](#different-methods-to-create-objects-in-javascript)
 
-### TypeScript
+### [TypeScript](#typescript)
 - [TypeScript Basics](#typescript-basics)
 - [Interface vs Abstract Class](#interface-vs-abstract-class)
 
-### Angular
-- [Angular Evolution (14-20)](#angular-evolution)
-- [Standalone vs Module](#standalone-module)
+### [Angular](#angular)
+- [Angular Evolution (14-20)](#angular-evolution-14-20)
+- [Standalone vs Module](#standalone-vs-module)
 - [Angular Material](#angular-material)
-- [Service in Modal Window](#service-in-modal)
-- [Accessibility of Services in Parent Modules](#service-accessibility)
+- [Service in Modal Window](#service-in-modal-window)
+- [Accessibility of Services in Parent Modules](#accessibility-of-services-in-parent-modules)
 - [Async Pipe](#async-pipe)
-- [Signals Deep Dive](#signals)
-    - [Signals vs LinkedSignal vs Computed Signals](#signals-comparison)
-- [Modificators of Injectors](#injector-modificators)
+- [Signals Deep Dive](#signals-deep-dive)
+    - [Signals vs LinkedSignal vs Computed Signals](#signals-vs-linkedsignal-vs-computed-signals)
+- [Modificators of Injectors](#modificators-of-injectors)
 - [Directive vs Component](#directive-vs-component)
-- [Get Component Instance with Directive](#component-instance-directive)
-- [Component Interaction Types](#component-interaction)
+- [Get Component Instance with Directive](#get-component-instance-with-directive)
+- [Component Interaction Types](#component-interaction-types)
+- [Creating Dynamic Components](#creating-dynamic-components)
 
-### CSS
-- [CSS Features (Last 5 Years)](#css-last-years)
+### [CSS](#css)
+- [CSS Features (Last 5 Years)](#css-features-last-5-years)
+
+### [Summary](#summary)
+- [Document Summary](#summary)
 
 ---
 
 ## General Web Questions
 
-### <a name="web-page-loading"></a>Web Page Loading
+### Web Page Loading
 
 **How does a web page load?**
 
@@ -73,7 +77,7 @@
 
 ---
 
-### <a name="image-optimization"></a>Image Optimization
+### Image Optimization
 
 **Best Practices:**
 
@@ -113,7 +117,7 @@ export class HeroComponent {}
 
 ---
 
-### <a name="performance-challenges"></a>Performance Challenges in Frontend Applications
+### Performance Challenges in Frontend Applications
 
 **Common Issues:**
 
@@ -149,7 +153,7 @@ export class HeroComponent {}
 
 ---
 
-### <a name="xss-attacks"></a>XSS Attacks
+### XSS Attacks
 
 **Cross-Site Scripting (XSS)** allows attackers to inject malicious scripts.
 
@@ -180,7 +184,7 @@ getSafeHtml(html: string) {
 
 ---
 
-### <a name="cdn"></a>CDN (Content Delivery Network)
+### CDN (Content Delivery Network)
 
 **What is CDN?**
 Distributed network of servers that deliver content based on geographic location.
@@ -208,7 +212,7 @@ Distributed network of servers that deliver content based on geographic location
 
 ---
 
-### <a name="microfrontends"></a>Microfrontends
+### Microfrontends
 
 **Architecture pattern** where frontend is decomposed into smaller, independent applications.
 
@@ -241,7 +245,7 @@ new ModuleFederationPlugin({
 
 ## JavaScript
 
-### <a name="event-loop"></a>Event Loop
+### Event Loop
 
 **How JavaScript handles asynchronous operations.**
 
@@ -274,7 +278,7 @@ console.log('4'); // Synchronous
 
 ---
 
-### <a name="design-patterns"></a>Design Patterns
+### Design Patterns
 
 **Common JavaScript Patterns:**
 
@@ -337,7 +341,7 @@ const Calculator = (() => {
 
 ---
 
-### <a name="call-bind-apply"></a>Call, Bind, Apply
+### Call, Bind, Apply
 
 **Methods to control `this` context.**
 
@@ -378,7 +382,7 @@ setTimeout(greetFunc, 1000); // "Hi, I'm Alice"
 
 ---
 
-### <a name="lexical-environment"></a>Lexical Environment
+### Lexical Environment
 
 **Structure that holds identifier-variable mapping.**
 
@@ -410,7 +414,7 @@ function outer() { // Function Environment
 
 ---
 
-### <a name="closures"></a>Closures
+### Closures
 
 **Function that retains access to outer scope variables.**
 
@@ -465,7 +469,7 @@ export class CacheService {
 
 ---
 
-### <a name="this-keyword"></a>This Keyword
+### This Keyword
 
 **Context depends on how function is called.**
 
@@ -518,7 +522,7 @@ export class MyComponent {
 
 ---
 
-### <a name="how-js-loads"></a>How JavaScript Loads
+### How JavaScript Loads
 
 **Script Loading:**
 
@@ -555,7 +559,7 @@ export class MyComponent {
 
 ---
 
-### <a name="oop-solid"></a>OOP Principles & SOLID
+### OOP Principles & SOLID
 
 **OOP Principles:**
 1. **Encapsulation**: Hide internal details
@@ -653,7 +657,7 @@ class UserService {
 
 ---
 
-### <a name="create-objects-js"></a>Different Methods to Create Objects in JavaScript
+### Different Methods to Create Objects in JavaScript
 
 JavaScript provides multiple ways to create objects, each with its own use cases and advantages.
 
@@ -1199,7 +1203,7 @@ const deepClone = structuredClone(user);
 
 ## TypeScript
 
-### <a name="typescript-basics"></a>TypeScript Basics
+### TypeScript Basics
 
 **Key Features:**
 
@@ -1285,7 +1289,7 @@ type UserEmail = Pick<User, 'email'>; // Pick only email
 
 ---
 
-### <a name="interface-vs-abstract-class"></a>Interface vs Abstract Class
+### Interface vs Abstract Class
 
 **Interface:**
 - Contract for object structure
@@ -1344,7 +1348,7 @@ class Dog extends Animal {
 
 ## Angular
 
-### <a name="angular-evolution"></a>Angular Evolution (14-20)
+### Angular Evolution (14-20)
 
 **Angular 14 (June 2022)**
 - Standalone components (developer preview)
@@ -1393,7 +1397,7 @@ class Dog extends Animal {
 
 ---
 
-### <a name="standalone-module"></a>Standalone vs Module
+### Standalone vs Module
 
 **Standalone Components (Recommended):**
 ```typescript
@@ -1444,7 +1448,7 @@ export const routes: Routes = [
 
 ---
 
-### <a name="angular-material"></a>Angular Material
+### Angular Material
 
 **UI component library** following Material Design.
 
@@ -1501,7 +1505,7 @@ html {
 
 ---
 
-### <a name="service-in-modal"></a>Service in Modal Window
+### Service in Modal Window
 
 **Injecting services into Material Dialog:**
 
@@ -1555,7 +1559,7 @@ export class ParentComponent {
 
 ---
 
-### <a name="service-accessibility"></a>Accessibility of Services in Parent Modules
+### Accessibility of Services in Parent Modules
 
 **Service Visibility Rules:**
 
@@ -1606,7 +1610,7 @@ Root Injector (providedIn: 'root')
 
 ---
 
-### <a name="async-pipe"></a>Async Pipe
+### Async Pipe
 
 **Subscribes to Observables/Promises and unwraps values.**
 
@@ -1660,7 +1664,7 @@ export class UserComponent {
 
 ---
 
-### <a name="signals"></a>Signals Deep Dive
+### Signals Deep Dive
 
 **Fine-grained reactive primitives** for Angular.
 
@@ -1751,7 +1755,7 @@ export class UserComponent {
 
 ---
 
-#### <a name="signals-comparison"></a>Signals vs LinkedSignal vs Computed Signals
+#### Signals vs LinkedSignal vs Computed Signals
 
 **Understanding the three types of reactive primitives in Angular.**
 
@@ -2171,7 +2175,7 @@ fullName = computed(() => `${this.firstName()} ${this.lastName()}`);
 
 ---
 
-### <a name="injector-modificators"></a>Modificators of Injectors
+### Modificators of Injectors
 
 **Control dependency resolution.**
 
@@ -2211,7 +2215,7 @@ export class MyComponent {
 
 ---
 
-### <a name="directive-vs-component"></a>Directive vs Component
+### Directive vs Component
 
 **Directive**: Adds behavior to existing elements
 
@@ -2268,7 +2272,7 @@ export class CardComponent {}
 
 ---
 
-### <a name="component-instance-directive"></a>Get Component Instance with Directive
+### Get Component Instance with Directive
 
 **Yes, using `ViewChild` or `ContentChild`:**
 
@@ -2323,7 +2327,7 @@ export class MonitorDirective {
 
 ---
 
-### <a name="component-interaction"></a>Component Interaction Types
+### Component Interaction Types
 
 **1. Input/Output (Parent ↔ Child):**
 ```typescript
@@ -2414,9 +2418,275 @@ count = globalCount; // Read the same signal
 
 ---
 
+### Creating Dynamic Components
+
+**How to create and render components dynamically in Angular 20:**
+
+Dynamic components are useful when you need to create components at runtime based on user actions or application state. In modern Angular (18+), the process has been significantly simplified with the introduction of the `createComponent` API.
+
+**Basic Approach:**
+
+```typescript
+import { Component, ViewContainerRef, inject, ComponentRef } from '@angular/core';
+import { DynamicContentComponent } from './dynamic-content.component';
+
+@Component({
+  selector: 'app-host',
+  template: `
+    <div>
+      <button (click)="loadComponent()">Load Dynamic Component</button>
+      <div #container></div>
+    </div>
+  `
+})
+export class HostComponent {
+  private viewContainerRef = inject(ViewContainerRef);
+  private componentRef?: ComponentRef<DynamicContentComponent>;
+
+  loadComponent() {
+    // Clear previous components
+    this.viewContainerRef.clear();
+
+    // Create and attach the component
+    this.componentRef = this.viewContainerRef.createComponent(DynamicContentComponent);
+
+    // Pass data to the component
+    this.componentRef.setInput('title', 'Dynamic Title');
+    this.componentRef.setInput('data', { id: 1, name: 'Item' });
+
+    // Subscribe to outputs
+    this.componentRef.instance.closeEvent.subscribe(() => {
+      this.removeComponent();
+    });
+  }
+
+  removeComponent() {
+    if (this.componentRef) {
+      this.componentRef.destroy();
+      this.componentRef = undefined;
+    }
+  }
+}
+```
+
+**Dynamic Component:**
+
+```typescript
+import { Component, input, output } from '@angular/core';
+
+@Component({
+  selector: 'app-dynamic-content',
+  template: `
+    <div class="dynamic-content">
+      <h2>{{ title() }}</h2>
+      <p>ID: {{ data().id }}, Name: {{ data().name }}</p>
+      <button (click)="close()">Close</button>
+    </div>
+  `,
+  styles: [`
+    .dynamic-content {
+      padding: 16px;
+      border: 2px solid #3f51b5;
+      border-radius: 8px;
+      margin-top: 16px;
+    }
+  `]
+})
+export class DynamicContentComponent {
+  title = input.required<string>();
+  data = input.required<{ id: number; name: string }>();
+  closeEvent = output<void>();
+
+  close() {
+    this.closeEvent.emit();
+  }
+}
+```
+
+**Advanced: Dynamic Component Factory:**
+
+```typescript
+import { 
+  Injectable, 
+  ComponentRef, 
+  ViewContainerRef,
+  Type,
+  EnvironmentInjector,
+  createComponent
+} from '@angular/core';
+
+@Injectable({ providedIn: 'root' })
+export class DynamicComponentService {
+  private environmentInjector = inject(EnvironmentInjector);
+
+  createComponent<T>(
+    componentType: Type<T>,
+    viewContainerRef: ViewContainerRef,
+    inputs?: Record<string, unknown>
+  ): ComponentRef<T> {
+    // Create component
+    const componentRef = viewContainerRef.createComponent(componentType, {
+      environmentInjector: this.environmentInjector
+    });
+
+    // Set inputs if provided
+    if (inputs) {
+      Object.entries(inputs).forEach(([key, value]) => {
+        componentRef.setInput(key, value);
+      });
+    }
+
+    return componentRef;
+  }
+
+  // Alternative: Create component without ViewContainerRef
+  createStandaloneComponent<T>(
+    componentType: Type<T>,
+    inputs?: Record<string, unknown>
+  ): ComponentRef<T> {
+    const componentRef = createComponent(componentType, {
+      environmentInjector: this.environmentInjector
+    });
+
+    if (inputs) {
+      Object.entries(inputs).forEach(([key, value]) => {
+        componentRef.setInput(key, value);
+      });
+    }
+
+    return componentRef;
+  }
+}
+```
+
+**Usage with Service:**
+
+```typescript
+@Component({
+  selector: 'app-parent',
+  template: `
+    <button (click)="addComponent()">Add Component</button>
+    <div #container></div>
+  `
+})
+export class ParentComponent {
+  @ViewChild('container', { read: ViewContainerRef }) 
+  container!: ViewContainerRef;
+  
+  private dynamicService = inject(DynamicComponentService);
+  private components: ComponentRef<DynamicContentComponent>[] = [];
+
+  addComponent() {
+    const componentRef = this.dynamicService.createComponent(
+      DynamicContentComponent,
+      this.container,
+      {
+        title: `Component ${this.components.length + 1}`,
+        data: { id: this.components.length + 1, name: 'Item' }
+      }
+    );
+
+    // Subscribe to close event
+    componentRef.instance.closeEvent.subscribe(() => {
+      const index = this.components.indexOf(componentRef);
+      if (index > -1) {
+        this.components.splice(index, 1);
+        componentRef.destroy();
+      }
+    });
+
+    this.components.push(componentRef);
+  }
+}
+```
+
+**Loading Components Dynamically by Type:**
+
+```typescript
+import { Component, Type, ViewContainerRef, inject } from '@angular/core';
+import { CardComponent } from './card.component';
+import { ListComponent } from './list.component';
+import { TableComponent } from './table.component';
+
+@Component({
+  selector: 'app-dynamic-loader',
+  template: `
+    <div>
+      <button (click)="loadComponent('card')">Load Card</button>
+      <button (click)="loadComponent('list')">Load List</button>
+      <button (click)="loadComponent('table')">Load Table</button>
+      <div #outlet></div>
+    </div>
+  `
+})
+export class DynamicLoaderComponent {
+  @ViewChild('outlet', { read: ViewContainerRef }) 
+  outlet!: ViewContainerRef;
+
+  private componentMap: Record<string, Type<any>> = {
+    card: CardComponent,
+    list: ListComponent,
+    table: TableComponent
+  };
+
+  loadComponent(type: string) {
+    this.outlet.clear();
+    
+    const componentType = this.componentMap[type];
+    if (componentType) {
+      const componentRef = this.outlet.createComponent(componentType);
+      
+      // Pass common inputs
+      componentRef.setInput('data', this.getData());
+      componentRef.setInput('config', { theme: 'light' });
+    }
+  }
+
+  private getData() {
+    return [
+      { id: 1, name: 'Item 1' },
+      { id: 2, name: 'Item 2' }
+    ];
+  }
+}
+```
+
+**Key Points:**
+
+1. **ViewContainerRef**: Container for hosting dynamic components
+2. **createComponent()**: Modern API for creating components (Angular 13+)
+3. **setInput()**: Type-safe way to pass inputs to dynamic components (Angular 14+)
+4. **ComponentRef**: Reference to manage component lifecycle
+5. **destroy()**: Clean up components to prevent memory leaks
+6. **EnvironmentInjector**: Provides dependency injection context
+7. **Standalone components**: Work seamlessly with dynamic creation
+
+**Use Cases:**
+
+- Modal dialogs
+- Toast notifications
+- Dynamic forms
+- Tab content loading
+- Widget dashboards
+- Plugin systems
+- A/B testing components
+
+**Best Practices:**
+
+- Always destroy components when no longer needed
+- Use signals for component communication
+- Prefer `setInput()` over direct property access
+- Handle subscriptions properly to avoid memory leaks
+- Consider lazy loading for large dynamic components
+- Use typed component references for type safety
+
+[Back to Top](#table-of-contents)
+
+---
+
 ## CSS
 
-### <a name="css-last-years"></a>CSS Features (Last 5 Years)
+### CSS Features (Last 5 Years)
 
 **Overview:**
 

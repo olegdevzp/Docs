@@ -30,3 +30,18 @@ build/
 .env.local
 .env.*.local
 
+# Angular specific
+.angular/
+*.ngfactory.ts
+*.ngsummary.json
+*.metadata.json
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Temporary files
+*.bak
+*.cache
+*.temp
+

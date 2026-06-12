@@ -1,7 +1,22 @@
 {
+  "engines": {
+    "node": ">=22.22.0"
+  },
+  "scripts": {
+    "convert:md": "node scripts/convert-to-md.js",
+    "convert:nestjs-docs": "node scripts/convert-nestjs-docs-to-md.js",
+    "convert:pdf": "node scripts/convert-to-pdf-final.js",
+    "convert:mobi": "node scripts/convert-to-mobi.js"
+  },
   "dependencies": {
+    "@opendocsg/pdf2md": "^0.2.5",
     "jsdom": "^27.0.0",
+    "mammoth": "^1.11.0",
     "marked": "^16.3.0",
-    "puppeteer": "^24.23.0"
+    "marked-gfm-heading-id": "^4.1.4",
+    "node-html-markdown": "^2.0.0",
+    "pdf-to-img": "^5.0.0",
+    "puppeteer": "^24.23.0",
+    "tesseract.js": "^7.0.0"
   }
 }

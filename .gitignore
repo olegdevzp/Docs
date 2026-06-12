@@ -44,4 +44,8 @@ coverage/
 *.bak
 *.cache
 *.temp
+scripts/temp.html
+scripts/temp-pdf.html
+
+
 

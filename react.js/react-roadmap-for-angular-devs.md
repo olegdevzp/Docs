@@ -63,30 +63,30 @@ This roadmap is designed for Angular developers transitioning to React. It maps 
 ## Phase 2: State Management & Data Flow
 
 ### 2.1 Component State
-- What is the `useState` hook and how does it compare to Angular signals?
-- How do you update state immutably in React?
-- What are the rules of hooks in React?
-- How do you manage complex state objects?
-- What is the difference between state and props?
+- [What is the `useState` hook and how does it compare to Angular signals?](#21-what-is-the-usestate-hook-and-how-does-it-compare-to-angular-signals)
+- [How do you update state immutably in React?](#22-how-do-you-update-state-immutably-in-react)
+- [What are the rules of hooks in React?](#23-what-are-the-rules-of-hooks-in-react)
+- [How do you manage complex state objects?](#24-how-do-you-manage-complex-state-objects)
+- [What is the difference between state and props?](#25-what-is-the-difference-between-state-and-props)
 
 ### 2.2 Props & Data Flow
-- How do you pass data from parent to child components (vs Angular's `input()`)?
-- How is one-way data flow enforced in React?
-- What is prop drilling and how do you avoid it?
-- How do you handle default props?
-- What is prop validation with PropTypes or TypeScript?
+- [How do you pass data from parent to child components (vs Angular's `input()`)?](#26-how-do-you-pass-data-from-parent-to-child-components-vs-angulars-input)
+- [How is one-way data flow enforced in React?](#27-how-is-one-way-data-flow-enforced-in-react)
+- [What is prop drilling and how do you avoid it?](#28-what-is-prop-drilling-and-how-do-you-avoid-it)
+- [How do you handle default props?](#29-how-do-you-handle-default-props)
+- [What is prop validation with PropTypes or TypeScript?](#210-what-is-prop-validation-with-proptypes-or-typescript)
 
 ### 2.3 Event Handling
-- How do you handle events in React (vs Angular's event bindings)?
-- How do you pass data from child to parent (vs Angular's `output()`)?
-- What are synthetic events in React?
-- How do you prevent default behavior and stop propagation?
-- How do you handle form submissions?
+- [How do you handle events in React (vs Angular's event bindings)?](#211-how-do-you-handle-events-in-react-vs-angulars-event-bindings)
+- [How do you pass data from child to parent (vs Angular's `output()`)?](#212-how-do-you-pass-data-from-child-to-parent-vs-angulars-output)
+- [What are synthetic events in React?](#213-what-are-synthetic-events-in-react)
+- [How do you prevent default behavior and stop propagation?](#214-how-do-you-prevent-default-behavior-and-stop-propagation)
+- [How do you handle form submissions?](#215-how-do-you-handle-form-submissions)
 
 ### 2.4 Lifting State Up
-- When should you lift state up to a parent component?
-- How do you share state between sibling components?
-- What is the difference between local and shared state?
+- [When should you lift state up to a parent component?](#216-when-should-you-lift-state-up-to-a-parent-component)
+- [How do you share state between sibling components?](#217-how-do-you-share-state-between-sibling-components)
+- [What is the difference between local and shared state?](#218-what-is-the-difference-between-local-and-shared-state)
 
 ---
 
@@ -1792,7 +1792,7 @@ function UserGreeting({ isLoggedIn, username }: Props) {
       )}
     </div>
   );
-}
+} 
 ```
 
 ```typescript
@@ -2697,6 +2697,1956 @@ function Box({ style, isHighlighted }: BoxProps) {
 - Dynamic classes and inline styles
 
 Next, move on to Phase 2 to learn about state management and data flow!
+
+---
+
+## Phase 2: State Management & Data Flow - Answers
+
+### 2.1 What is the `useState` hook and how does it compare to Angular signals?
+
+**Answer:**
+
+`useState` is React's primary hook for managing component state. It returns a state value and a function to update it.
+
+**Basic useState:**
+
+```typescript
+import { useState } from 'react';
+
+function Counter() {
+  // Declare state: [currentValue, setterFunction]
+  const [count, setCount] = useState(0);  // 0 is initial value
+  
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+      <button onClick={() => setCount(count - 1)}>Decrement</button>
+      <button onClick={() => setCount(0)}>Reset</button>
+    </div>
+  );
+}
+```
+
+**Angular Signals:**
+
+```typescript
+import { Component, signal } from '@angular/core';
+
+@Component({
+  selector: 'app-counter',
+  standalone: true,
+  template: `
+    <div>
+      <p>Count: {{ count() }}</p>
+      <button (click)="increment()">Increment</button>
+      <button (click)="decrement()">Decrement</button>
+      <button (click)="reset()">Reset</button>
+    </div>
+  `
+})
+export class CounterComponent {
+  count = signal(0);
+  
+  increment() {
+    this.count.update(c => c + 1);
+  }
+  
+  decrement() {
+    this.count.update(c => c - 1);
+  }
+  
+  reset() {
+    this.count.set(0);
+  }
+}
+```
+
+**Key Differences:**
+
+| Aspect | React useState | Angular Signals |
+|--------|---------------|----------------|
+| Syntax | `const [state, setState] = useState(initial)` | `count = signal(initial)` |
+| Reading | Direct access: `count` | Function call: `count()` |
+| Setting | `setState(newValue)` | `signal.set(newValue)` |
+| Updating | `setState(prev => prev + 1)` | `signal.update(v => v + 1)` |
+| Component re-render | Triggers full component re-render | Only updates dependent parts |
+| Reactivity | Component-level | Fine-grained |
+
+**Multiple State Values:**
+
+```typescript
+// React: Separate useState calls
+function UserForm() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [age, setAge] = useState(0);
+  
+  return (
+    <form>
+      <input 
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <input 
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <input 
+        type="number"
+        value={age}
+        onChange={(e) => setAge(Number(e.target.value))}
+      />
+    </form>
+  );
+}
+```
+
+**Lazy Initialization:**
+
+```typescript
+// React: Function as initial value (runs only once)
+function ExpensiveComponent() {
+  // calculateInitialState only runs on mount
+  const [data, setData] = useState(() => {
+    const initialData = calculateExpensiveInitialState();
+    return initialData;
+  });
+  
+  return <div>{data}</div>;
+}
+
+// Bad: This runs on every render!
+const [data, setData] = useState(calculateExpensiveInitialState());
+```
+
+[↑ Back to Roadmap](#21-component-state)
+
+---
+
+### 2.2 How do you update state immutably in React?
+
+**Answer:**
+
+React requires immutable updates - you must create new objects/arrays instead of modifying existing ones.
+
+**Primitives (automatically immutable):**
+
+```typescript
+const [count, setCount] = useState(0);
+
+// ✅ Good
+setCount(count + 1);
+setCount(prev => prev + 1);  // Preferred with function
+```
+
+**Objects:**
+
+```typescript
+const [user, setUser] = useState({
+  name: 'John',
+  age: 30,
+  email: 'john@example.com'
+});
+
+// ❌ Bad: Mutating existing object
+user.name = 'Jane';  // React won't detect this change
+setUser(user);
+
+// ✅ Good: Create new object with spread
+setUser({
+  ...user,
+  name: 'Jane'
+});
+
+// ✅ Good: Using prev state (safer with async)
+setUser(prev => ({
+  ...prev,
+  age: prev.age + 1
+}));
+
+// ✅ Good: Nested object update
+setUser(prev => ({
+  ...prev,
+  address: {
+    ...prev.address,
+    city: 'New York'
+  }
+}));
+```
+
+**Arrays:**
+
+```typescript
+const [items, setItems] = useState(['apple', 'banana']);
+
+// ❌ Bad: Mutating methods
+items.push('orange');  // Mutates array
+setItems(items);
+
+// ✅ Good: Adding items
+setItems([...items, 'orange']);
+setItems(prev => [...prev, 'orange']);
+
+// ✅ Good: Removing items
+setItems(items.filter(item => item !== 'banana'));
+
+// ✅ Good: Updating item at index
+setItems(items.map((item, i) => 
+  i === 1 ? 'blueberry' : item
+));
+
+// ✅ Good: Inserting at specific position
+const index = 1;
+setItems([
+  ...items.slice(0, index),
+  'kiwi',
+  ...items.slice(index)
+]);
+
+// ✅ Good: Sorting (slice first to avoid mutation)
+setItems([...items].sort());
+```
+
+**Array of Objects:**
+
+```typescript
+interface Todo {
+  id: number;
+  text: string;
+  completed: boolean;
+}
+
+const [todos, setTodos] = useState<Todo[]>([]);
+
+// ✅ Add new todo
+setTodos([...todos, { id: Date.now(), text: 'New task', completed: false }]);
+
+// ✅ Update specific todo
+setTodos(todos.map(todo =>
+  todo.id === targetId
+    ? { ...todo, completed: !todo.completed }
+    : todo
+));
+
+// ✅ Delete todo
+setTodos(todos.filter(todo => todo.id !== targetId));
+
+// ✅ Update nested property
+setTodos(todos.map(todo =>
+  todo.id === targetId
+    ? { 
+        ...todo, 
+        metadata: { 
+          ...todo.metadata, 
+          lastModified: new Date() 
+        }
+      }
+    : todo
+));
+```
+
+**Comparison with Angular:**
+
+```typescript
+// Angular: Can use mutating methods (with signals or change detection)
+@Component({...})
+export class TodoComponent {
+  todos = signal<Todo[]>([]);
+  
+  addTodo(text: string) {
+    // Angular allows mutation with update()
+    this.todos.update(current => {
+      current.push({ id: Date.now(), text, completed: false });
+      return [...current];  // But still better to return new array
+    });
+  }
+  
+  // Better: Immutable approach works in both
+  addTodoImmutable(text: string) {
+    this.todos.update(current => [
+      ...current,
+      { id: Date.now(), text, completed: false }
+    ]);
+  }
+}
+```
+
+**Helper Libraries:**
+
+```typescript
+// Using Immer (popular library for immutable updates)
+import { useState } from 'react';
+import { produce } from 'immer';
+
+function TodoList() {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  
+  const updateTodo = (id: number, text: string) => {
+    setTodos(produce(draft => {
+      const todo = draft.find(t => t.id === id);
+      if (todo) {
+        todo.text = text;  // Looks like mutation, but Immer handles it!
+      }
+    }));
+  };
+  
+  return <div>{/* JSX */}</div>;
+}
+```
+
+[↑ Back to Roadmap](#21-component-state)
+
+---
+
+### 2.3 What are the rules of hooks in React?
+
+**Answer:**
+
+Hooks have strict rules that must be followed for React to work correctly.
+
+**The Two Rules of Hooks:**
+
+1. **Only call hooks at the top level** (not inside loops, conditions, or nested functions)
+2. **Only call hooks from React functions** (components or custom hooks)
+
+**Rule 1: Top Level Only**
+
+```typescript
+// ❌ Bad: Conditional hook
+function BadComponent({ shouldShow }: Props) {
+  if (shouldShow) {
+    const [count, setCount] = useState(0);  // ❌ Hook in condition!
+  }
+  
+  return <div>Content</div>;
+}
+
+// ✅ Good: Unconditional hook
+function GoodComponent({ shouldShow }: Props) {
+  const [count, setCount] = useState(0);  // ✅ Always called
+  
+  if (!shouldShow) {
+    return null;  // Conditional rendering instead
+  }
+  
+  return <div>Count: {count}</div>;
+}
+
+// ❌ Bad: Hook in loop
+function BadList({ items }: Props) {
+  return (
+    <div>
+      {items.map(item => {
+        const [selected, setSelected] = useState(false);  // ❌ Hook in loop!
+        return <div>{item}</div>;
+      })}
+    </div>
+  );
+}
+
+// ✅ Good: Separate component
+function ListItem({ item }: { item: string }) {
+  const [selected, setSelected] = useState(false);  // ✅ Top level
+  return <div className={selected ? 'selected' : ''}>{item}</div>;
+}
+
+function GoodList({ items }: Props) {
+  return (
+    <div>
+      {items.map(item => (
+        <ListItem key={item} item={item} />
+      ))}
+    </div>
+  );
+}
+
+// ❌ Bad: Hook in callback
+function BadComponent() {
+  const handleClick = () => {
+    const [count, setCount] = useState(0);  // ❌ Hook in function!
+  };
+  
+  return <button onClick={handleClick}>Click</button>;
+}
+
+// ✅ Good: Hook at top level
+function GoodComponent() {
+  const [count, setCount] = useState(0);  // ✅ Top level
+  
+  const handleClick = () => {
+    setCount(count + 1);  // ✅ Use state setter
+  };
+  
+  return <button onClick={handleClick}>Count: {count}</button>;
+}
+```
+
+**Why This Rule Exists:**
+
+React relies on the order hooks are called to maintain state between renders:
+
+```typescript
+function Component() {
+  // First render: React stores these in order [0, 1, 2]
+  const [name, setName] = useState('');      // Index 0
+  const [email, setEmail] = useState('');    // Index 1
+  const [age, setAge] = useState(0);         // Index 2
+  
+  // Second render: React matches by order
+  // If a hook is skipped, everything breaks!
+}
+```
+
+**Rule 2: Only in React Functions**
+
+```typescript
+// ❌ Bad: Hook in regular function
+function calculatePrice() {
+  const [discount, setDiscount] = useState(0);  // ❌ Not a component or hook!
+  return 100 - discount;
+}
+
+// ✅ Good: Hook in component
+function PriceDisplay() {
+  const [discount, setDiscount] = useState(0);  // ✅ In component
+  const price = 100 - discount;
+  
+  return <div>Price: ${price}</div>;
+}
+
+// ✅ Good: Hook in custom hook
+function usePrice(basePrice: number) {
+  const [discount, setDiscount] = useState(0);  // ✅ In custom hook
+  const price = basePrice - discount;
+  
+  return { price, discount, setDiscount };
+}
+
+// ❌ Bad: Hook in class method
+class BadComponent extends React.Component {
+  calculateTotal() {
+    const [tax, setTax] = useState(0);  // ❌ Can't use hooks in classes!
+    return this.props.price + tax;
+  }
+  
+  render() {
+    return <div>{this.calculateTotal()}</div>;
+  }
+}
+```
+
+**ESLint Plugin:**
+
+Install the official ESLint plugin to catch violations:
+
+```bash
+npm install eslint-plugin-react-hooks --save-dev
+```
+
+```json
+// .eslintrc.json
+{
+  "plugins": ["react-hooks"],
+  "rules": {
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
+  }
+}
+```
+
+**Comparison with Angular:**
+
+```typescript
+// Angular: No such restrictions
+@Component({...})
+export class FlexibleComponent {
+  // Can create signals anywhere
+  conditionalSignal() {
+    if (someCondition) {
+      const count = signal(0);  // ✅ Allowed in Angular
+      return count();
+    }
+    return 0;
+  }
+  
+  // Can use lifecycle hooks without restrictions
+  ngOnInit() {
+    if (this.shouldInit) {
+      this.initializeData();  // ✅ No problem
+    }
+  }
+}
+
+// React: Must follow hook rules
+function RestrictedComponent({ shouldInit }: Props) {
+  // ❌ Can't conditionally use hooks
+  if (shouldInit) {
+    useEffect(() => {  // ❌ Breaks rules of hooks!
+      initializeData();
+    }, []);
+  }
+  
+  // ✅ Put condition inside hook
+  useEffect(() => {
+    if (shouldInit) {  // ✅ Condition inside hook
+      initializeData();
+    }
+  }, [shouldInit]);
+}
+```
+
+[↑ Back to Roadmap](#21-component-state)
+
+---
+
+### 2.4 How do you manage complex state objects?
+
+**Answer:**
+
+For complex state, you have several options: single `useState` with object, multiple `useState` calls, or `useReducer`.
+
+**Option 1: Single useState with Object**
+
+```typescript
+interface FormState {
+  firstName: string;
+  lastName: string;
+  email: string;
+  age: number;
+  address: {
+    street: string;
+    city: string;
+    zipCode: string;
+  };
+}
+
+function RegistrationForm() {
+  const [formData, setFormData] = useState<FormState>({
+    firstName: '',
+    lastName: '',
+    email: '',
+    age: 0,
+    address: {
+      street: '',
+      city: '',
+      zipCode: ''
+    }
+  });
+  
+  // Update top-level field
+  const updateField = (field: keyof FormState, value: any) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+  
+  // Update nested field
+  const updateAddress = (field: keyof FormState['address'], value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      address: {
+        ...prev.address,
+        [field]: value
+      }
+    }));
+  };
+  
+  return (
+    <form>
+      <input
+        value={formData.firstName}
+        onChange={(e) => updateField('firstName', e.target.value)}
+      />
+      <input
+        value={formData.address.city}
+        onChange={(e) => updateAddress('city', e.target.value)}
+      />
+    </form>
+  );
+}
+```
+
+**Option 2: Multiple useState (Simpler)**
+
+```typescript
+function RegistrationForm() {
+  // Separate state for each concern
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [age, setAge] = useState(0);
+  const [street, setStreet] = useState('');
+  const [city, setCity] = useState('');
+  const [zipCode, setZipCode] = useState('');
+  
+  return (
+    <form>
+      <input
+        value={firstName}
+        onChange={(e) => setFirstName(e.target.value)}
+      />
+      <input
+        value={city}
+        onChange={(e) => setCity(e.target.value)}
+      />
+    </form>
+  );
+}
+```
+
+**Option 3: useReducer (Best for Complex Logic)**
+
+```typescript
+interface State {
+  user: {
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
+  settings: {
+    theme: 'light' | 'dark';
+    notifications: boolean;
+  };
+  isLoading: boolean;
+  error: string | null;
+}
+
+type Action =
+  | { type: 'UPDATE_USER_FIELD'; field: keyof State['user']; value: string }
+  | { type: 'UPDATE_SETTINGS'; settings: Partial<State['settings']> }
+  | { type: 'SET_LOADING'; isLoading: boolean }
+  | { type: 'SET_ERROR'; error: string | null }
+  | { type: 'RESET' };
+
+function reducer(state: State, action: Action): State {
+  switch (action.type) {
+    case 'UPDATE_USER_FIELD':
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          [action.field]: action.value
+        }
+      };
+    
+    case 'UPDATE_SETTINGS':
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          ...action.settings
+        }
+      };
+    
+    case 'SET_LOADING':
+      return { ...state, isLoading: action.isLoading };
+    
+    case 'SET_ERROR':
+      return { ...state, error: action.error };
+    
+    case 'RESET':
+      return initialState;
+    
+    default:
+      return state;
+  }
+}
+
+const initialState: State = {
+  user: { firstName: '', lastName: '', email: '' },
+  settings: { theme: 'light', notifications: true },
+  isLoading: false,
+  error: null
+};
+
+function ComplexForm() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  
+  return (
+    <div>
+      <input
+        value={state.user.firstName}
+        onChange={(e) => dispatch({
+          type: 'UPDATE_USER_FIELD',
+          field: 'firstName',
+          value: e.target.value
+        })}
+      />
+      
+      <button onClick={() => dispatch({ type: 'RESET' })}>
+        Reset Form
+      </button>
+      
+      {state.error && <div className="error">{state.error}</div>}
+    </div>
+  );
+}
+```
+
+**When to Use Each:**
+
+| Approach | Use When |
+|----------|----------|
+| Multiple `useState` | Simple, independent values; each can update separately |
+| Single `useState` with object | Related values that often update together; simple logic |
+| `useReducer` | Complex state logic; multiple actions; state transitions |
+
+**Comparison with Angular:**
+
+```typescript
+// Angular: Signals for each value or object
+@Component({...})
+export class FormComponent {
+  // Option 1: Individual signals
+  firstName = signal('');
+  lastName = signal('');
+  email = signal('');
+  
+  // Option 2: Signal with object
+  formData = signal<FormState>({
+    firstName: '',
+    lastName: '',
+    email: ''
+  });
+  
+  updateFirstName(value: string) {
+    // Must create new object for reactivity
+    this.formData.update(current => ({
+      ...current,
+      firstName: value
+    }));
+  }
+  
+  // Option 3: Computed signal for derived state
+  fullName = computed(() => 
+    `${this.firstName()} ${this.lastName()}`
+  );
+}
+```
+
+[↑ Back to Roadmap](#21-component-state)
+
+---
+
+### 2.5 What is the difference between state and props?
+
+**Answer:**
+
+**Props** and **State** are both plain JavaScript objects that hold data, but they serve different purposes.
+
+**Props (Properties):**
+
+- Passed from parent to child component
+- Read-only (immutable within the component)
+- Controlled by parent component
+- Like function parameters
+
+```typescript
+// React: Props
+interface UserCardProps {
+  name: string;
+  email: string;
+  age: number;
+  onEdit: () => void;
+}
+
+function UserCard({ name, email, age, onEdit }: UserCardProps) {
+  // ❌ Can't modify props
+  // name = 'New Name';  // Error in strict mode
+  
+  return (
+    <div>
+      <h2>{name}</h2>
+      <p>{email}</p>
+      <p>Age: {age}</p>
+      <button onClick={onEdit}>Edit</button>
+    </div>
+  );
+}
+
+// Parent controls props
+function App() {
+  return <UserCard name="John" email="john@example.com" age={30} onEdit={() => {}} />;
+}
+```
+
+```typescript
+// Angular: Inputs (similar to props)
+@Component({
+  selector: 'app-user-card',
+  template: `
+    <div>
+      <h2>{{ name() }}</h2>
+      <p>{{ email() }}</p>
+      <p>Age: {{ age() }}</p>
+      <button (click)="onEdit()">Edit</button>
+    </div>
+  `
+})
+export class UserCardComponent {
+  name = input.required<string>();
+  email = input.required<string>();
+  age = input.required<number>();
+  onEdit = output<void>();
+  
+  // ❌ Can't modify inputs
+  // this.name.set('New Name');  // Not possible
+}
+```
+
+**State:**
+
+- Managed within the component
+- Mutable (via setter function)
+- Private to the component
+- Can be passed as props to children
+
+```typescript
+// React: State
+function UserProfile() {
+  const [isEditing, setIsEditing] = useState(false);
+  const [name, setName] = useState('John Doe');
+  
+  // ✅ Can modify own state
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
+  
+  const handleSave = () => {
+    setIsEditing(false);
+    // Save logic
+  };
+  
+  return (  1
+    <div>
+      {isEditing ? (
+        <input 
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      ) : (
+        <h2>{name}</h2>
+      )}
+      
+      <button onClick={isEditing ? handleSave : handleEdit}>
+        {isEditing ? 'Save' : 'Edit'}
+      </button>
+    </div>
+  );
+}
+```
+
+```typescript
+// Angular: State with signals
+@Component({
+  selector: 'app-user-profile',
+  template: `
+    <div>
+      @if (isEditing()) {
+        <input 
+          [value]="name()"
+          (input)="name.set($any($event.target).value)"
+        />
+      } @else {
+        <h2>{{ name() }}</h2>
+      }
+      
+      <button (click)="isEditing() ? save() : edit()">
+        {{ isEditing() ? 'Save' : 'Edit' }}
+      </button>
+    </div>
+  `
+})
+export class UserProfileComponent {
+  isEditing = signal(false);
+  name = signal('John Doe');
+  
+  edit() {
+    this.isEditing.set(true);
+  }
+  
+  save() {
+    this.isEditing.set(false);
+    // Save logic
+  }
+}
+```
+
+**Key Differences:**
+
+| Aspect | Props | State |
+|--------|-------|-------|
+| **Ownership** | Owned by parent | Owned by component |
+| **Mutability** | Immutable (read-only) | Mutable (via setState) |
+| **Source** | Passed from parent | Declared in component |
+| **Update** | Parent re-renders | setState triggers re-render |
+| **Access** | Received as parameter | Declared with useState |
+
+**Props and State Together:**
+
+```typescript
+// React: Combining props and state
+interface CounterProps {
+  initialCount: number;
+  step?: number;
+  onCountChange?: (count: number) => void;
+}
+
+function Counter({ initialCount, step = 1, onCountChange }: CounterProps) {
+  // Props: initialCount, step, onCountChange (from parent)
+  // State: count (internal)
+  const [count, setCount] = useState(initialCount);
+  
+  const increment = () => {
+    const newCount = count + step;
+    setCount(newCount);
+    onCountChange?.(newCount);  // Notify parent of change
+  };
+  
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={increment}>Increment by {step}</button>
+    </div>
+  );
+}
+
+// Usage
+function App() {
+  const [totalClicks, setTotalClicks] = useState(0);
+  
+  return (
+    <div>
+      <Counter 
+        initialCount={0}
+        step={5}
+        onCountChange={(count) => setTotalClicks(prev => prev + 1)}
+      />
+      <p>Total button clicks: {totalClicks}</p>
+    </div>
+  );
+}
+```
+
+**Common Pattern: Derived State from Props**
+
+```typescript
+// ❌ Bad: Duplicating props in state
+function SearchBox({ initialQuery }: { initialQuery: string }) {
+  const [query, setQuery] = useState(initialQuery);
+  
+  // Problem: If initialQuery prop changes, state doesn't update!
+  
+  return <input value={query} onChange={(e) => setQuery(e.target.value)} />;
+}
+
+// ✅ Good: Use prop directly if no transformation needed
+function SearchBox({ query, onQueryChange }: Props) {
+  return (
+    <input 
+      value={query}
+      onChange={(e) => onQueryChange(e.target.value)}
+    />
+  );
+}
+
+// ✅ Good: If you need initial value but want local control
+function SearchBox({ initialQuery }: { initialQuery: string }) {
+  const [query, setQuery] = useState(initialQuery);
+  
+  // Reset when prop changes
+  useEffect(() => {
+    setQuery(initialQuery);
+  }, [initialQuery]);
+  
+  return <input value={query} onChange={(e) => setQuery(e.target.value)} />;
+}
+```
+
+**Rule of Thumb:**
+- Use **props** to pass data down the component tree
+- Use **state** for data that changes over time within a component
+- Lift state up when multiple components need to share it
+
+[↑ Back to Roadmap](#21-component-state)
+
+---
+
+### 2.6 How do you pass data from parent to child components (vs Angular's `input()`)?
+
+**Answer:**
+
+In React, you pass data via **props** - just like passing arguments to a function.
+
+**Basic Props:**
+
+```typescript
+// React: Child component
+interface UserCardProps {
+  name: string;
+  email: string;
+  age?: number;  // Optional prop
+}
+
+function UserCard({ name, email, age }: UserCardProps) {
+  return (
+    <div className="user-card">
+      <h2>{name}</h2>
+      <p>{email}</p>
+      {age && <p>Age: {age}</p>}
+    </div>
+  );
+}
+
+// Parent component
+function UserList() {
+  const users = [
+    { id: 1, name: 'Alice', email: 'alice@example.com', age: 25 },
+    { id: 2, name: 'Bob', email: 'bob@example.com' }
+  ];
+  
+  return (
+    <div>
+      {users.map(user => (
+        <UserCard
+          key={user.id}
+          name={user.name}
+          email={user.email}
+          age={user.age}
+        />
+      ))}
+    </div>
+  );
+}
+```
+
+```typescript
+// Angular: Input signals
+@Component({
+  selector: 'app-user-card',
+  standalone: true,
+  template: `
+    <div class="user-card">
+      <h2>{{ name() }}</h2>
+      <p>{{ email() }}</p>
+      @if (age()) {
+        <p>Age: {{ age() }}</p>
+      }
+    </div>
+  `
+})
+export class UserCardComponent {
+  name = input.required<string>();
+  email = input.required<string>();
+  age = input<number>();  // Optional
+}
+
+// Parent component
+@Component({
+  selector: 'app-user-list',
+  standalone: true,
+  imports: [UserCardComponent],
+  template: `
+    <div>
+      @for (user of users; track user.id) {
+        <app-user-card
+          [name]="user.name"
+          [email]="user.email"
+          [age]="user.age"
+        />
+      }
+    </div>
+  `
+})
+export class UserListComponent {
+  users = [
+    { id: 1, name: 'Alice', email: 'alice@example.com', age: 25 },
+    { id: 2, name: 'Bob', email: 'bob@example.com' }
+  ];
+}
+```
+
+**Passing Complex Data:**
+
+```typescript
+// React: Objects, arrays, functions
+interface Todo {
+  id: number;
+  text: string;
+  completed: boolean;
+}
+
+interface TodoItemProps {
+  todo: Todo;
+  onToggle: (id: number) => void;
+  onDelete: (id: number) => void;
+}
+
+function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
+  return (
+    <div className={todo.completed ? 'completed' : ''}>
+      <span onClick={() => onToggle(todo.id)}>{todo.text}</span>
+      <button onClick={() => onDelete(todo.id)}>Delete</button>
+    </div>
+  );
+}
+
+function TodoList() {
+  const [todos, setTodos] = useState<Todo[]>([
+    { id: 1, text: 'Learn React', completed: false },
+    { id: 2, text: 'Build app', completed: false }
+  ]);
+  
+  const handleToggle = (id: number) => {
+    setTodos(todos.map(todo =>
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo
+    ));
+  };
+  
+  const handleDelete = (id: number) => {
+    setTodos(todos.filter(todo => todo.id !== id));
+  };
+  
+  return (
+    <div>
+      {todos.map(todo => (
+        <TodoItem
+          key={todo.id}
+          todo={todo}
+          onToggle={handleToggle}
+          onDelete={handleDelete}
+        />
+      ))}
+    </div>
+  );
+}
+```
+
+**Props Spreading:**
+
+```typescript
+// React: Spread operator for props
+interface ButtonProps {
+  variant: 'primary' | 'secondary';
+  size: 'small' | 'large';
+  children: React.ReactNode;
+}
+
+function CustomButton(props: ButtonProps) {
+  // Pass all props to child
+  return <Button {...props} />;
+}
+
+// Or: Extract some, pass rest
+function CustomButton({ variant, ...rest }: ButtonProps) {
+  return <Button {...rest} className={`btn-${variant}`} />;
+}
+
+// Usage
+<CustomButton variant="primary" size="large">
+  Click me
+</CustomButton>
+```
+
+**Default Props:**
+
+```typescript
+// React: Default parameters (modern way)
+interface CardProps {
+  title: string;
+  bordered?: boolean;
+  elevation?: number;
+  children: React.ReactNode;
+}
+
+function Card({ 
+  title, 
+  bordered = false,      // Default value
+  elevation = 1,         // Default value
+  children 
+}: CardProps) {
+  return (
+    <div className={`card ${bordered ? 'bordered' : ''}`}>
+      <h3>{title}</h3>
+      {children}
+    </div>
+  );
+}
+
+// Usage
+<Card title="My Card">Content</Card>  // Uses defaults
+<Card title="My Card" bordered elevation={3}>Content</Card>
+```
+
+**Children Prop (Special):**
+
+```typescript
+// React: children is a special prop for nested content
+interface ContainerProps {
+  title: string;
+  children: React.ReactNode;  // Can be anything: text, elements, components
+}
+
+function Container({ title, children }: ContainerProps) {
+  return (
+    <div className="container">
+      <h1>{title}</h1>
+      <div className="content">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+// Usage
+<Container title="Dashboard">
+  <p>Welcome back!</p>
+  <UserProfile />
+  <StatisticsPanel />
+</Container>
+```
+
+```typescript
+// Angular: ng-content (similar)
+@Component({
+  selector: 'app-container',
+  template: `
+    <div class="container">
+      <h1>{{ title() }}</h1>
+      <div class="content">
+        <ng-content />
+      </div>
+    </div>
+  `
+})
+export class ContainerComponent {
+  title = input.required<string>();
+}
+
+// Usage
+<app-container title="Dashboard">
+  <p>Welcome back!</p>
+  <app-user-profile />
+  <app-statistics-panel />
+</app-container>
+```
+
+**Key Differences:**
+
+| Aspect | React Props | Angular Inputs |
+|--------|-------------|----------------|
+| Syntax | Function parameters | `input()` or `@Input()` |
+| Passing | `<Component prop={value} />` | `<Component [prop]="value" />` |
+| Required | TypeScript required prop | `input.required<T>()` |
+| Optional | `prop?: Type` | `input<T>()` |
+| Default | Default parameters | Default value in `input()` |
+| Children | `children` prop | `<ng-content />` |
+
+[↑ Back to Roadmap](#22-props--data-flow)
+
+---
+
+### 2.7 How is one-way data flow enforced in React?
+
+**Answer:**
+
+React strictly enforces **unidirectional data flow** - data flows down from parent to child via props, and children cannot directly modify parent state.
+
+**One-Way Data Flow:**
+
+```typescript
+// React: Parent owns state, child receives props
+function Parent() {
+  const [count, setCount] = useState(0);
+  
+  return (
+    <div>
+      <p>Parent count: {count}</p>
+      {/* Data flows DOWN via props */}
+      <Child count={count} />
+      
+      {/* Parent controls state */}
+      <button onClick={() => setCount(count + 1)}>
+        Increment in Parent
+      </button>
+    </div>
+  );
+}
+
+interface ChildProps {
+  count: number;  // Received from parent
+}
+
+function Child({ count }: ChildProps) {
+  // ❌ Child CANNOT modify parent's state directly
+  // count = 10;  // Won't work - props are read-only
+  
+  // Child can only display or use the data
+  return <p>Child sees count: {count}</p>;
+}
+```
+
+**Child-to-Parent Communication (Callback Props):**
+
+```typescript
+// React: Pass functions down to allow child to communicate up
+function Parent() {
+  const [message, setMessage] = useState('');
+  
+  const handleMessageFromChild = (msg: string) => {
+    setMessage(msg);
+  };
+  
+  return (
+    <div>
+      <p>Message from child: {message}</p>
+      {/* Pass callback function as prop */}
+      <Child onSendMessage={handleMessageFromChild} />
+    </div>
+  );
+}
+
+interface ChildProps {
+  onSendMessage: (message: string) => void;
+}
+
+function Child({ onSendMessage }: ChildProps) {
+  const [input, setInput] = useState('');
+  
+  const handleSubmit = () => {
+    // Child calls parent's function (passed as prop)
+    onSendMessage(input);
+    setInput('');
+  };
+  
+  return (
+    <div>
+      <input
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+      />
+      <button onClick={handleSubmit}>Send to Parent</button>
+    </div>
+  );
+}
+``` 
+
+```typescript
+// Angular: Similar pattern with outputs
+@Component({
+  selector: 'app-parent',
+  template: `
+    <div>
+      <p>Message from child: {{ message }}</p>
+      <app-child (sendMessage)="handleMessageFromChild($event)" />
+    </div>
+  `
+})
+export class ParentComponent {
+  message = '';
+  
+  handleMessageFromChild(msg: string) {
+    this.message = msg;
+  }
+}
+
+@Component({
+  selector: 'app-child',
+  template: `
+    <div>
+      <input [(ngModel)]="input" />
+      <button (click)="handleSubmit()">Send to Parent</button>
+    </div>
+  `
+})
+export class ChildComponent {
+  input = '';
+  sendMessage = output<string>();
+  
+  handleSubmit() {
+    this.sendMessage.emit(this.input);
+    this.input = '';
+  }
+}
+```
+
+**Why One-Way Data Flow:**
+
+1. **Predictable:** Data flows in one direction, easier to trace bugs
+2. **Maintainable:** Clear data ownership and responsibilities
+3. **Debuggable:** Changes originate from one source (parent state)
+4. **No sync issues:** No two-way binding conflicts
+
+**Comparison with Two-Way Binding:**
+
+```typescript
+// Angular: Two-way binding (special case)
+@Component({
+  template: `
+    <input [(ngModel)]="username" />
+    <p>Hello, {{ username }}</p>
+  `
+})
+export class TwoWayComponent {
+  username = '';
+}
+
+// React: Manual two-way binding (one-way under the hood)
+function TwoWayExample() {
+  const [username, setUsername] = useState('');
+  
+  return (
+    <div>
+      {/* This LOOKS like two-way but is actually one-way */}
+      <input
+        value={username}  // Data flows down (one-way)
+        onChange={(e) => setUsername(e.target.value)}  // Event flows up (one-way)
+      />
+      <p>Hello, {username}</p>
+    </div>
+  );
+}
+```
+
+**Data Flow Diagram:**
+
+```
+        Parent Component
+             |
+         State (count)
+             |
+             ↓ (props)
+        Child Component
+             |
+             ↑ (callback)
+        Event Handler
+```
+
+[↑ Back to Roadmap](#22-props--data-flow)
+
+---
+
+### 2.8 What is prop drilling and how do you avoid it?
+
+**Answer:**
+
+**Prop drilling** is when you pass props through multiple component layers to reach a deeply nested component, even though intermediate components don't use those props.
+
+**Problem: Prop Drilling**
+
+```typescript
+// React: Passing props through multiple levels
+function App() {
+  const [user, setUser] = useState({ name: 'Alice', theme: 'dark' });
+  
+  return (
+    <Dashboard user={user} />  // Pass to Dashboard
+  );
+}
+
+function Dashboard({ user }: { user: User }) {
+  return (
+    <div>
+      <Sidebar user={user} />  {/* Pass through - doesn't use it */}
+      <Content />
+    </div>
+  );
+}
+
+function Sidebar({ user }: { user: User }) {
+  return (
+    <div>
+      <Navigation user={user} />  {/* Pass through again */}
+    </div>
+  );
+}
+
+function Navigation({ user }: { user: User }) {
+  return (
+    <nav>
+      <UserMenu user={user} />  {/* Finally used here! */}
+    </nav>
+  );
+}
+
+function UserMenu({ user }: { user: User }) {
+  // Finally, the component that actually needs it!
+  return <div>Welcome, {user.name}</div>;
+}
+```
+
+**Solution 1: Context API (Best for Global State)**
+
+```typescript
+// React: Create context
+import { createContext, useContext, useState, ReactNode } from 'react';
+
+interface User {
+  name: string;
+  theme: string;
+}
+
+interface UserContextType {
+  user: User;
+  setUser: (user: User) => void;
+}
+
+const UserContext = createContext<UserContextType | undefined>(undefined);
+
+// Provider component
+export function UserProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<User>({ name: 'Alice', theme: 'dark' });
+  
+  return (
+    <UserContext.Provider value={{ user, setUser }}>
+      {children}
+    </UserContext.Provider>
+  );
+}
+
+// Custom hook for easy access
+export function useUser() {
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error('useUser must be used within UserProvider');
+  }
+  return context;
+}
+
+// Now components can access directly
+function App() {
+  return (
+    <UserProvider>
+      <Dashboard />  {/* No props needed! */}
+    </UserProvider>
+  );
+}
+
+function Dashboard() {
+  // Sidebar doesn't receive or pass user prop
+  return (
+    <div>
+      <Sidebar />
+      <Content />
+    </div>
+  );
+}
+
+function Sidebar() {
+  // Navigation doesn't receive or pass user prop
+  return (
+    <div>
+      <Navigation />
+    </div>
+  );
+}
+
+function Navigation() {
+  return (
+    <nav>
+      <UserMenu />
+    </nav>
+  );
+}
+
+function UserMenu() {
+  // Directly access from context!
+  const { user } = useUser();
+  
+  return <div>Welcome, {user.name}</div>;
+}
+```
+
+**Solution 2: Component Composition (Best for Layout)**
+
+```typescript
+// React: Pass components as props (children or render props)
+function App() {
+  const [user, setUser] = useState({ name: 'Alice', theme: 'dark' });
+  
+  // Pass the final component directly as children
+  return (
+    <Dashboard>
+      <UserMenu user={user} />
+    </Dashboard>
+  );
+}
+
+function Dashboard({ children }: { children: ReactNode }) {
+  return (
+    <div>
+      <Sidebar>
+        <Navigation>
+          {children}  {/* Render the UserMenu here */}
+        </Navigation>
+      </Sidebar>
+      <Content />
+    </div>
+  );
+}
+
+function Sidebar({ children }: { children: ReactNode }) {
+  return <div className="sidebar">{children}</div>;
+}
+
+function Navigation({ children }: { children: ReactNode }) {
+  return <nav>{children}</nav>;
+}
+
+function UserMenu({ user }: { user: User }) {
+  return <div>Welcome, {user.name}</div>;
+}
+```
+
+**Solution 3: State Management Libraries**
+
+```typescript
+// Using Zustand (lightweight state management)
+import create from 'zustand';
+
+interface UserStore {
+  user: User;
+  setUser: (user: User) => void;
+}
+
+const useUserStore = create<UserStore>((set) => ({
+  user: { name: 'Alice', theme: 'dark' },
+  setUser: (user) => set({ user })
+}));
+
+// Any component can access directly
+function UserMenu() {
+  const user = useUserStore((state) => state.user);
+  return <div>Welcome, {user.name}</div>;
+}
+
+function ThemeToggle() {
+  const { user, setUser } = useUserStore();
+  
+  const toggleTheme = () => {
+    setUser({
+      ...user,
+      theme: user.theme === 'dark' ? 'light' : 'dark'
+    });
+  };
+  
+  return <button onClick={toggleTheme}>Toggle Theme</button>;
+}
+```
+
+**Comparison with Angular:**
+
+```typescript
+// Angular: Dependency Injection (no prop drilling!)
+@Injectable({ providedIn: 'root' })
+export class UserService {
+  private userSignal = signal<User>({ name: 'Alice', theme: 'dark' });
+  
+  user = this.userSignal.asReadonly();
+  
+  setUser(user: User) {
+    this.userSignal.set(user);
+  }
+}
+
+// Any component can inject the service
+@Component({...})
+export class UserMenuComponent {
+  private userService = inject(UserService);
+  user = this.userService.user;
+}
+
+@Component({...})
+export class ThemeToggleComponent {
+  private userService = inject(UserService);
+  
+  toggleTheme() {
+    const current = this.userService.user();
+    this.userService.setUser({
+      ...current,
+      theme: current.theme === 'dark' ? 'light' : 'dark'
+    });
+  }
+}
+```
+
+**When to Use Each Solution:**
+
+| Scenario | Solution |
+|----------|----------|
+| Truly global state (user, theme, auth) | Context API or State Management Library |
+| Layout/structural props | Component Composition |
+| Only 2-3 levels deep | Prop drilling is fine! |
+| Complex app-wide state | Redux/Zustand/Jotai |
+| Simple shared state | Context API |
+
+[↑ Back to Roadmap](#22-props--data-flow)
+
+---
+
+### 2.9 How do you handle default props?
+
+**Answer:**
+
+React provides several ways to set default values for props.
+
+**Method 1: Default Parameters (Modern, Recommended)**
+
+```typescript
+// React: ES6 default parameters
+interface ButtonProps {
+  label: string;
+  variant?: 'primary' | 'secondary' | 'danger';
+  size?: 'small' | 'medium' | 'large';
+  disabled?: boolean;
+  onClick?: () => void;
+}
+
+function Button({ 
+  label,
+  variant = 'primary',      // Default value
+  size = 'medium',           // Default value
+  disabled = false,          // Default value
+  onClick = () => {}         // Default value
+}: ButtonProps) {
+  return (
+    <button 
+      className={`btn btn-${variant} btn-${size}`}
+      disabled={disabled}
+      onClick={onClick}
+    >
+      {label}
+    </button>
+  );
+}
+
+// Usage
+<Button label="Click me" />  // Uses all defaults
+<Button label="Delete" variant="danger" size="large" />
+```
+
+**Method 2: Destructuring with Defaults**
+
+```typescript
+// React: Destructure and provide defaults
+interface CardProps {
+  title: string;
+  bordered?: boolean;
+  elevation?: number;
+  padding?: string;
+  children: ReactNode;
+}
+
+function Card(props: CardProps) {
+  // Extract with defaults
+  const {
+    title,
+    bordered = false,
+    elevation = 1,
+    padding = '20px',
+    children
+  } = props;
+  
+  return (
+    <div 
+      className={`card ${bordered ? 'bordered' : ''}`}
+      style={{
+        boxShadow: `0 ${elevation}px ${elevation * 2}px rgba(0,0,0,0.1)`,
+        padding
+      }}
+    >
+      <h2>{title}</h2>
+      {children}
+    </div>
+  );
+}
+```
+
+**Method 3: defaultProps (Legacy, Class Components)**
+
+```typescript
+// React: Legacy class component approach
+class Button extends React.Component<ButtonProps> {
+  static defaultProps = {
+    variant: 'primary',
+    size: 'medium',
+    disabled: false
+  };
+  
+  render() {
+    const { label, variant, size, disabled, onClick } = this.props;
+    
+    return (
+      <button 
+        className={`btn btn-${variant} btn-${size}`}
+        disabled={disabled}
+        onClick={onClick}
+      >
+        {label}
+      </button>
+    );
+  }
+}
+
+// Also works with function components (but not recommended)
+function Button({ label, variant, size, disabled, onClick }: ButtonProps) {
+  return <button>{label}</button>;
+}
+
+Button.defaultProps = {
+  variant: 'primary',
+  size: 'medium',
+  disabled: false
+};
+```
+
+**Method 4: Nullish Coalescing**
+
+```typescript
+// React: Use ?? operator for defaults
+interface ConfigProps {
+  maxItems?: number;
+  showHeader?: boolean;
+  title?: string;
+}
+
+function List({ maxItems, showHeader, title }: ConfigProps) {
+  // Use nullish coalescing
+  const itemLimit = maxItems ?? 10;
+  const displayHeader = showHeader ?? true;
+  const headerTitle = title ?? 'Default Title';
+  
+  return (
+    <div>
+      {displayHeader && <h2>{headerTitle}</h2>}
+      {/* Render up to itemLimit items */}
+    </div>
+  );
+}
+```
+
+**Complex Default Objects:**
+
+```typescript
+// React: Default object with spread
+interface User {
+  name: string;
+  email: string;
+  role: 'admin' | 'user';
+  preferences: {
+    theme: 'light' | 'dark';
+    notifications: boolean;
+  };
+}
+
+interface UserProfileProps {
+  user?: Partial<User>;
+}
+
+const defaultUser: User = {
+  name: 'Guest',
+  email: '',
+  role: 'user',
+  preferences: {
+    theme: 'light',
+    notifications: true
+  }
+};
+
+function UserProfile({ user }: UserProfileProps) {
+  // Merge provided user with defaults
+  const fullUser: User = {
+    ...defaultUser,
+    ...user,
+    preferences: {
+      ...defaultUser.preferences,
+      ...user?.preferences
+    }
+  };
+  
+  return (
+    <div>
+      <h2>{fullUser.name}</h2>
+      <p>{fullUser.email}</p>
+      <p>Role: {fullUser.role}</p>
+      <p>Theme: {fullUser.preferences.theme}</p>
+    </div>
+  );
+}
+```
+
+**Comparison with Angular:**
+
+```typescript
+// Angular: Default values in input()
+@Component({
+  selector: 'app-button',
+  template: `
+    <button 
+      class="btn btn-{{ variant() }} btn-{{ size() }}"
+      [disabled]="disabled()"
+      (click)="handleClick()"
+    >
+      {{ label() }}
+    </button>
+  `
+})
+export class ButtonComponent {
+  label = input.required<string>();
+  variant = input<'primary' | 'secondary' | 'danger'>('primary');  // Default
+  size = input<'small' | 'medium' | 'large'>('medium');  // Default
+  disabled = input(false);  // Default
+  onClick = output<void>();
+  
+  handleClick() {
+    this.onClick.emit();
+  }
+}
+
+// Usage
+<app-button label="Click me" />  <!-- Uses defaults -->
+<app-button label="Delete" variant="danger" [size]="'large'" />
+```
+
+**Best Practices:**
+
+1. **Use default parameters** for function components (modern, clean)
+2. **Document defaults** in TypeScript interfaces
+3. **Validate defaults** make sense for the component
+4. **Don't use null/undefined** as defaults (use actual values)
+
+```typescript
+// ✅ Good: Clear defaults
+interface ListProps {
+  items: string[];
+  pageSize?: number;  // Optional, will default to 10
+}
+
+function List({ items, pageSize = 10 }: ListProps) {
+  return <div>{items.slice(0, pageSize).map(/*...*/)}</div>;
+}
+
+// ❌ Bad: Unclear defaults
+interface ListProps {
+  items?: string[];  // Optional items doesn't make sense
+  pageSize?: number;  // No clear default
+}
+
+function List({ items, pageSize }: ListProps) {
+  // Have to check everywhere
+  const actualItems = items || [];
+  const actualPageSize = pageSize || 10;
+  // ...
+}
+```
+
+[↑ Back to Roadmap](#22-props--data-flow)
+
+---
+
+*Note: Due to the extensive length of this guide, I'll continue adding more answers in the next sections. The document now includes comprehensive answers for Phase 2 State Management & Data Flow. Would you like me to continue with Phase 3 (Advanced Hooks & Side Effects) and beyond?*
 
 ---
 

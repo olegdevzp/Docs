@@ -31,46 +31,73 @@ Node.js is a JavaScript runtime built on Chrome's V8 engine that allows JavaScri
 
 ### 2. What is the Event Loop in Node.js?
 **Answer:**
-**Literal Definition:** The Event Loop is the mechanism that handles asynchronous operations in Node.js. It continuously checks the call stack and callback queue, executing callbacks when the stack is empty.
+**Literal Definition:** The Event Loop is the mechanism that schedules and runs callbacks for asynchronous work in Node.js. Your JavaScript runs on one thread; completed async operations signal back through queues, and the event loop decides **when** those callbacks run relative to timers, I/O, and other phases.
 
-The Event Loop is the mechanism that handles asynchronous operations in Node.js. It continuously checks the call stack and callback queue, executing callbacks when the stack is empty.
+**Big picture — three pieces:**
+1. **JavaScript call stack** — runs synchronous code one frame at a time. While it is busy, the loop cannot advance phases for JS callbacks.
+2. **libuv** — Node’s native layer that talks to the OS: epoll/kqueue/IOCP on network I/O, thread pool for some file/crypto/DNS work, and timers. When work finishes, libuv arranges for the right callback to become runnable.
+3. **Event loop** — coordinates phases so timers, I/O completions, `setImmediate`, close handlers, etc. run in a defined order after the stack is empty (and interleaved with special queues below).
 
-**How it works:**
-Node.js is single-threaded but can handle concurrent operations through the event loop. When asynchronous operations (like file I/O, network requests) are initiated, they're delegated to the system kernel or thread pool, freeing the main thread to continue executing other code.
+**“Single-threaded” vs concurrency:**
+- **Single-threaded JavaScript** means one call stack for your JS; no two JS callbacks run truly in parallel on that stack.
+- **Concurrent I/O** happens because the OS and libuv handle sockets, timers, and some blocking-style work **off** the JS thread (kernel async I/O or libuv’s thread pool). That is why thousands of connections can progress without each one blocking the others—as long as you don’t block the JS thread yourself.
 
-**Event Loop Phases (in order):**
-1. **Timers**: Executes callbacks scheduled by `setTimeout()` and `setInterval()`
-2. **Pending callbacks**: Executes I/O callbacks deferred from the previous cycle
-3. **Idle, prepare**: Internal operations (used internally by Node.js)
-4. **Poll**: Retrieve new I/O events; execute I/O related callbacks
-5. **Check**: Execute `setImmediate()` callbacks
-6. **Close callbacks**: Execute close event callbacks (e.g., `socket.on('close')`)
+**What blocks the event loop (important in interviews):**
+- Long synchronous loops, huge JSON `JSON.parse`/`stringify`, tight CPU work, or synchronous file APIs (`fs.readFileSync`, etc.) stall **all** timers, promises, and HTTP responses until that work finishes.
+- Prefer async APIs, streaming, and worker threads / child processes for heavy CPU.
 
-**Microtasks vs Macrotasks:**
-- **Microtasks** (Promises, process.nextTick): Execute immediately after current operation, before moving to next phase
-- **Macrotasks** (setTimeout, setImmediate): Execute in their respective event loop phases
+**Official phase order (each tick cycles through roughly this):**
+1. **Timers** — callbacks scheduled by `setTimeout()` / `setInterval()` whose time has come (minimum delay is not a guarantee of exact timing).
+2. **Pending callbacks** — some deferred system callbacks (e.g. certain TCP errors) run here if they weren’t run earlier.
+3. **Idle, prepare** — internal housekeeping.
+4. **Poll** — wait for I/O, execute I/O callbacks that are ready; can affect how long the loop stays here.
+5. **Check** — `setImmediate()` callbacks (mainly useful inside I/O callbacks to run “right after poll”).
+6. **Close callbacks** — e.g. `socket.on('close')`, server close handlers.
+
+**Queues that are not “phases” but run very often:**
+- **`process.nextTick` queue** — runs **after** the current synchronous operation completes and **before** the event loop continues to the next phase. It is **not** the same as promise microtasks; it is higher priority and can **starve** the loop if you enqueue endless nextTicks (anti-pattern in production).
+- **Microtasks** — primarily Promise `.then()` / `.catch()` / `.finally()` and other promise jobs; in Node they run after `nextTick` work scheduled for that transition and before the loop enters the next phase / continues.
+
+So ordering is roughly: **sync code → drain `nextTick` → drain promise microtasks → phases repeat**, with `nextTick`/microtasks also consulted around phase boundaries.
+
+**Macrotasks (scheduled in phases):**
+- **`setTimeout` / `setInterval`** — timers phase.
+- **`setImmediate`** — check phase (ordering vs `setTimeout(0)` **depends on context**: inside an I/O callback, `setImmediate` typically runs after poll; from top-level script the relative order with `setTimeout(0)` can differ—know the APIs, don’t memorize one universal print order).
 
 ```typescript
-console.log('Start'); // 1. Synchronous - executes immediately
+console.log('Start'); // 1. Synchronous
 
 setTimeout(() => {
-  console.log('Timeout'); // 4. Macrotask - goes to timers phase
+  console.log('Timeout'); // Macrotask — timers phase
 }, 0);
 
 Promise.resolve().then(() => {
-  console.log('Promise'); // 3. Microtask - executes after sync code, before macrotasks
+  console.log('Promise'); // Microtask — after sync, before timers phase in this example
 });
 
-console.log('End'); // 2. Synchronous - executes immediately
+console.log('End'); // 2. Synchronous
 
-// Output: Start, End, Promise, Timeout
-// Why? Synchronous code runs first, then microtasks (Promises), then macrotasks (setTimeout)
+// Typical output: Start, End, Promise, Timeout
+// Sync runs first; stack clears; microtasks (Promise) run before the timers phase picks up setTimeout(0).
+```
+
+```typescript
+// Illustrating nextTick vs Promise (nextTick runs first)
+console.log('sync');
+
+process.nextTick(() => console.log('nextTick'));
+
+Promise.resolve().then(() => console.log('promise'));
+
+console.log('sync end');
+
+// Typical output: sync, sync end, nextTick, promise
 ```
 
 **Key Points:**
-- The event loop allows Node.js to perform non-blocking I/O operations despite JavaScript being single-threaded
-- Understanding the event loop is crucial for optimizing async code and avoiding blocking operations
-- Always use async operations for I/O to prevent blocking the event loop
+- The event loop is why Node can do **non-blocking I/O** with a **single JS thread**: completion callbacks are interleaved with your synchronous work and timer/immediate phases—never truly parallel JS unless you use workers or multiple processes.
+- **`await`** is syntax over Promises: after `await`, continuation runs as microtask work when the promise settles—still coordinated by the same loop.
+- **Practice discipline**: avoid long synchronous CPU on the main thread; watch `nextTick` recursion; don’t assume `setTimeout(fn, 0)` runs “immediately”—only “after timers phase eligibility.”
 
 ### 3. What is the difference between `require()` and `import`?
 **Answer:**
@@ -180,13 +207,13 @@ fs.createReadStream('input.txt')
 
 ### 7. What is the difference between `process.nextTick()` and `setImmediate()`?
 **Answer:**
-- **process.nextTick()**: Executes before the next event loop iteration (microtask queue)
-- **setImmediate()**: Executes on the next event loop iteration (check phase)
+- **`process.nextTick()`**: Schedules a callback on the **nextTick queue**. It runs **before** the event loop continues—still inside the conceptual “current turn”—and **before** Promise microtasks for that transition. It is **not** the same queue as `Promise.then()` (abusing `nextTick` can delay I/O).
+- **`setImmediate()`**: Schedules a callback for the **check phase** of the **next event loop tick** (or later), after poll/I/O work for that iteration—useful to defer work without starving the loop like deep `nextTick` chains can.
 
 ```typescript
 setImmediate(() => console.log('Immediate'));
 process.nextTick(() => console.log('Next Tick'));
-// Output: Next Tick, Immediate
+// Typical output: Next Tick, Immediate
 ```
 
 ### 8. What is middleware in Node.js?

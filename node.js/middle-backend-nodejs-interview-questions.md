@@ -151,6 +151,8 @@ async function processOrder(orderId) {
 }
 ```
 
+[⬆ Back to Top](#meiddle-level-backend-nodejs-interview-questions)
+
 ---
 
 ## Streams & Buffers
@@ -267,6 +269,8 @@ class BufferPool {
   }
 }
 ```
+
+[⬆ Back to Top](#meiddle-level-backend-nodejs-interview-questions)
 
 ---
 
@@ -483,6 +487,8 @@ const expensiveOperation = memoize((n) => {
 });
 ```
 
+[⬆ Back to Top](#meiddle-level-backend-nodejs-interview-questions)
+
 ---
 
 ## Clustering & Worker Threads
@@ -616,6 +622,8 @@ async function processItems(items) {
   return results;
 }
 ```
+
+[⬆ Back to Top](#meiddle-level-backend-nodejs-interview-questions)
 
 ---
 
@@ -802,6 +810,8 @@ app.use(session({
   }
 }));
 ```
+
+[⬆ Back to Top](#meiddle-level-backend-nodejs-interview-questions)
 
 ---
 
@@ -1028,6 +1038,8 @@ class UserService {
 module.exports = new UserService();
 ```
 
+[⬆ Back to Top](#meiddle-level-backend-nodejs-interview-questions)
+
 ---
 
 ## Database & ORM
@@ -1210,6 +1222,8 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 });
 ```
 
+[⬆ Back to Top](#meiddle-level-backend-nodejs-interview-questions)
+
 ---
 
 ## Testing
@@ -1376,6 +1390,8 @@ class TestHelper {
 
 module.exports = TestHelper;
 ```
+
+[⬆ Back to Top](#meiddle-level-backend-nodejs-interview-questions)
 
 ---
 
@@ -1588,6 +1604,8 @@ class PaymentProcessor {
   }
 }
 ```
+
+[⬆ Back to Top](#meiddle-level-backend-nodejs-interview-questions)
 
 ---
 
@@ -1811,6 +1829,8 @@ const breaker = new CircuitBreaker(
 );
 ```
 
+[⬆ Back to Top](#meiddle-level-backend-nodejs-interview-questions)
+
 ---
 
 ## Error Handling
@@ -1978,6 +1998,8 @@ const result = await RetryableOperation.execute(
 );
 ```
 
+[⬆ Back to Top](#meiddle-level-backend-nodejs-interview-questions)
+
 ---
 
 ## Authentication & Authorization
@@ -2104,6 +2126,8 @@ app.put('/api/posts/:id', authenticate, async (req, res) => {
   res.json({ data: post });
 });
 ```
+
+[⬆ Back to Top](#meiddle-level-backend-nodejs-interview-questions)
 
 ---
 
@@ -2259,6 +2283,8 @@ function addLinks(resource, baseUrl) {
 }
 ```
 
+[⬆ Back to Top](#meiddle-level-backend-nodejs-interview-questions)
+
 ---
 
 ## Memory Management
@@ -2396,6 +2422,8 @@ app.get('/download', (req, res) => {
   stream.pipe(res);
 });
 ```
+
+[⬆ Back to Top](#meiddle-level-backend-nodejs-interview-questions)
 
 ---
 
@@ -2748,6 +2776,8 @@ app.get('/api/upload/:uploadId/progress', (req, res) => {
 });
 ```
 
+[⬆ Back to Top](#meiddle-level-backend-nodejs-interview-questions)
+
 ---
 
 ## Additional Questions
@@ -2766,6 +2796,8 @@ app.get('/api/upload/:uploadId/progress', (req, res) => {
 ### 39. How do you implement rate limiting and throttling?
 ### 40. Explain the concept of idempotency in APIs
 
+[⬆ Back to Top](#meiddle-level-backend-nodejs-interview-questions)
+
 ---
 
 ## System Design Questions
@@ -2776,6 +2808,8 @@ app.get('/api/upload/:uploadId/progress', (req, res) => {
 ### 44. Design a caching layer for a high-traffic application
 ### 45. Design a logging and monitoring system
 
+[⬆ Back to Top](#meiddle-level-backend-nodejs-interview-questions)
+
 ---
 
 ## Performance Questions
@@ -2785,6 +2819,8 @@ app.get('/api/upload/:uploadId/progress', (req, res) => {
 ### 48. How do you handle memory leaks in production?
 ### 49. Explain the N+1 query problem and solutions
 ### 50. How do you optimize database queries?
+
+[⬆ Back to Top](#meiddle-level-backend-nodejs-interview-questions)
 
 ---
 

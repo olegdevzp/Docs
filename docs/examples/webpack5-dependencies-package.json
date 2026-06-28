@@ -1,0 +1,69 @@
+{
+  "name": "angular-webpack5-dependencies",
+  "version": "1.0.0",
+  "description": "Required dependencies for Webpack 5 with Angular complex configurations",
+  "private": true,
+  "dependencies": {
+    "@angular/common": "^20.2.0",
+    "@angular/compiler": "^20.2.0",
+    "@angular/core": "^20.2.0",
+    "@angular/forms": "^20.2.0",
+    "@angular/platform-browser": "^20.2.0",
+    "@angular/router": "^20.2.0",
+    "@angular/service-worker": "^20.2.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular-builders/custom-webpack": "^17.0.0",
+    "@angular/cli": "^20.2.0",
+    "@angular/compiler-cli": "^20.2.0",
+    "@angular-devkit/build-optimizer": "^20.2.0",
+    "@module-federation/webpack": "^0.5.0",
+    "@types/node": "^20.0.0",
+    "@types/webpack": "^5.28.0",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1",
+    "webpack-bundle-analyzer": "^4.10.1",
+    "webpack-stats-plugin": "^4.0.2",
+    "clean-webpack-plugin": "^4.0.0",
+    "mini-css-extract-plugin": "^2.7.6",
+    "css-minimizer-webpack-plugin": "^5.0.1",
+    "css-loader": "^6.8.1",
+    "style-loader": "^3.3.3",
+    "sass": "^1.69.5",
+    "sass-loader": "^13.3.2",
+    "postcss": "^8.4.32",
+    "postcss-loader": "^7.3.3",
+    "autoprefixer": "^10.4.16",
+    "cssnano": "^6.0.1",
+    "html-loader": "^4.2.0",
+    "terser-webpack-plugin": "^5.3.9",
+    "compression-webpack-plugin": "^10.0.0",
+    "brotli-webpack-plugin": "^1.1.0",
+    "speed-measure-webpack-plugin": "^1.5.0",
+    "inspectpack": "^4.7.1",
+    "image-webpack-loader": "^8.1.0",
+    "image-minimizer-webpack-plugin": "^3.8.3",
+    "workbox-webpack-plugin": "^7.0.0",
+    "@angular-architects/module-federation": "^17.0.0",
+    "typescript": "~5.9.2"
+  },
+  "scripts": {
+    "build": "webpack --config webpack.config.js",
+    "build:dev": "webpack --config webpack.config.dev.js",
+    "build:prod": "webpack --config webpack.config.prod.js",
+    "serve": "webpack serve --config webpack.config.dev.js",
+    "analyze": "webpack-bundle-analyzer dist/stats.json",
+    "build:analyze": "webpack --config webpack.config.analyze.js",
+    "test:webpack": "webpack --config webpack.config.test.js"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  }
+}
+
+
+

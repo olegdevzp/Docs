@@ -1,11 +1,15 @@
-# Comprehensive Angular Framework Questions for Middle-Level Developers
+# Comprehensive Angular Framework Questions for Middle-Level Developers (2026)
+
+Curated interview questions for developers with 2–4 years of Angular experience — from core concepts through signals, standalone APIs, zoneless change detection, and production patterns.
+
+> **Angular baseline (2026):** Examples target **Angular 20+** (LTS). New projects use **standalone components by default** (`standalone: true` since v19), **built-in control flow** (`@if`, `@for`, `@switch`, `@defer`), **signals** for local state, and **`provideZonelessChangeDetection()`** (stable since v20.2). Prefer `inject()`, functional guards/resolvers, and `provideHttpClient()` over NgModule-based bootstrapping. NgModules and structural directives (`*ngIf`, `*ngFor`) remain in legacy codebases but are not the default for new work.
 
 ## Table of Contents
 
 1. [Core Angular Concepts](#core-angular-concepts)
 2. [Change Detection & Performance](#change-detection--performance)
 3. [RxJS and Observables](#rxjs-and-observables)
-4. [Signals (Angular 16+)](#signals-angular-16)
+4. [Signals](#signals)
 5. [Routing and Navigation](#routing-and-navigation)
 6. [Forms and Validation](#forms-and-validation)
 7. [Dependency Injection](#dependency-injection)
@@ -91,7 +95,7 @@
 
 ---
 
-## Signals (Angular 16+)
+## Signals {#signals}
 
 46. [What are Angular Signals and how do they work?](#46-what-are-angular-signals-and-how-do-they-work)
 47. [Signals vs Observables: when to use each?](#47-signals-vs-observables-when-to-use-each)
@@ -179,7 +183,7 @@
 101. [Explain `@ViewChild` options](#101-explain-viewchild-options)
 102. [What is the difference between `*ngIf` vs `[hidden]`?](#102-what-is-the-difference-between-ngif-vs-hidden)
 103. [How do you use `ng-template`, `ng-container`?](#103-how-do-you-use-ng-template-ng-container)
-104. [What are Angular 17 control flow features (`@if`, `@for`, `@defer`)?](#104-what-are-angular-17-control-flow-features-if-for-defer)
+104. [What are built-in control flow features (`@if`, `@for`, `@defer`)?](#104-what-are-built-in-control-flow-features-if-for-defer)
 105. [How do you handle dynamic component loading?](#105-how-do-you-handle-dynamic-component-loading)
 106. [What are component factories?](#106-what-are-component-factories)
 107. [How do you pass data to dynamically created components?](#107-how-do-you-pass-data-to-dynamically-created-components)
@@ -358,7 +362,7 @@
 217. [How do you use `takeUntilDestroyed` and `DestroyRef`?](#217-how-do-you-use-takeuntildestroyed-and-destroyref)
 218. [What are pure vs impure pipes and their performance impact?](#218-what-are-pure-vs-impure-pipes-and-their-performance-impact)
 219. [How does `AsyncPipe` work with OnPush?](#219-how-does-asyncpipe-work-with-onpush)
-220. [What are the new control flow features in Angular 17?](#220-what-are-the-new-control-flow-features-in-angular-17)
+220. [What are built-in control flow features (`@if`, `@for`, `@defer`)?](#220-what-are-built-in-control-flow-features-if-for-defer)
 221. [How do you use `@defer` for lazy loading?](#221-how-do-you-use-defer-for-lazy-loading)
 222. [What are signal inputs and outputs?](#222-what-are-signal-inputs-and-outputs)
 223. [How do you migrate from NgModules to standalone?](#223-how-do-you-migrate-from-ngmodules-to-standalone)
@@ -438,7 +442,7 @@
 **@Directive:**
 - Modifies the behavior or appearance of existing DOM elements
 - No template of its own
-- Three types: Component directives, Structural directives (`*ngIf`, `*ngFor`), and Attribute directives (`ngClass`, `ngStyle`)
+- Three types: Component directives, Structural directives (legacy: `*ngIf`, `*ngFor`; prefer `@if`, `@for`), and Attribute directives (`ngClass`, `ngStyle`)
 - Adds functionality to existing elements
 - Example: `<div myHighlight>` where `myHighlight` changes the element's behavior
 
@@ -710,16 +714,31 @@ ngOnInit() {
 ```
 
 **Zone-less Angular (Modern Approach):**
-With Angular 14+, you can opt out of Zone.js and use signals or manual change detection for better performance.
+Since Angular 18 (experimental) and **stable in Angular 20.2+**, you can run without Zone.js using `provideZonelessChangeDetection()` and signals for predictable, high-performance change detection.
 
 [Back to Core Angular Concepts](#core-angular-concepts)
 
 ### 7. How do you handle lazy loading of modules in Angular?
 
 **Answer:**
-Lazy loading allows you to load feature modules only when needed, reducing initial bundle size and improving application startup time.
+Lazy loading defers loading feature code until the route is visited, reducing initial bundle size. **In 2026, prefer lazy-loaded standalone routes** (`loadComponent` / `loadChildren` with route files) over NgModule-based `loadChildren`.
 
-**Implementation Steps:**
+**Standalone route (recommended):**
+```typescript
+// app.routes.ts
+export const routes: Routes = [
+  {
+    path: 'users',
+    loadComponent: () => import('./users/user-list.component').then(m => m.UserListComponent)
+  },
+  {
+    path: 'admin',
+    loadChildren: () => import('./admin/admin.routes').then(m => m.ADMIN_ROUTES)
+  }
+];
+```
+
+**Legacy NgModule approach (maintaining older apps):**
 
 **1. Create Feature Module:**
 ```typescript
@@ -753,7 +772,7 @@ const routes: Routes = [
     path: 'feature',
     loadChildren: () => import('./feature/feature.module').then(m => m.FeatureModule)
   },
-  // Standalone component (Angular 14+)
+  // Standalone route (default since v19)
   {
     path: 'standalone',
     loadComponent: () => import('./standalone/standalone.component').then(c => c.StandaloneComponent)
@@ -1095,7 +1114,7 @@ export class MyClass {
 ### 12. Explain the concept of Angular modules and their purpose
 
 **Answer:**
-Angular modules (NgModules) are containers that group related components, directives, pipes, and services. They provide compilation context and help organize application functionality.
+Angular modules (NgModules) are legacy containers that group related components, directives, pipes, and services. **New Angular 19+ projects use standalone components by default**; NgModules remain relevant for maintaining older codebases.
 
 **Purpose of NgModules:**
 - **Organization** - Group related functionality together
@@ -1146,7 +1165,8 @@ export class UserModule {}
 - Use shared modules for common functionality
 - Implement lazy loading for large features
 - Avoid importing the same module in multiple places
-- Consider standalone components (Angular 14+) as an alternative
+- Prefer **standalone components** and `bootstrapApplication()` for new features
+- Use NgModules only when maintaining legacy code (set `standalone: false` explicitly when declaring in a module)
 
 [Back to Core Angular Concepts](#core-angular-concepts)
 
@@ -1512,18 +1532,18 @@ setTimeout(Zone.current.wrap(() => {
 ```
 
 **Zone-less Angular (Modern Approach):**
-Starting with Angular 14, you can opt out of Zone.js for better performance and control.
+Since Angular 18 (experimental) and **stable in Angular 20.2+**, you can run without Zone.js for better performance and explicit change detection control.
 
 **Enabling Zone-less:**
 ```typescript
 // main.ts
 import { bootstrapApplication } from '@angular/platform-browser';
-import { provideExperimentalZonelessChangeDetection } from '@angular/core';
+import { provideZonelessChangeDetection } from '@angular/core';
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideExperimentalZonelessChangeDetection() // Angular 18+
-    // or provideZoneChangeDetection({ eventCoalescing: true }) for zone-based
+    provideZonelessChangeDetection() // Stable since Angular 20.2
+    // or provideZoneChangeDetection({ eventCoalescing: true }) for zone-based apps
   ]
 });
 ```
@@ -1876,7 +1896,7 @@ export class ComponentWithSubscriptions implements OnDestroy {
   }
 }
 
-// Or with takeUntilDestroyed (Angular 16+)
+// Or with takeUntilDestroyed
 export class ModernComponent {
   data$ = this.service.getData()
     .pipe(takeUntilDestroyed());
@@ -2192,12 +2212,12 @@ export class OptimizedVirtualListComponent {
 
 [Back to Change Detection & Performance](#change-detection--performance)
 
-### 21. What are the benefits of using trackBy functions in ngFor?
+### 21. What are the benefits of using trackBy functions in `@for` / `*ngFor`?
 
 **Answer:**
-TrackBy functions optimize *ngFor performance by providing Angular with a stable identity for each item, enabling efficient DOM updates and preventing unnecessary re-rendering.
+Track expressions optimize list rendering by giving Angular a stable identity for each item. With built-in control flow, use `track item.id`; with legacy `*ngFor`, use `trackBy: trackByFn`.
 
-**How ngFor Works Without TrackBy:**
+**How `@for` / `*ngFor` works without track:**
 Angular uses array index as the default tracking mechanism:
 
 ```typescript
@@ -2428,7 +2448,7 @@ const routes: Routes = [
     loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
     canLoad: [AdminGuard] // Only load if user has access
   },
-  // Standalone component lazy loading (Angular 14+)
+  // Standalone component lazy loading
   {
     path: 'profile',
     loadComponent: () => import('./profile/profile.component').then(c => c.ProfileComponent)
@@ -4206,7 +4226,7 @@ export class CDTriggerExamples {
 
 [Back to Change Detection & Performance](#change-detection--performance)
 
-### 30. How do you implement efficient data structures for large datasets? {#30-how-do-you-implement-efficient-data-structures-for-large-datasets}
+### 30. How do you implement efficient data structures for large datasets? 30-how-do-you-implement-efficient-data-structures-for-large-datasets
 
 **Answer:**
 Efficient data structures are crucial for handling large datasets in Angular applications. Here are comprehensive strategies and implementations:
@@ -5476,7 +5496,7 @@ export class UserComponent implements OnInit, OnDestroy {
 }
 ```
 
-**2. takeUntilDestroyed (Angular 16+)**
+**2. takeUntilDestroyed**
 ```typescript
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -5703,7 +5723,7 @@ describe('UserComponent', () => {
 **Best Practices:**
 
 **✅ DO:**
-- Use `takeUntilDestroyed()` in Angular 16+
+- Use `takeUntilDestroyed()`
 - Use `takeUntil()` pattern for multiple subscriptions
 - Prefer async pipe when possible
 - Use reactive patterns to minimize subscriptions
@@ -6775,7 +6795,7 @@ export class CartListComponent {
 **Answer:**
 Preventing RxJS memory leaks is crucial for Angular application performance. Here are the most effective strategies:
 
-**1. takeUntilDestroyed (Angular 16+)**
+**1. takeUntilDestroyed**
 ```typescript
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -7403,7 +7423,7 @@ describe('User Search Component', () => {
 ### 46. What are Angular Signals and how do they work?
 
 **Answer:**
-Angular Signals are a **reactive primitive** introduced in Angular 16+ that provides a new way to manage state and trigger change detection. Signals offer a more predictable and performant alternative to traditional change detection.
+Angular Signals are a **reactive primitive** and the recommended way to manage local UI state and trigger fine-grained change detection in modern Angular apps.
 
 **Core Concepts:**
 
@@ -7533,7 +7553,7 @@ customSignal.set({ name: 'John' }); // No change (same name)
 - **Predictable updates** - explicit dependency tracking
 - **Developer experience** - easier debugging and reasoning
 
-[Back to Signals (Angular 16+)](#signals-angular-16)
+[Back to Signals](#signals)
 
 ### 47. Signals vs Observables: when to use each?
 
@@ -7759,7 +7779,7 @@ export class EffectComponent {
 // Phase 4: Keep Observables for complex async patterns
 ```
 
-[Back to Signals (Angular 16+)](#signals-angular-16)
+[Back to Signals](#signals)
 
 ### 48. How do you create computed signals?
 
@@ -8045,7 +8065,7 @@ const sortedItems = computed(() => filteredItems().sort((a, b) => a.name.localeC
 const paginatedItems = computed(() => sortedItems().slice(0, pageSize()));
 ```
 
-[Back to Signals (Angular 16+)](#signals-angular-16)
+[Back to Signals](#signals)
 
 ### 49. What is the difference between signals and observables?
 
@@ -8366,7 +8386,7 @@ describe('ObservableComponent', () => {
 // Keep Observables for async operations
 ```
 
-[Back to Signals (Angular 16+)](#signals-angular-16)
+[Back to Signals](#signals)
 
 ### 50. How do you convert between signals and observables?
 
@@ -8690,7 +8710,7 @@ const loading = toSignal(
 // No manual cleanup needed in most cases
 ```
 
-[Back to Signals (Angular 16+)](#signals-angular-16)
+[Back to Signals](#signals)
 
 ### 51. What are effect signals and when to use them?
 
@@ -9086,7 +9106,7 @@ template = `<div>{{message()}}</div>`;
 
 **Effects are perfect for side effects like API calls, logging, storage, and DOM manipulation that need to happen reactively when signals change!**
 
-[Back to Signals (Angular 16+)](#signals-angular-16)
+[Back to Signals](#signals)
 
 ### 52. How do signals integrate with change detection?
 
@@ -9344,7 +9364,7 @@ export class RouterComponent {
 bootstrapApplication(App, {
   providers: [
     // ✅ Disable Zone.js for better performance
-    provideExperimentalZonelessChangeDetection()
+    provideZonelessChangeDetection()
   ]
 });
 ```
@@ -9500,7 +9520,7 @@ export class HybridComponent {
 
 **Signals provide automatic, efficient change detection that works seamlessly with Angular's existing change detection system while offering superior performance characteristics!**
 
-[Back to Signals (Angular 16+)](#signals-angular-16)
+[Back to Signals](#signals)
 
 ### 53. What are the benefits of using signals over observables?
 
@@ -9915,7 +9935,7 @@ export class ZonelessComponent {
 **Summary:**
 Signals provide a simpler, more performant, and more intuitive way to handle reactive state in Angular applications, especially for component-level state management and synchronous computations. They excel in scenarios where you need immediate values, automatic memory management, and fine-grained change detection.
 
-[Back to Signals (Angular 16+)](#signals-angular-16)
+[Back to Signals](#signals)
 
 ### 54. How do you handle async operations with signals?
 
@@ -10029,7 +10049,7 @@ export class WebSocketComponent {
 - ✅ Always handle **loading** and **error** states
 - ✅ Use **firstValueFrom()** for promise conversion
 
-[Back to Signals (Angular 16+)](#signals-angular-16)
+[Back to Signals](#signals)
 
 ### 55. What is signal-based state management?
 
@@ -10360,7 +10380,7 @@ private _error = signal<string | null>(null);
 
 **Signal-based state management provides a simpler, more performant, and more intuitive approach to managing application state compared to traditional solutions like NgRx or services with BehaviorSubjects.**
 
-[Back to Signals (Angular 16+)](#signals-angular-16)
+[Back to Signals](#signals)
 
 ### 56. How do you implement routing in Angular?
 
@@ -10426,7 +10446,7 @@ export class AppModule { }
 <router-outlet></router-outlet>
 ```
 
-**4. Standalone Components (Angular 14+):**
+**4. Standalone Components (default since v19):**
 
 ```typescript
 // main.ts
@@ -10693,7 +10713,7 @@ const routes: Routes = [
 ];
 ```
 
-**5. CanMatch - Control Route Matching (Angular 14+):**
+**5. CanMatch - Control Route Matching:**
 
 ```typescript
 // role-based.guard.ts
@@ -10726,7 +10746,7 @@ const routes: Routes = [
 ];
 ```
 
-**Modern Functional Guards (Angular 14+):**
+**Functional Guards:**
 
 ```typescript
 // functional-guards.ts
@@ -11555,7 +11575,7 @@ export class ParameterSubscriptionComponent implements OnInit, OnDestroy {
       })
     );
     
-    // Or use takeUntilDestroyed (Angular 16+)
+    // Or use takeUntilDestroyed
     this.route.paramMap.pipe(
       takeUntilDestroyed()
     ).subscribe(params => {
@@ -12063,7 +12083,7 @@ export class DashboardComponent {}
 ### 63. Routing with standalone APIs
 
 **Answer:**
-Angular's standalone APIs revolutionize routing by eliminating the need for NgModules, making applications more modular and tree-shakable. Introduced in Angular 14+ and enhanced in Angular 15+.
+Angular's standalone APIs revolutionize routing by eliminating the need for NgModules, making applications more modular and tree-shakable. Available since Angular 14, now the default architecture.
 
 **Bootstrapping with Standalone APIs:**
 
@@ -12425,7 +12445,7 @@ Navigation Process:
  Route Matching → Module Loading → Component Activation
 ```
 
-**CanMatch (Angular 14+):**
+**CanMatch:**
 
 **Purpose**: Controls whether a route configuration should match the URL
 **When it runs**: During route matching phase, before any loading
@@ -13045,7 +13065,7 @@ Route resolvers are services that fetch data before a route is activated, ensuri
 
 **Basic Resolver Implementation:**
 
-**1. Creating a Resolver (Angular 14+ Functional Approach):**
+**1. Creating a Resolver (Functional Approach):**
 ```typescript
 // user.resolver.ts
 import { inject } from '@angular/core';
@@ -13158,7 +13178,7 @@ export class UserDetailComponent implements OnInit {
 }
 ```
 
-**2. Using Input Signals (Angular 16+):**
+**2. Using Input Signals:**
 ```typescript
 // user-detail.component.ts
 import { Component, input } from '@angular/core';
@@ -22512,7 +22532,7 @@ export class ApiService {
     );
   }
   
-  // Using inject() function (Angular 14+)
+  // Using inject() function
   private logger = inject(LOGGER_TOKEN);
   
   logRequest(url: string): void {
@@ -24267,7 +24287,7 @@ export class UserListComponent {
 }
 ```
 
-**2. Using the `inject()` Function (Angular 14+):**
+**2. Using the `inject()` Function:**
 ```typescript
 // modern-standalone.component.ts
 @Component({
@@ -27555,7 +27575,7 @@ describe('Injection Scopes', () => {
 ### 96. What are standalone components vs NgModules?
 
 **Answer:**
-Standalone components (introduced in Angular 14) are self-contained components that don't need to be declared in NgModules. They can import dependencies directly and simplify Angular application architecture.
+Standalone components (default since Angular 19) are self-contained components that import dependencies directly without NgModules. They simplify architecture and improve tree-shaking.
 
 **Traditional NgModule Approach:**
 
@@ -28216,7 +28236,7 @@ export class SubscriberComponent implements OnInit, OnDestroy {
 }
 ```
 
-**5. Signal-Based Communication (Angular 16+):**
+**5. Signal-Based Communication:**
 
 ```typescript
 // signal-communication.service.ts
@@ -29796,10 +29816,10 @@ export class ProgrammaticTemplatesComponent {
 
 [Back to Components and Templates](#components-and-templates)
 
-### 104. What are Angular 17 control flow features (`@if`, `@for`, `@defer`)?
+### 104. What are built-in control flow features (`@if`, `@for`, `@defer`)?
 
 **Answer:**
-Angular 17 introduced new control flow syntax (`@if`, `@for`, `@defer`) that provides better performance, type safety, and developer experience compared to structural directives.
+Angular's built-in control flow syntax (`@if`, `@for`, `@switch`, `@defer`) replaced structural directives as the recommended approach. It provides better performance, type narrowing, and cleaner templates.
 
 **@if Control Flow:**
 
@@ -32469,7 +32489,7 @@ interface Product {
 }
 ```
 
-**3. Signal-Based State Management (Modern Angular 16+):**
+**3. Signal-Based State Management:**
 
 ```typescript
 // Signal-based state service
@@ -34144,7 +34164,7 @@ export class UserListComponent implements OnInit, OnDestroy {
 }
 ```
 
-**4. Signal-Based Side Effects (Angular 16+):**
+**4. Signal-Based Side Effects:**
 
 ```typescript
 // signal-user.service.ts
@@ -35643,7 +35663,7 @@ export class RxjsProductsComponent implements OnInit, OnDestroy {
 }
 ```
 
-**4. Signals Store (Modern Angular 17+):**
+**4. Signals Store:**
 
 ```typescript
 // Signals Store Implementation
@@ -39211,7 +39231,7 @@ import { environment } from '../environments/environment';
 export class AppModule { }
 ```
 
-**For Standalone applications (app.config.ts) - Angular 17+:**
+**For standalone applications (app.config.ts):**
 ```typescript
 import { ApplicationConfig, isDevMode } from '@angular/core';
 import { provideServiceWorker } from '@angular/service-worker';
@@ -39492,7 +39512,7 @@ const resourceStrategies = {
   ]
 };
 
-// 2. Modern Caching with Workbox (Angular 17+)
+// 2. Modern Caching with Workbox
 import { Workbox } from 'workbox-window';
 
 if ('serviceWorker' in navigator) {
@@ -39810,7 +39830,7 @@ async function cacheFirst(request) {
 
 **6. Modern Cache Management Strategies:**
 
-**Workbox Integration (Angular 17+):**
+**Workbox Integration:**
 ```typescript
 // Install Workbox for advanced caching
 // npm install workbox-webpack-plugin workbox-window
@@ -40094,7 +40114,7 @@ function getCacheStrategy(request) {
 - ✅ **Implement progressive enhancement** for offline features
 - ✅ **Cache user preferences** for personalized experience
 
-**Modern PWA Caching Best Practices (2024):**
+**Modern PWA Caching Best Practices (2026):**
 
 **1. Strategy Selection Matrix:**
 ```typescript
@@ -40182,7 +40202,7 @@ src/
 └── styles/
 ```
 
-**2. Standalone Components Structure (Modern Angular 14+):**
+**2. Standalone Components Structure (Modern Angular):**
 ```typescript
 // Feature with standalone components
 export const USER_ROUTES: Routes = [
@@ -43716,7 +43736,7 @@ export class DashboardComponent {
 }
 ```
 
-**4. Deferred Views (@defer) - Angular 17+:**
+**4. Deferred Views (@defer):**
 
 ```typescript
 @Component({
@@ -44626,281 +44646,1394 @@ src/app/
 
 ### 186. How does TypeScript enhance Angular development?
 
+**Answer:**
+TypeScript is the default language for Angular. It adds static typing, modern ECMAScript features, and compile-time checks that catch bugs before runtime.
+
+**Key benefits:**
+- **Type-safe templates** — strict template checking catches binding errors at build time
+- **Interfaces and generics** — model API responses, form values, and store state
+- **Decorators** — `@Component`, `@Injectable`, `input()`, `output()` rely on TypeScript metadata
+- **Refactoring confidence** — rename symbols across templates and TypeScript safely
+- **IDE support** — autocomplete for injected services, route params, and signal types
+
+```typescript
+interface User {
+  id: string;
+  name: string;
+  role: 'admin' | 'user';
+}
+
+@Injectable({ providedIn: 'root' })
+export class UserService {
+  private readonly http = inject(HttpClient);
+
+  getUser(id: string) {
+    return this.http.get<User>(`/api/users/${id}`);
+  }
+}
+```
+
+**2026 best practice:** Enable `strict` mode in `tsconfig.json` and use `inject()` return types rather than `any`.
+
 [Back to TypeScript Integration](#typescript-integration)
 
 ### 187. What are Angular decorators and how do they work?
+
+**Answer:**
+Decorators are TypeScript metadata annotations that tell the Angular compiler how to process classes. See also [Question 11](#11-what-are-angular-decorators-and-how-do-they-work) for the full lifecycle overview.
+
+**Common decorators in 2026:**
+| Decorator / API | Purpose |
+|----------------|---------|
+| `@Component` | Defines a component (selector, template, imports) |
+| `@Directive` / `@Pipe` | Attribute/structural behavior or transforms |
+| `@Injectable` | Marks a class for DI |
+| `input()` / `output()` | Signal-based component API (preferred over `@Input`/`@Output`) |
+| `@HostListener` / `@HostBinding` | React to or bind host DOM events/properties |
+
+```typescript
+@Component({
+  selector: 'app-user-card',
+  imports: [CommonModule],
+  template: `<h2>{{ name() }}</h2>`
+})
+export class UserCardComponent {
+  name = input.required<string>();
+  selected = output<User>();
+}
+```
+
+Angular reads decorator metadata at compile time to build the component definition (`ɵcmp`).
 
 [Back to TypeScript Integration](#typescript-integration)
 
 ### 188. How do you use TypeScript interfaces in Angular?
 
+**Answer:**
+Interfaces define contracts for data shapes without generating runtime code — ideal for API models, form values, and service contracts.
+
+```typescript
+export interface Product {
+  id: string;
+  title: string;
+  price: number;
+  tags?: string[];
+}
+
+@Component({ /* ... */ })
+export class ProductListComponent {
+  private readonly api = inject(ProductApiService);
+  products = signal<Product[]>([]);
+
+  ngOnInit() {
+    this.api.getAll().subscribe(data => this.products.set(data));
+  }
+}
+```
+
+**Tips:**
+- Use `interface` for object shapes; use `type` for unions/intersections
+- Prefer `readonly` properties for immutable view models
+- Share interfaces via a `models/` or `@app/core/models` barrel
+- Pair with generics on `HttpClient.get<T>()` for end-to-end type safety
+
 [Back to TypeScript Integration](#typescript-integration)
 
 ### 189. What are generic types and how do you use them in Angular?
+
+**Answer:**
+Generics let you write reusable, type-safe code parameterized by a type argument.
+
+```typescript
+// Generic API wrapper
+@Injectable({ providedIn: 'root' })
+export class ApiService {
+  private http = inject(HttpClient);
+
+  get<T>(url: string) {
+    return this.http.get<T>(url);
+  }
+}
+
+// Generic state helper
+export class PaginatedState<T> {
+  items = signal<T[]>([]);
+  page = signal(1);
+  total = signal(0);
+}
+
+// Generic form control factory
+function createIdControl<T extends { id: string }>(entity: T) {
+  return new FormControl(entity.id, Validators.required);
+}
+```
+
+Use generics in services, stores, pipes (`PipeTransform`), and reusable components (`TableComponent<T>`).
 
 [Back to TypeScript Integration](#typescript-integration)
 
 ### 190. How do you implement type-safe HTTP requests?
 
+**Answer:**
+Combine typed interfaces, `HttpClient` generics, and response mapping.
+
+```typescript
+interface CreateOrderDto {
+  productId: string;
+  quantity: number;
+}
+
+interface Order {
+  id: string;
+  status: 'pending' | 'shipped';
+}
+
+@Injectable({ providedIn: 'root' })
+export class OrderService {
+  private http = inject(HttpClient);
+
+  create(dto: CreateOrderDto) {
+    return this.http.post<Order>('/api/orders', dto);
+  }
+
+  list() {
+    return this.http.get<Order[]>('/api/orders');
+  }
+}
+```
+
+**Additional techniques:**
+- Use **Zod** or runtime validators when API contracts are unreliable
+- Map DTOs to domain models with pure mapper functions
+- Type interceptors with `HttpInterceptorFn` and `HttpRequest<unknown>`
+- Use `httpResource()` (Angular 19+) for signal-based, typed HTTP state
+
 [Back to TypeScript Integration](#typescript-integration)
 
 ### 191. What are utility types in TypeScript?
+
+**Answer:**
+Built-in type transforms for common patterns:
+
+| Utility | Use case |
+|---------|----------|
+| `Partial<T>` | Optional fields for update DTOs |
+| `Required<T>` | Ensure all fields present |
+| `Pick<T, K>` | Select subset of properties |
+| `Omit<T, K>` | Exclude properties |
+| `Record<K, V>` | Dictionary/map types |
+| `ReturnType<F>` | Infer function return type |
+
+```typescript
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+type UserUpdate = Partial<Pick<User, 'name' | 'email'>>;
+type UserListItem = Pick<User, 'id' | 'name'>;
+```
+
+Useful in Angular for form models, store patches, and API layer typing.
 
 [Back to TypeScript Integration](#typescript-integration)
 
 ### 192. How do you use enums in Angular?
 
+**Answer:**
+Enums define a fixed set of named constants. In templates, expose them via component properties.
+
+```typescript
+export enum OrderStatus {
+  Pending = 'PENDING',
+  Shipped = 'SHIPPED',
+  Cancelled = 'CANCELLED',
+}
+
+@Component({
+  template: `
+    @switch (status()) {
+      @case (OrderStatus.Pending) { <span>Pending</span> }
+      @case (OrderStatus.Shipped) { <span>Shipped</span> }
+    }
+  `
+})
+export class OrderBadgeComponent {
+  readonly OrderStatus = OrderStatus; // expose to template
+  status = input.required<OrderStatus>();
+}
+```
+
+**2026 note:** Many teams prefer `as const` objects or string union types over numeric enums for better tree-shaking and simpler JSON serialization.
+
 [Back to TypeScript Integration](#typescript-integration)
 
 ### 193. What is type assertion and type guards?
+
+**Answer:**
+**Type assertion** tells the compiler to treat a value as a specific type (`value as User`). Use sparingly — it bypasses safety.
+
+**Type guards** narrow types at runtime:
+
+```typescript
+function isUser(value: unknown): value is User {
+  return typeof value === 'object' && value !== null && 'id' in value;
+}
+
+function handlePayload(data: unknown) {
+  if (isUser(data)) {
+    console.log(data.name); // typed as User
+  }
+}
+```
+
+In Angular, use guards in resolvers, interceptors, and when parsing `localStorage` JSON. Prefer `unknown` over `any` at boundaries.
 
 [Back to TypeScript Integration](#typescript-integration)
 
 ### 194. How do you handle optional properties?
 
+**Answer:**
+Mark optional fields with `?` or `| undefined`, and handle absence explicitly.
+
+```typescript
+interface Profile {
+  name: string;
+  avatarUrl?: string;
+}
+
+@Component({ template: `
+  @if (profile().avatarUrl; as url) {
+    <img [src]="url" alt="Avatar" />
+  } @else {
+    <span class="placeholder">{{ initials() }}</span>
+  }
+`})
+export class AvatarComponent {
+  profile = input.required<Profile>();
+  initials = computed(() => this.profile().name.slice(0, 2).toUpperCase());
+}
+```
+
+Enable `exactOptionalPropertyTypes` in strict TS configs to distinguish missing vs explicitly `undefined`.
+
 [Back to TypeScript Integration](#typescript-integration)
 
 ### 195. What are mapped types and conditional types?
+
+**Answer:**
+**Mapped types** transform each property of a type. **Conditional types** select types based on a condition.
+
+```typescript
+// Make all properties nullable
+type Nullable<T> = { [K in keyof T]: T[K] | null };
+
+// Extract observable inner type
+type UnwrapObservable<T> = T extends Observable<infer U> ? U : T;
+
+// Form model from interface
+type FormModel<T> = {
+  [K in keyof T]: FormControl<T[K] | null>;
+};
+```
+
+Useful for building typed form factories, store selectors, and generic utility libraries in large Angular apps.
 
 [Back to TypeScript Integration](#typescript-integration)
 
 ### 196. How do you configure Angular build process?
 
+**Answer:**
+Modern Angular uses the **`application` builder** (`@angular-devkit/build-angular:application`) defined in `angular.json`.
+
+```json
+{
+  "projects": {
+    "my-app": {
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:application",
+          "options": {
+            "outputPath": "dist/my-app",
+            "index": "src/index.html",
+            "browser": "src/main.ts",
+            "tsConfig": "tsconfig.app.json",
+            "assets": ["src/assets"],
+            "styles": ["src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [{ "type": "initial", "maximumWarning": "500kB" }],
+              "outputHashing": "all"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+Key CLI commands: `ng build`, `ng build --configuration production`, `ng serve`.
+
 [Back to Build and Deployment](#build-and-deployment)
 
 ### 197. What are build optimization techniques?
+
+**Answer:**
+- **Lazy loading** routes with `loadComponent` / `loadChildren`
+- **`@defer`** blocks for below-the-fold UI
+- **OnPush** + signals to minimize change detection
+- **Tree-shaking** — import only needed symbols (no barrel-importing entire libraries)
+- **Image optimization** — `NgOptimizedImage` with `priority` and `loading="lazy"`
+- **Remove Zone.js** when using `provideZonelessChangeDetection()`
+- **Analyze bundles** with `ng build --stats-json` and webpack-bundle-analyzer
 
 [Back to Build and Deployment](#build-and-deployment)
 
 ### 198. How do you set up budgets and source maps?
 
+**Answer:**
+**Budgets** warn or fail builds when bundles exceed size limits:
+
+```json
+"budgets": [
+  { "type": "initial", "maximumWarning": "500kB", "maximumError": "1MB" },
+  { "type": "anyComponentStyle", "maximumWarning": "4kB" }
+]
+```
+
+**Source maps:**
+- `sourceMap: true` in development for debugging
+- `sourceMap: { scripts: true, styles: false, hidden: true }` in production — upload to error tracker, don't serve publicly
+
 [Back to Build and Deployment](#build-and-deployment)
 
 ### 199. What is strict TypeScript mode?
+
+**Answer:**
+`"strict": true` in `tsconfig.json` enables a suite of checks: `strictNullChecks`, `noImplicitAny`, `strictFunctionTypes`, etc.
+
+**Angular-specific strict flags** in `angularCompilerOptions`:
+```json
+{
+  "angularCompilerOptions": {
+    "strictTemplates": true,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true
+  }
+}
+```
+
+Benefits: fewer runtime `undefined` errors, safer templates, better refactoring. Enable early in greenfield projects; migrate legacy apps incrementally.
 
 [Back to Build and Deployment](#build-and-deployment)
 
 ### 200. How do you implement environment configurations?
 
+**Answer:**
+Modern Angular apps use **build-time file replacement** or **runtime injection** instead of the old `environment.ts` pattern.
+
+**Option 1 — file replacement (angular.json):**
+```json
+"fileReplacements": [{
+  "replace": "src/environments/environment.ts",
+  "with": "src/environments/environment.prod.ts"
+}]
+```
+
+**Option 2 — injection token (recommended for runtime flexibility):**
+```typescript
+export const APP_CONFIG = new InjectionToken<AppConfig>('app.config');
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    { provide: APP_CONFIG, useValue: { apiUrl: 'https://api.example.com' } }
+  ]
+};
+```
+
+**Option 3 — use `import.meta` or server-injected `window.__ENV__` for containerized deployments.
+
 [Back to Build and Deployment](#build-and-deployment)
 
 ### 201. What are Angular build targets?
+
+**Answer:**
+Build targets in `angular.json` define CLI tasks under `architect`:
+
+| Target | Purpose |
+|--------|---------|
+| `build` | Compile application/library |
+| `serve` | Dev server with HMR |
+| `test` | Unit tests (Karma/Jest/Vitest) |
+| `lint` | ESLint |
+| `extract-i18n` | Extract translation messages |
+| `server` / `prerender` | SSR and static generation |
+
+Run with `ng run <project>:<target>[:configuration]`.
 
 [Back to Build and Deployment](#build-and-deployment)
 
 ### 202. How do you optimize for production builds?
 
+**Answer:**
+- `ng build --configuration production` enables minification, tree-shaking, and hashing
+- Set `outputHashing: "all"` for cache busting
+- Remove `console.log` via build optimizer or ESLint rule
+- Enable **SSR/prerender** for SEO-critical pages
+- Use **CDN** for static assets
+- Configure **service worker** for caching (see Question 169)
+- Audit with Lighthouse and Angular DevTools
+
 [Back to Build and Deployment](#build-and-deployment)
 
 ### 203. What is differential loading?
+
+**Answer:**
+Differential loading (serving separate ES5 and ES2015+ bundles) was **removed in Angular 12**. Modern Angular targets evergreen browsers only and ships a single optimized ES2022+ bundle.
+
+**Historical context:** It allowed older browsers to get transpiled code while modern browsers got smaller, untranspiled bundles. Today, set `browserslist` to your supported browsers and let esbuild handle downleveling if needed.
 
 [Back to Build and Deployment](#build-and-deployment)
 
 ### 204. How do you implement build-time optimizations?
 
+**Answer:**
+- **esbuild** (default in application builder) for fast compilation
+- **Ahead-of-Time (AOT)** compilation — always on in production
+- **Tree-shaking** unused exports
+- **`@angular/localize`** for i18n message extraction at build time
+- **Prerendering** static routes at build time
+- **Inline critical CSS** for SSR apps
+- Custom **webpack/esbuild plugins** only when necessary (prefer official builder options)
+
 [Back to Build and Deployment](#build-and-deployment)
 
 ### 205. What are build analyzers and how to use them?
+
+**Answer:**
+Generate a stats file and visualize bundle composition:
+
+```bash
+ng build --configuration production --stats-json
+npx webpack-bundle-analyzer dist/my-app/stats.json
+```
+
+Look for:
+- Oversized third-party libraries (import subsets or alternatives)
+- Duplicate modules across lazy chunks
+- Accidentally eager-loaded feature code
+
+Also use **Source Map Explorer** and Chrome DevTools **Coverage** tab.
 
 [Back to Build and Deployment](#build-and-deployment)
 
 ### 206. How do you implement accessibility in Angular?
 
+**Answer:**
+- Use **semantic HTML** (`<button>`, `<nav>`, `<main>`, headings in order)
+- Add **ARIA** only when native semantics are insufficient
+- Ensure **keyboard navigation** for all interactive elements
+- Maintain **color contrast** (WCAG 2.1 AA minimum)
+- Use **Angular CDK a11y** utilities (`FocusMonitor`, `LiveAnnouncer`)
+- Test with screen readers (NVDA, VoiceOver) and axe DevTools
+- Use `@if` / `@for` — they preserve accessibility better than manual DOM manipulation
+
 [Back to Accessibility and CDK](#accessibility-and-cdk)
 
 ### 207. What are CDK a11y utilities (`FocusMonitor`, `LiveAnnouncer`)?
+
+**Answer:**
+**FocusMonitor** — tracks focus origin (keyboard vs mouse vs touch) to apply focus styles appropriately.
+
+```typescript
+@Component({ /* ... */ })
+export class DialogComponent {
+  private focusMonitor = inject(FocusMonitor);
+  private el = inject(ElementRef);
+
+  ngAfterViewInit() {
+    this.focusMonitor.monitor(this.el);
+  }
+  ngOnDestroy() {
+    this.focusMonitor.stopMonitoring(this.el);
+  }
+}
+```
+
+**LiveAnnouncer** — announces dynamic content changes to screen readers:
+
+```typescript
+private liveAnnouncer = inject(LiveAnnouncer);
+
+onSave() {
+  this.liveAnnouncer.announce('Changes saved successfully');
+}
+```
 
 [Back to Accessibility and CDK](#accessibility-and-cdk)
 
 ### 208. How do you use CDK Overlay/Portals?
 
+**Answer:**
+CDK Overlay renders floating panels (tooltips, menus, dialogs) above the page.
+
+```typescript
+@Component({ /* ... */ })
+export class MenuTriggerComponent {
+  private overlay = inject(Overlay);
+  private vcr = inject(ViewContainerRef);
+
+  open() {
+    const overlayRef = this.overlay.create({
+      positionStrategy: this.overlay.position()
+        .flexibleConnectedTo(this.trigger)
+        .withPositions([{ originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top' }]),
+      scrollStrategy: this.overlay.scrollStrategies.reposition(),
+      hasBackdrop: true,
+    });
+    const portal = new ComponentPortal(MenuComponent, this.vcr);
+    overlayRef.attach(portal);
+  }
+}
+```
+
+Angular Material dialogs, menus, and tooltips are built on CDK Overlay.
+
 [Back to Accessibility and CDK](#accessibility-and-cdk)
 
 ### 209. What are positioning and scroll strategies?
+
+**Answer:**
+**Position strategies** control where an overlay appears relative to its origin:
+- `global()` — centered on screen (modals)
+- `flexibleConnectedTo()` — anchored to a trigger element (dropdowns)
+
+**Scroll strategies:**
+- `reposition()` — moves overlay with scroll (default for dropdowns)
+- `block()` — prevents background scroll (modals)
+- `close()` — dismisses overlay on scroll
+- `noop()` — no scroll handling
+
+Choose based on UX: modals should block scroll; tooltips should reposition.
 
 [Back to Accessibility and CDK](#accessibility-and-cdk)
 
 ### 210. How do you implement keyboard navigation?
 
+**Answer:**
+- Tab order follows DOM order — avoid positive `tabindex` values
+- Implement **arrow key navigation** in lists/menus (CDK `ListKeyManager`)
+- **Escape** closes overlays/dialogs
+- **Enter/Space** activates buttons
+- Trap focus inside modals (CDK `FocusTrap` or Material Dialog)
+- Provide visible **focus indicators** (`:focus-visible`)
+
+```typescript
+@HostListener('keydown', ['$event'])
+onKeydown(event: KeyboardEvent) {
+  if (event.key === 'Escape') this.close();
+}
+```
+
 [Back to Accessibility and CDK](#accessibility-and-cdk)
 
 ### 211. What are ARIA attributes and how to use them?
+
+**Answer:**
+ARIA supplements HTML when native elements lack semantics:
+
+| Attribute | Use |
+|-----------|-----|
+| `aria-label` | Accessible name when visible label is missing |
+| `aria-labelledby` | Reference another element as label |
+| `aria-describedby` | Link to helper/error text |
+| `aria-expanded` | Toggle button / accordion state |
+| `aria-live="polite"` | Announce dynamic updates |
+| `role="alert"` | Important status messages |
+
+**Rule:** No ARIA is better than bad ARIA. Prefer `<button>` over `<div role="button">`.
 
 [Back to Accessibility and CDK](#accessibility-and-cdk)
 
 ### 212. How do you handle focus management?
 
+**Answer:**
+- **Move focus** to the dialog heading when a modal opens
+- **Restore focus** to the trigger element when it closes
+- Use `cdkFocusInitial` to set initial focus
+- Prevent focus from escaping modals (`cdkTrapFocus`)
+- After deleting a list item, move focus to the next item or container
+
+Material Dialog handles most of this automatically; custom overlays need manual management.
+
 [Back to Accessibility and CDK](#accessibility-and-cdk)
 
 ### 213. What are screen reader considerations?
+
+**Answer:**
+- Provide **text alternatives** for icons (`aria-label` or visually hidden text)
+- Announce **loading states** and **errors** via `LiveAnnouncer`
+- Don't rely on color alone to convey meaning
+- Keep **heading hierarchy** logical (h1 → h2 → h3)
+- Avoid `aria-hidden="true"` on interactive content
+- Test with VoiceOver (macOS/iOS) and NVDA (Windows)
 
 [Back to Accessibility and CDK](#accessibility-and-cdk)
 
 ### 214. How do you test accessibility?
 
+**Answer:**
+- **Automated:** axe-core in Cypress/Playwright, Lighthouse accessibility audit
+- **Manual:** keyboard-only navigation, screen reader walkthrough
+- **Unit:** verify ARIA attributes are set correctly
+
+```typescript
+it('should have accessible button', async () => {
+  const { container } = await render(MyComponent);
+  const results = await axe(container);
+  expect(results).toHaveNoViolations();
+});
+```
+
+Run a11y checks in CI to prevent regressions.
+
 [Back to Accessibility and CDK](#accessibility-and-cdk)
 
 ### 215. What are CDK layout utilities?
+
+**Answer:**
+`@angular/cdk/layout` provides responsive breakpoint observation:
+
+```typescript
+@Component({ /* ... */ })
+export class ResponsiveComponent {
+  private breakpointObserver = inject(BreakpointObserver);
+  isHandset = toSignal(
+    this.breakpointObserver.observe(Breakpoints.Handset).pipe(map(r => r.matches)),
+    { initialValue: false }
+  );
+}
+```
+
+Use for adaptive layouts without duplicating CSS media queries in TypeScript logic.
 
 [Back to Accessibility and CDK](#accessibility-and-cdk)
 
 ### 216. What are directive input coercion and best practices?
 
+**Answer:**
+Input coercion automatically converts string attribute values to the correct type (boolean, number).
+
+```typescript
+@Directive({ selector: '[appDisabled]' })
+export class DisabledDirective {
+  @Input({ transform: booleanAttribute }) disabled = false;
+  @Input({ transform: numberAttribute }) tabIndex = 0;
+}
+```
+
+**Best practices:**
+- Use `booleanAttribute` for boolean inputs (empty attribute = `true`)
+- Use `numberAttribute` for numeric inputs
+- Prefer `input()` signal API with transforms in new code
+- Document expected input types in component libraries
+
 [Back to Modern Angular Features](#modern-angular-features)
 
 ### 217. How do you use `takeUntilDestroyed` and `DestroyRef`?
+
+**Answer:**
+`takeUntilDestroyed()` automatically unsubscribes when the injection context is destroyed — no manual `ngOnDestroy` boilerplate.
+
+```typescript
+@Component({ /* ... */ })
+export class SearchComponent {
+  private http = inject(HttpClient);
+  private destroyRef = inject(DestroyRef);
+
+  constructor() {
+    this.searchTerm$.pipe(
+      debounceTime(300),
+      switchMap(term => this.http.get(`/api/search?q=${term}`)),
+      takeUntilDestroyed() // unsubscribes when component is destroyed
+    ).subscribe(results => this.results.set(results));
+  }
+}
+```
+
+Pass `destroyRef` explicitly when subscribing outside the constructor. Prefer signals + `httpResource` or `async` pipe when possible to avoid manual subscriptions entirely.
 
 [Back to Modern Angular Features](#modern-angular-features)
 
 ### 218. What are pure vs impure pipes and their performance impact?
 
+**Answer:**
+**Pure pipes** (default) run only when primitive inputs change or object references change. **Impure pipes** run on every change detection cycle.
+
+```typescript
+@Pipe({ name: 'sortByName' }) // pure (default)
+export class SortByNamePipe implements PipeTransform {
+  transform(items: Item[]) {
+    return [...items].sort((a, b) => a.name.localeCompare(b.name));
+  }
+}
+
+@Pipe({ name: 'liveTimer', pure: false }) // impure — use sparingly
+export class LiveTimerPipe implements PipeTransform {
+  transform(start: Date) { return Date.now() - start.getTime(); }
+}
+```
+
+**Best practice:** Prefer `computed()` signals over impure pipes. Impure pipes can cause performance issues in large templates.
+
 [Back to Modern Angular Features](#modern-angular-features)
 
 ### 219. How does `AsyncPipe` work with OnPush?
 
+**Answer:**
+`AsyncPipe` subscribes to an Observable, returns the latest value, and **marks the component for check** when a new value arrives — making it ideal for OnPush components.
+
+```typescript
+@Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `
+    @if (users$ | async; as users) {
+      @for (user of users; track user.id) {
+        <app-user-card [user]="user" />
+      }
+    }
+  `
+})
+export class UserListComponent {
+  users$ = inject(UserService).getAll();
+}
+```
+
+With signals, prefer `toSignal()` or direct signal reads instead of `AsyncPipe`.
+
 [Back to Modern Angular Features](#modern-angular-features)
 
-### 220. What are the new control flow features in Angular 17?
+### 220. What are built-in control flow features (`@if`, `@for`, `@defer`)?
+
+**Answer:**
+See the full answer in [Question 104](#104-what-are-built-in-control-flow-features-if-for-defer). Built-in control flow (`@if`, `@for`, `@switch`, `@defer`) is the standard template syntax in 2026 — structural directives (`*ngIf`, `*ngFor`) are legacy.
+
+**Quick reference:**
+```html
+@if (user(); as u) {
+  <p>{{ u.name }}</p>
+} @else {
+  <p>Not logged in</p>
+}
+
+@for (item of items(); track item.id) {
+  <li>{{ item.name }}</li>
+} @empty {
+  <li>No items</li>
+}
+
+@defer (on viewport) {
+  <heavy-chart />
+} @placeholder {
+  <div class="skeleton" />
+}
+```
 
 [Back to Modern Angular Features](#modern-angular-features)
 
 ### 221. How do you use `@defer` for lazy loading?
 
+**Answer:**
+`@defer` lazily loads template blocks and their dependencies when a trigger condition is met.
+
+**Triggers:** `on idle`, `on viewport`, `on interaction`, `on hover`, `on immediate`, `on timer(2s)`, `when condition`
+
+```html
+@defer (on viewport) {
+  <app-analytics-dashboard />
+} @placeholder (minimum 500ms) {
+  <app-skeleton />
+} @loading (after 200ms) {
+  <spinner />
+} @error {
+  <p>Failed to load dashboard</p>
+}
+```
+
+Benefits: smaller initial bundle, faster First Contentful Paint. Combine with lazy routes for maximum code splitting.
+
 [Back to Modern Angular Features](#modern-angular-features)
 
 ### 222. What are signal inputs and outputs?
+
+**Answer:**
+`input()` and `output()` replace `@Input()` and `@Output()` with a signal-based API (stable since Angular 17.1+).
+
+```typescript
+@Component({
+  selector: 'app-counter',
+  template: `
+    <p>Count: {{ count() }}</p>
+    <button (click)="increment.emit()">+</button>
+  `
+})
+export class CounterComponent {
+  count = input(0);                    // optional with default
+  label = input.required<string>();    // required
+  increment = output<void>();            // EventEmitter replacement
+
+  doubled = computed(() => this.count() * 2);
+}
+```
+
+Benefits: type-safe, works naturally with `computed()`, integrates with `OnPush` and zoneless CD.
 
 [Back to Modern Angular Features](#modern-angular-features)
 
 ### 223. How do you migrate from NgModules to standalone?
 
+**Answer:**
+1. Run `ng update @angular/core` — schematics convert many patterns automatically
+2. Add `imports: [...]` to each component/directive/pipe
+3. Replace `NgModule` providers with `bootstrapApplication` providers or route-level `providers`
+4. Convert `loadChildren: () => import('./module')` to `loadComponent` or `loadChildren` with route files
+5. Set `standalone: false` only on components that must remain in legacy modules
+6. Remove empty modules incrementally
+
+```bash
+ng generate @angular/core:standalone
+```
+
+Migrate feature-by-feature; keep the app buildable at each step.
+
 [Back to Modern Angular Features](#modern-angular-features)
 
 ### 224. What are the benefits of standalone APIs?
+
+**Answer:**
+- **Simpler mental model** — no module import/export graph
+- **Better tree-shaking** — only imported dependencies are bundled
+- **Easier lazy loading** — `loadComponent` without wrapper modules
+- **Faster bootstrapping** — `bootstrapApplication` with functional providers
+- **Default in Angular 19+** — aligns with framework direction
+- **Functional guards/interceptors** — composable, testable, tree-shakable
 
 [Back to Modern Angular Features](#modern-angular-features)
 
 ### 225. How do you handle migration strategies?
 
+**Answer:**
+- **Incremental migration** — one feature module at a time
+- **Strangler fig pattern** — new features standalone, legacy modules untouched until refactored
+- **Automated schematics** — `ng update`, `ng generate @angular/core:control-flow`
+- **CI gates** — lint rules preventing new NgModule declarations
+- **Test after each step** — unit, e2e, and visual regression
+- **Document breaking changes** per version in `CHANGELOG.md`
+
 [Back to Modern Angular Features](#modern-angular-features)
 
 ### 226. How do you implement global error handling?
+
+**Answer:**
+Provide a custom `ErrorHandler` and HTTP interceptor for centralized error processing.
+
+```typescript
+@Injectable()
+export class GlobalErrorHandler implements ErrorHandler {
+  private logger = inject(LoggingService);
+  private snackBar = inject(MatSnackBar);
+
+  handleError(error: unknown): void {
+    this.logger.error(error);
+    this.snackBar.open('Something went wrong', 'Dismiss', { duration: 5000 });
+  }
+}
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    { provide: ErrorHandler, useClass: GlobalErrorHandler },
+  ]
+};
+```
+
+Also handle unhandled promise rejections and RxJS errors via `catchError` in root effects.
 
 [Back to Error Handling and Debugging](#error-handling-and-debugging)
 
 ### 227. What is `ErrorHandler` and router errors?
 
+**Answer:**
+`ErrorHandler` catches unhandled exceptions during change detection and rendering.
+
+**Router errors** occur in guards, resolvers, and lazy-load failures:
+
+```typescript
+export const routes: Routes = [{
+  path: 'admin',
+  canActivate: [authGuard],
+  loadComponent: () => import('./admin.component').then(m => m.AdminComponent),
+}];
+
+// In app component or service
+this.router.events.pipe(
+  filter((e): e is NavigationError => e instanceof NavigationError)
+).subscribe(e => console.error('Navigation failed', e.error));
+```
+
+Use a global handler for unexpected errors; handle expected router failures in the UI (redirect to login, show 404).
+
 [Back to Error Handling and Debugging](#error-handling-and-debugging)
 
 ### 228. How do you handle async errors?
+
+**Answer:**
+- **RxJS:** `catchError`, `retry`, `retryWhen` operators
+- **Promises:** `try/catch` with `async/await`
+- **Signals:** `resource()` and `httpResource()` expose `.error()` and `.isLoading()`
+- **Templates:** `@if (error())` blocks for user-facing messages
+
+```typescript
+data = resource({
+  loader: () => fetch('/api/data').then(r => {
+    if (!r.ok) throw new Error('Failed');
+    return r.json();
+  })
+});
+```
+
+Never swallow errors silently — log and surface appropriately.
 
 [Back to Error Handling and Debugging](#error-handling-and-debugging)
 
 ### 229. What are debugging techniques in Angular?
 
+**Answer:**
+- **Angular DevTools** — component tree, profiler, signal inspection
+- **`ng.probe()`** (dev mode) — inspect component instances in console
+- **Source maps** — step through original TypeScript in DevTools
+- **`enableProdMode()` off** — verbose assertions in development
+- **RxJS `tap` operator** — trace stream values
+- **`effect()` with logging** — trace signal dependencies
+- **Augury / DevTools profiler** — identify slow change detection
+
 [Back to Error Handling and Debugging](#error-handling-and-debugging)
 
 ### 230. How do you use browser dev tools with Angular?
+
+**Answer:**
+- **Elements panel** — inspect component attributes (`ng-reflect-*` in dev mode)
+- **Console** — `ng.getComponent($0)` on selected element (Angular DevTools)
+- **Network tab** — inspect HTTP calls, timing, payloads
+- **Performance tab** — record change detection cycles
+- **Memory tab** — detect detached DOM nodes and subscription leaks
+- **Lighthouse** — performance, accessibility, SEO audits
 
 [Back to Error Handling and Debugging](#error-handling-and-debugging)
 
 ### 231. What are common Angular errors and solutions?
 
+**Answer:**
+| Error | Cause | Fix |
+|-------|-------|-----|
+| `NG0100` ExpressionChangedAfterItHasBeenChecked | Value changes after CD | Defer update to next tick or use signals |
+| `NG0201` No provider for X | Missing provider | Add to `providers` or `providedIn: 'root'` |
+| `NG0301` Export not found | Missing import in standalone component | Add to `imports` array |
+| `NG0912` Component ID collision | Duplicate component metadata | Ensure unique selectors/styles |
+| Standalone in NgModule | `standalone: true` default | Set `standalone: false` or remove from `declarations` |
+
 [Back to Error Handling and Debugging](#error-handling-and-debugging)
 
 ### 232. How do you implement logging strategies?
+
+**Answer:**
+- **Development:** `console` with structured objects, Redux DevTools for stores
+- **Production:** send to Sentry, Datadog, or Application Insights
+- **Correlation IDs** in HTTP interceptors for request tracing
+- **Log levels** — debug/info/warn/error with environment-based filtering
+- **Never log** tokens, passwords, or PII
+
+```typescript
+export const loggingInterceptor: HttpInterceptorFn = (req, next) => {
+  const start = performance.now();
+  return next(req).pipe(tap({
+    next: () => console.info(`[HTTP] ${req.method} ${req.url} ${performance.now() - start}ms`),
+    error: (err) => console.error(`[HTTP] ${req.method} ${req.url} failed`, err),
+  }));
+};
+```
 
 [Back to Error Handling and Debugging](#error-handling-and-debugging)
 
 ### 233. What are error boundaries in Angular?
 
+**Answer:**
+Angular doesn't have React-style error boundaries, but you can achieve similar patterns:
+
+- **Custom `ErrorHandler`** — global catch-all
+- **`@defer` `@error` blocks** — isolate lazy-loaded UI failures
+- **Try/catch in resolvers/guards** — return fallback routes
+- **Component-level `try/catch`** around risky operations
+- **`*ngComponentOutlet` with error template** for dynamic components
+
+For critical sections, wrap in a parent component that catches child failures and renders a fallback UI.
+
 [Back to Error Handling and Debugging](#error-handling-and-debugging)
 
 ### 234. How do you handle network errors?
+
+**Answer:**
+```typescript
+export const errorInterceptor: HttpInterceptorFn = (req, next) => {
+  return next(req).pipe(
+    retry({ count: 2, delay: 1000 }),
+    catchError((error: HttpErrorResponse) => {
+      if (error.status === 0) {
+        // Network offline
+      } else if (error.status === 401) {
+        inject(AuthService).logout();
+      } else if (error.status >= 500) {
+        inject(NotificationService).showError('Server error');
+      }
+      return throwError(() => error);
+    })
+  );
+};
+```
+
+Show user-friendly messages; log technical details server-side.
 
 [Back to Error Handling and Debugging](#error-handling-and-debugging)
 
 ### 235. What are debugging tools and extensions?
 
+**Answer:**
+- **Angular DevTools** (Chrome/Firefox extension)
+- **Redux DevTools** (with NgRx)
+- **Augury** (legacy, largely replaced by Angular DevTools)
+- **VS Code Angular Language Service** — template type checking
+- **Playwright/Cypress** — e2e debugging with trace viewer
+- **Source Map Explorer** — bundle analysis
+
 [Back to Error Handling and Debugging](#error-handling-and-debugging)
 
 ### 236. What are Angular security best practices?
+
+**Answer:**
+- Never bypass sanitization (`bypassSecurityTrust*`) without review
+- Use **HttpOnly, Secure cookies** for session tokens
+- Implement **CSP** headers
+- Validate input on the server — client validation is UX only
+- Keep dependencies updated (`npm audit`, `ng update`)
+- Use **CSRF tokens** for state-changing requests
+- Avoid storing secrets in frontend code or `localStorage`
 
 [Back to Security](#security)
 
 ### 237. How do you prevent XSS attacks?
 
+**Answer:**
+Angular sanitizes values bound to DOM by default. Dangerous patterns:
+
+```typescript
+// ❌ Never do this with user input
+this.sanitizer.bypassSecurityTrustHtml(userInput);
+
+// ✅ Let Angular sanitize
+<div>{{ userComment }}</div>
+
+// ✅ Use DomSanitizer only for trusted, reviewed content
+```
+
+Also set `Content-Security-Policy` headers and avoid `eval()`, `innerHTML` with untrusted data, and injecting scripts from URL parameters.
+
 [Back to Security](#security)
 
 ### 238. What is Content Security Policy (CSP)?
+
+**Answer:**
+CSP is an HTTP header that restricts which resources the browser can load, mitigating XSS.
+
+```
+Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;
+```
+
+Angular supports **CSP-compatible builds** (no inline scripts). For `style-src 'unsafe-inline'`, use external stylesheets. Test CSP in staging before enforcing in production.
 
 [Back to Security](#security)
 
 ### 239. How do you handle authentication tokens securely?
 
+**Answer:**
+| Storage | Security | Recommendation |
+|---------|----------|----------------|
+| HttpOnly cookie | Best (not accessible to JS) | Preferred for session/JWT |
+| Memory (variable) | Good (lost on refresh) | Short-lived access tokens |
+| localStorage | Vulnerable to XSS | Avoid for sensitive tokens |
+
+Use **refresh token rotation**, short access token TTL, and attach tokens via interceptor — not URL query params.
+
 [Back to Security](#security)
 
 ### 240. What are CSRF attacks and prevention?
+
+**Answer:**
+CSRF tricks a user's browser into making authenticated requests to your API. Prevention:
+
+- **CSRF tokens** — server generates token, client sends in header (`X-CSRF-Token`)
+- **SameSite cookies** — `SameSite=Strict` or `Lax`
+- Angular's `HttpClient` supports `withXsrfConfiguration` for cookie-based CSRF protection
+
+```typescript
+provideHttpClient(withXsrfConfiguration({
+  cookieName: 'XSRF-TOKEN',
+  headerName: 'X-XSRF-TOKEN',
+}));
+```
 
 [Back to Security](#security)
 
 ### 241. How do you sanitize user input?
 
+**Answer:**
+- **Templates** — Angular auto-escapes `{{ }}` bindings
+- **DomSanitizer** — for HTML, URL, style, and resource URLs
+- **Server-side validation** — always validate and sanitize on the backend
+- **DOMPurify** — if you must render rich HTML from users
+
+Never trust client-side sanitization alone.
+
 [Back to Security](#security)
 
 ### 242. What are trusted types?
+
+**Answer:**
+Trusted Types is a browser security feature that restricts dangerous DOM sinks (`innerHTML`, `eval`) to only accept trusted, policy-created values.
+
+Angular supports Trusted Types in production builds. Define a policy:
+
+```typescript
+if (window.trustedTypes) {
+  window.trustedTypes.createPolicy('angular', {
+    createHTML: (s) => s // Angular handles sanitization internally
+  });
+}
+```
+
+Enable via CSP header: `Trusted-Types angular; require-trusted-types-for 'script'`.
 
 [Back to Security](#security)
 
 ### 243. How do you implement secure HTTP communication?
 
+**Answer:**
+- **HTTPS only** — enforce TLS, use HSTS header
+- **Certificate pinning** for mobile/hybrid apps
+- **Interceptors** for auth headers (never log tokens)
+- **Request signing** for sensitive APIs
+- **Rate limiting** on the server
+- Validate SSL certificates; don't disable cert checks in production
+
 [Back to Security](#security)
 
 ### 244. What are security headers?
+
+**Answer:**
+| Header | Purpose |
+|--------|---------|
+| `Strict-Transport-Security` | Force HTTPS |
+| `Content-Security-Policy` | Restrict resource loading |
+| `X-Content-Type-Options: nosniff` | Prevent MIME sniffing |
+| `X-Frame-Options: DENY` | Prevent clickjacking |
+| `Referrer-Policy` | Control referrer information |
+| `Permissions-Policy` | Restrict browser features |
+
+Configure on the server (nginx, CDN, or backend middleware).
 
 [Back to Security](#security)
 
 ### 245. How do you handle sensitive data?
 
+**Answer:**
+- Don't store secrets in frontend code or environment files committed to git
+- Mask sensitive fields in UI (credit cards, SSN)
+- Clear sensitive data from memory on logout
+- Use **field-level encryption** for highly sensitive client-side storage
+- Audit what data is logged, cached, and sent to analytics
+- Comply with GDPR/CCPA — consent, data minimization, right to deletion
+
 [Back to Security](#security)
 
 ### 246. How do you upgrade Angular versions?
+
+**Answer:**
+```bash
+# Check current version
+ng version
+
+# Update CLI globally
+npm install -g @angular/cli@latest
+
+# Update project (step through major versions)
+ng update @angular/core @angular/cli
+
+# Update other Angular packages
+ng update @angular/material
+```
+
+**Process:**
+1. Read the official update guide at `angular.dev/update`
+2. Update one major version at a time
+3. Fix breaking changes and run tests after each step
+4. Update TypeScript, Node.js, and third-party libs to compatible versions
 
 [Back to Migration and Upgrades](#migration-and-upgrades)
 
 ### 247. What are breaking changes to watch for?
 
+**Answer:**
+**Angular 19–21 key changes (2025–2026):**
+- **`standalone: true` is default** — components in NgModules need `standalone: false`
+- **Built-in control flow** replaces `*ngIf`, `*ngFor`, `*ngSwitch` (structural directives deprecated)
+- **`provideZonelessChangeDetection()`** stable (v20.2); default in v21+
+- **`@angular/animations` deprecated** — prefer CSS animations or new animate API
+- **`HttpClientModule` removed** — use `provideHttpClient()`
+- **NgModules deprecated** — migrate to standalone
+- **Signal inputs/outputs** replace decorator-based `@Input`/`@Output`
+- **`resource()` / `httpResource()`** for async signal state
+- **Karma default replaced** by Vitest/Jest in new projects
+
+Always read release notes before upgrading.
+
 [Back to Migration and Upgrades](#migration-and-upgrades)
 
 ### 248. How do you migrate from AngularJS to Angular?
+
+**Answer:**
+Legacy migration path (rare in 2026 new projects):
+
+1. **Hybrid approach** — use `@angular/upgrade` to run AngularJS and Angular side by side
+2. **Rewrite** — often faster for small apps; recommended for most cases in 2026
+3. **Incremental** — migrate route-by-route from AngularJS to Angular
+
+Tools: `ngUpgrade`, `angularjs-to-angular` migration guides. Plan for replacing `$scope`, directives, and AngularJS services with Angular equivalents.
 
 [Back to Migration and Upgrades](#migration-and-upgrades)
 
 ### 249. What are migration tools and strategies?
 
+**Answer:**
+| Tool | Purpose |
+|------|---------|
+| `ng update` | Automated dependency and schematic migrations |
+| `ng generate @angular/core:standalone` | Convert to standalone |
+| `ng generate @angular/core:control-flow` | Migrate to `@if`/`@for` |
+| `ng generate @angular/core:inject` | Convert constructor DI to `inject()` |
+| ESLint `@angular-eslint` | Enforce modern patterns |
+
+Strategy: automate what you can, test thoroughly, migrate incrementally.
+
 [Back to Migration and Upgrades](#migration-and-upgrades)
 
 ### 250. How do you handle deprecated APIs?
+
+**Answer:**
+1. **Check deprecation warnings** in build output and IDE
+2. **Read migration schematics** — `ng update` often auto-fixes
+3. **Replace incrementally:**
+
+| Deprecated | Replacement |
+|------------|-------------|
+| `*ngIf` / `*ngFor` | `@if` / `@for` |
+| `@Input()` / `@Output()` | `input()` / `output()` |
+| `HttpClientModule` | `provideHttpClient()` |
+| `NgModule` bootstrapping | `bootstrapApplication()` |
+| `@angular/animations` | CSS animations / new `animate` API |
+| `provideExperimentalZonelessChangeDetection` | `provideZonelessChangeDetection()` |
+| `NgZone.onStable` | `afterNextRender()` / `afterRender()` |
+
+Set a deprecation budget — fix warnings each sprint.
 
 [Back to Migration and Upgrades](#migration-and-upgrades)
 
 ### 251. What is ng update and how to use it?
 
+**Answer:**
+`ng update` analyzes dependencies and applies migration schematics.
+
+```bash
+# Preview changes
+ng update
+
+# Update specific packages
+ng update @angular/core @angular/cli
+
+# Force update when peer deps conflict (use carefully)
+ng update @angular/core --force
+
+# Migrate to control flow
+ng generate @angular/core:control-flow
+```
+
+Always commit before running, review the diff, and run the full test suite.
+
 [Back to Migration and Upgrades](#migration-and-upgrades)
 
 ### 252. How do you handle third-party library updates?
+
+**Answer:**
+- Check library compatibility with your Angular version on npm/GitHub
+- Update one library at a time
+- Read CHANGELOG for breaking changes
+- Use `npm outdated` or `ng update` to see available updates
+- Pin versions in `package.json` for stability; use Renovate/Dependabot for automated PRs
+- Run e2e tests after updating UI libraries (Material, PrimeNG, etc.)
 
 [Back to Migration and Upgrades](#migration-and-upgrades)
 
 ### 253. What are migration schematics?
 
+**Answer:**
+Schematics are automated code transforms run during `ng update` or `ng generate`.
+
+They can:
+- Rename imports and APIs
+- Convert NgModules to standalone
+- Migrate templates to new control flow
+- Update `tsconfig` and `angular.json` settings
+
+Located in `@angular/core/schematics` and third-party packages. You can write custom schematics for team-specific migrations.
+
 [Back to Migration and Upgrades](#migration-and-upgrades)
 
 ### 254. How do you test after migrations?
 
+**Answer:**
+1. **Unit tests** — `ng test` (all specs pass)
+2. **E2E tests** — critical user flows (login, checkout, etc.)
+3. **Visual regression** — screenshot comparison for UI libraries
+4. **Smoke test** in staging environment
+5. **Performance benchmark** — compare bundle size and Lighthouse scores
+6. **Manual exploratory testing** of migrated features
+
+Block the release if any critical-path test fails.
+
 [Back to Migration and Upgrades](#migration-and-upgrades)
 
 ### 255. What are rollback strategies?
+
+**Answer:**
+- **Git revert** the migration commit(s) — fastest rollback
+- **Keep previous Docker image** tagged and deployable
+- **Feature flags** — disable migrated features without full rollback
+- **Database migrations** — ensure backward-compatible schema changes
+- **Blue-green deployment** — switch traffic back to the previous environment
+- **Document rollback steps** before starting any major upgrade
+
+Always tag releases (`v2.1.0-pre-migration`) before upgrading.
 
 [Back to Migration and Upgrades](#migration-and-upgrades)
 

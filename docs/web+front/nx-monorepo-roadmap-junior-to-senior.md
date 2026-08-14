@@ -1040,3 +1040,54 @@ nx affected -t build test lint --base=HEAD~1
 | **Executors** | Runs built-in / inferred targets | Writes custom executors when needed | Inference plugins that replace boilerplate targets |
 | **CI** | Understands why CI uses affected | Tunes cache inputs, sets `--parallel` | Agents / DTE, PR vs main strategies, cache hit rate |
 | **Testing** | `nx test`, `nx e2e` | Affected test strategy, coverage thresholds | Flaky detection, distributing e2e across agents |
+
+---
+
+## Practical tasks by level
+
+Use these tasks to validate your real-world readiness at each level. Complete them in a fresh workspace (`npx create-nx-workspace@latest`) so there are no hidden shortcuts.
+
+---
+
+### Junior tasks
+
+1. **Bootstrap a workspace** — Create a new Nx workspace with `create-nx-workspace`, choose an application preset (React or Angular), and explore the generated folder structure. Identify `nx.json`, `project.json`, and `tsconfig.base.json`.
+2. **Run basic targets** — Run `nx build`, `nx serve`, `nx test`, and `nx lint` for the generated app. Read the terminal output and explain what each target produced.
+3. **Generate a library** — Use `nx g @nx/js:lib shared-utils` to scaffold a utility library. Export a simple helper function from it and import it in the app. Verify the build still passes.
+4. **View the project graph** — Run `nx graph` and open the browser view. Identify all projects and draw the dependency edges on paper.
+5. **Use `--dry-run`** — Run any generator with `--dry-run` and list the files it would create without touching the disk.
+6. **Read project config** — Run `nx show project <app-name> --web` and explain every target listed.
+7. **Add a new target** — Add a custom `greet` target to `project.json` that runs `echo Hello from Nx`. Execute it with `nx greet <app-name>`.
+8. **Fix a failing lint rule** — Intentionally write an unused variable, run `nx lint`, read the error, fix it, and confirm lint passes.
+9. **Run tests** — Write one unit test for your helper function and run `nx test shared-utils`. Make it fail, then fix it.
+10. **Explore built-in generators** — Run `nx list` and `nx list @nx/react` (or your preset plugin). List five generators and describe what each one creates.
+
+---
+
+### Middle tasks
+
+1. **Understand affected** — Make a change in `shared-utils`, then run `nx affected -t build test --base=main`. Explain which projects were included and why.
+2. **Configure cache inputs** — Add a `namedInput` that excludes `*.md` files from cache keys for the `test` target. Verify that changing a README does not invalidate the test cache.
+3. **Set `dependsOn`** — Configure the app's `build` target to `dependsOn` the library's `build` target. Confirm that running `nx build <app>` automatically builds the library first.
+4. **Add module boundary tags** — Tag two libraries (`scope:shared` and `scope:feature`). Configure `@nx/enforce-module-boundaries` to prevent `scope:shared` from importing `scope:feature`. Write a cross-boundary import and confirm lint catches it.
+5. **Write a workspace generator** — Scaffold a generator with `nx g @nx/plugin:generator my-component --project=tools`. Have it create a boilerplate React component file. Run it against a feature library.
+6. **Write a custom executor** — Create an executor that runs `tsc --noEmit` and reports success/failure. Wire it as a `typecheck` target on at least one project.
+7. **Configure parallel CI** — Set up a GitHub Actions (or similar) workflow that runs `nx affected -t lint test build --parallel=3`. Cache `node_modules` and `.nx/cache` between runs.
+8. **Buildable library** — Generate a buildable library (`--bundler=tsc`). Build it independently and inspect the `dist/` output. Import it in the app using the path alias and verify the final app build works.
+9. **Storybook integration** — Add Storybook to a UI library with `nx g @nx/storybook:configuration`. Write one story and run `nx storybook <lib>` successfully.
+10. **Tune `run-many`** — Use `nx run-many -t test --projects=tag:scope:shared` to run tests only for shared libraries. Add `--verbose` and inspect cache hit/miss output.
+
+---
+
+### Senior tasks
+
+1. **Self-hosted remote cache** — Configure Nx Cloud (or an S3/GCS remote cache) for the workspace. Prove cache sharing works by running a build on one machine, then running the same build on a second machine (or CI) and confirming a cache hit.
+2. **Distributed task execution** — Set up Nx Agents in a CI pipeline (GitHub Actions or similar). Run a full `nx affected -t build test lint` using at least two agent machines. Capture logs showing tasks distributed across agents.
+3. **Custom inference plugin** — Write an Nx plugin that uses `createNodes` to infer a `typecheck` target for every project that has a `tsconfig.json`, without adding anything to `project.json`. Publish it as a local package and register it in `nx.json`.
+4. **Module federation host + remote** — Scaffold a Module Federation workspace with one host app and two remote apps. Verify `nx serve` launches all three, that one remote can be swapped at runtime, and that `nx build` produces correct output manifests.
+5. **Workspace migration script** — Write an Nx migration (generator + `migrations.json`) that renames a config property across all `project.json` files in the workspace. Run it with `nx migrate --run-migrations` and verify idempotency.
+6. **`nx release` pipeline** — Configure `nx release` for a publishable library (version bump, changelog generation, npm publish to a local Verdaccio registry). Run the full release flow: `nx release version`, `nx release changelog`, `nx release publish`.
+7. **Architectural graph test** — Write a Jest test using `@nx/devkit` that asserts no project with `type:app` imports directly from another `type:app`. Run it in CI as a dedicated `graph-check` target.
+8. **Cache hit rate audit** — After 20 CI runs, inspect Nx Cloud analytics (or local cache logs) and identify the three targets with the lowest cache hit rate. Propose and implement input refinements that raise each rate above 80 %.
+9. **Multi-framework workspace** — Add a NestJS API and a React frontend to the same workspace. Share a `@scope/types` library (plain TypeScript) between them. Confirm both apps build independently and that affected works correctly when the shared lib changes.
+10. **Flaky test quarantine** — Identify a test that fails non-deterministically in CI. Implement a retry strategy (Jest `--retries` or Playwright retry), tag the test as `@flaky`, and configure CI to report flaky results separately without blocking the build.

@@ -7,6 +7,7 @@ Run from the **repository root** so relative paths resolve correctly.
 | Markdown | `npm run convert:md -- <file>` | PDF, HTML, DOCX, TXT → `.md` |
 | PDF | `npm run convert:pdf -- <file>` | Markdown or PDF → styled PDF |
 | Kindle | `npm run convert:mobi -- <paths...>` | Markdown, text, or PDF → MOBI (Calibre) |
+| DOCX | `npm run convert:docx -- <file.pdf>` | PDF → Word (.docx); LibreOffice if installed, else text extraction |
 
 `eng.traineddata` is the Tesseract English model (used by OCR in `convert-to-md.js` when needed).
 
@@ -16,4 +17,5 @@ Examples:
 npm run convert:md -- docs/first-aid/_First_AID.pdf
 npm run convert:pdf -- docs/react.js/documentation-react.md
 npm run convert:mobi -- docs/books/learning-how-to-learn-chapters.md --out-dir dist
+npm run convert:docx -- "docs/hr Interview/cover-letter.pdf"
 ```

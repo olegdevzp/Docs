@@ -1,5 +1,10 @@
 # Twenty Most Asked HR Questions for Senior Developers
 
+> **Customized for:** Oleh Pliuta — Senior Angular Developer  
+> **Based on:** Latest CV — 10+ years, Angular (v1–21), RxJS, NgRx, Ionic/Capacitor, 30+ projects, 8 apps on App Store & Google Play  
+> **Career arc:** Trident Software → Ergonized (5 yrs) → Shipment Company → iFit (most recent)  
+> **Customize:** Replace `[bracketed placeholders]` with company-specific details before each interview.
+
 ## Table of Contents
 
 1. [**Question 1:** Tell me about yourself and your development journey](#question-1)
@@ -38,15 +43,17 @@
 - Connect your journey to the role you're applying for
 - Keep it concise (2-3 minutes)
 
-**Sample Answer:**
+**Personalized Answer (Oleh Pliuta):**
 
-"I've been a software developer for over 8 years, specializing in full-stack web development. I started my career as a junior developer working primarily with JavaScript and Node.js, building REST APIs and simple web applications.
+"I'm a Senior Angular Developer with **10+ years** of experience and **30+ delivered web and mobile applications** across fintech, logistics, healthcare, and e-commerce. I specialize in **Angular, TypeScript, RxJS, NgRx, and Ionic/Capacitor**, with **8 applications published** to the App Store and Google Play.
 
-After about 2 years, I transitioned to a mid-level role where I took on more responsibility in system design and began mentoring junior developers. This is where I discovered my passion for both technical architecture and helping others grow. I led the migration of a monolithic application to a microservices architecture, which reduced deployment time by 60% and improved system reliability.
+I started at **Trident Software** building JavaScript web and mobile apps, then spent **five years at Ergonized** as Senior Front-End Developer — B2B insurance quoting with Stripe and NgRx, supply chain dashboards with WebSockets, and warehouse mobile apps with Ionic.
 
-Three years ago, I moved into a senior developer role where I've been leading a team of 5 developers, conducting architectural reviews, and establishing best practices for code quality and testing. I've also been involved in technical hiring and onboarding processes.
+At **Shipment Company**, I built an enterprise vessel logistics platform for **1000+ daily users** — Nx monorepo, shared component libraries, NestJS API integration, and a **14% load-time improvement** through webpack tuning and lazy loading. I also led an **Angular 14 → 17 migration** across 80+ components in six weeks without disrupting active feature work.
 
-What excites me about this opportunity is the chance to work on [specific technology/challenge mentioned in job description] and contribute to [company's mission/product]. I believe my experience in [relevant skill] aligns well with your team's needs."
+Most recently at **iFit**, I worked on fitness web and mobile apps serving **1M+ registered users** with Angular 19, Ionic 7, and React 19. I migrated core modules to **standalone component architecture**, cut the initial bundle from **3.2MB to 2.1MB**, improved the Lighthouse score from **61 to 84**, grew test coverage on new modules from **0% to 70%+** with Jest, and shipped **3 Ionic/Capacitor releases** to the App Store and Google Play.
+
+What excites me about this opportunity is **[specific technology/challenge from the job description]** — my experience in **[relevant skill: e.g., Angular architecture, shared libraries, performance, mentoring]** aligns well with your team's needs."
 
 **Key Points to Remember:**
 - Be authentic and enthusiastic
@@ -70,17 +77,17 @@ What excites me about this opportunity is the chance to work on [specific techno
 - Demonstrate enthusiasm and genuine interest
 - Avoid generic responses
 
-**Sample Answer:**
+**Personalized Answer (Oleh Pliuta):**
 
 "I'm particularly excited about this position for several reasons:
 
-First, your tech stack aligns perfectly with my expertise and interests. I've been working extensively with [specific technologies] for the past few years, and I'm impressed by how your team is using [specific technology/approach] to solve [specific problem]. The opportunity to work on [specific project/product] at scale is something I find very compelling.
+**First, the tech stack and senior scope.** The role emphasizes **Angular architecture, shared libraries, performance, and mentoring** — not just feature delivery. That's exactly what I've been doing: Nx monorepos at Shipment Company, standalone migrations and bundle optimization at iFit, and testing standards at Ergonized.
 
-Second, your company's commitment to [engineering culture/values] resonates with me. I read about your [blog post/open source contribution/technical initiative], and it demonstrates a culture of continuous learning and innovation that I want to be part of.
+**Second, the technical challenges.** I've solved similar problems at scale — reducing initial bundle size by **34%** at iFit, cutting load times by **14%** at Shipment Company, and building real-time dashboards with WebSockets at Ergonized. The opportunity to work on **[specific product/challenge from job description]** at **[company]** is compelling.
 
-Third, the technical challenges you're facing in [specific area] are exactly the kind of problems I enjoy solving. In my current role, I've dealt with similar challenges around [scalability/performance/architecture], and I'm eager to apply that experience while learning from your talented team.
+**Third, your engineering culture.** I researched **[company initiative/blog/values]** and it resonates with how I work — **[e.g., design thinking, quality craft, experimentation with discipline, collaborative reviews]**.
 
-Finally, the leadership opportunities this role offers align with my career goals. I'm looking to grow not just technically but also in mentoring and shaping engineering practices, which seems to be an integral part of this position."
+**Finally, the leadership dimension.** I want to keep growing as a senior IC — shaping standards, mentoring developers, and making architectural decisions that last. This role's emphasis on **[mentoring/standards/architecture from posting]** aligns with where I want to go next."
 
 **What NOT to Say:**
 - "I just need a job" or "The salary is good"
@@ -103,25 +110,23 @@ Finally, the leadership opportunities this role offers align with my career goal
 - Demonstrate empathy and patience
 - Highlight different mentoring scenarios
 
-**Sample Answer:**
+**Personalized Answer (Oleh Pliuta):**
 
-"My leadership style is collaborative and coaching-oriented. I believe in leading by example while empowering team members to take ownership of their work.
+"My leadership style is collaborative and coaching-oriented — I lead by example while empowering team members to take ownership.
 
 **Mentoring Approach:**
-I've mentored 6 junior developers over the past 3 years, using these strategies:
 
-1. **Structured Onboarding:** I create personalized learning paths for each mentee, starting with smaller, well-defined tasks and gradually increasing complexity. For example, I recently onboarded a junior developer by having them work on isolated features first, then backend services, and finally full-stack implementations.
+1. **Pair programming on real problems:** At Shipment Company, a mid-level developer struggled with **RxJS memory leaks** on long-lived operational screens. I paired with them on `takeUntilDestroyed` patterns, added ESLint guidance for subscriptions, and they became the team's reviewer for streaming code.
 
-2. **Pair Programming Sessions:** I schedule regular pair programming sessions where I demonstrate problem-solving approaches, debugging techniques, and best practices in real-time. This has been particularly effective for teaching code organization and testing strategies.
+2. **Code reviews as teaching:** I explain the *why* behind suggestions — not just "change this." At Ergonized, detailed educational reviews were part of a culture that contributed to **~20% fewer production bugs**.
 
-3. **Code Review as Teaching Tool:** I treat code reviews as teaching moments, not just quality gates. I explain the 'why' behind suggestions and provide resources for deeper learning. One of my mentees improved their code quality significantly after we established a pattern of detailed, educational code reviews.
+3. **Establishing standards, not just fixing bugs:** I introduced frontend **unit testing standards** at Ergonized (Jasmine/Karma, coverage growing from near-zero to **55%** on core modules) and **Playwright E2E** for critical user flows. At iFit, I grew test coverage on new Angular modules from **0% to 70%+** with Jest.
 
-4. **Regular 1-on-1s:** I hold weekly 30-minute 1-on-1s to discuss challenges, career goals, and technical growth. This creates a safe space for questions and concerns.
+4. **Progressive responsibility:** I start mentees on isolated features, then full modules, then architectural decisions — matching complexity to their growth pace.
 
-5. **Progressive Responsibility:** I gradually delegate more complex tasks as confidence and skills grow. For instance, I had a junior developer who initially struggled with database design. After three months of mentoring, they successfully designed and implemented a complete data layer for a new service.
+5. **RFCs and lunch-and-learns:** When shared grid wrappers diverged across squads at Shipment Company, I wrote an RFC, refactored the wrapper, added tests and docs, and ran sessions — reaching **~80% adoption** within a quarter.
 
-**Results:**
-Two of my mentees have been promoted to mid-level positions, and one is now mentoring others. The key is patience, clear communication, and celebrating small wins."
+**Results:** Stronger review culture, fewer recurring bug classes, and developers who can own features independently faster."
 
 **Key Leadership Qualities to Highlight:**
 - Empathy and emotional intelligence
@@ -145,29 +150,20 @@ Two of my mentees have been promoted to mid-level positions, and one is now ment
 - Demonstrate communication skills
 - Focus on positive outcomes
 
-**Sample Answer:**
+**Personalized Answer (Oleh Pliuta):**
 
-"I view conflicts as opportunities for growth and better understanding when handled constructively. My approach follows these principles:
-
-**1. Address Early:** I don't let conflicts fester. As soon as I notice tension or disagreement, I address it directly.
-
-**2. Listen to All Sides:** I meet with each party individually first to understand their perspective without judgment, then facilitate a group discussion.
-
-**3. Focus on Facts and Common Goals:** I redirect emotional responses to objective discussion about the problem and remind everyone of our shared goals.
+"I view conflicts as opportunities for growth when handled constructively. My approach: address early, listen to all sides, then decide with data — not opinions.
 
 **Real Example:**
-In my previous role, two senior engineers had a significant disagreement about architectural direction. One advocated for microservices, while the other wanted to keep a modular monolith. The tension was affecting sprint planning and code reviews.
+At Shipment Company, a colleague wanted to introduce a **new state management library** mid-project while the team was already productive with **RxJS + services**. Tension was affecting sprint planning.
 
 **My Approach:**
-- I scheduled separate meetings with each engineer to understand their concerns and reasoning
-- I discovered the conflict stemmed from different past experiences and valid technical concerns
-- I organized a technical design session where both presented their approaches with pros/cons
-- We evaluated both against our specific requirements: team size, deployment frequency, and complexity
-- We agreed to run a small proof-of-concept for both approaches over two weeks
-- Based on objective metrics (deployment time, debugging complexity, team velocity), we made a data-driven decision
+- Met with them individually to understand concerns — valid points on both sides
+- Proposed a **time-boxed two-day spike** with clear criteria: bundle size, test complexity, team familiarity, migration cost
+- Both options were evaluated against our actual requirements — enterprise ops UI, not a greenfield app
+- **RxJS + services won** on pragmatism; we documented the decision in an **ADR** and moved on
 
-**Outcome:**
-We chose a hybrid approach that addressed both concerns. Both engineers felt heard and valued, and they later collaborated effectively on the implementation. The key was creating a safe space for professional disagreement and using objective criteria for decisions.
+**Outcome:** No lingering resentment, one pattern for the team, and a reusable decision process for future disagreements. The key was assuming good intent and replacing opinion battles with measurable spikes.
 
 **Conflict Resolution Principles:**
 - Stay neutral and objective
@@ -191,88 +187,25 @@ We chose a hybrid approach that addressed both concerns. Both engineers felt hea
 - Mention specific aspects you review
 - Show respect for developers' work
 
-**Sample Answer:**
+**Personalized Answer (Oleh Pliuta):**
 
-"I view code reviews as one of the most valuable practices for maintaining code quality and sharing knowledge. My approach is structured yet flexible:
+"I view code reviews as one of the most valuable practices for knowledge sharing and quality. My approach is structured yet respectful:
 
-**Before Reviewing:**
-- I ensure I understand the context: the ticket, acceptance criteria, and design decisions
-- I check that automated tests pass and code meets basic quality gates
-- I review with a growth mindset, not a critical mindset
-
-**During Review - My Checklist:**
-
-**1. Functionality & Logic:**
-- Does the code solve the intended problem?
-- Are edge cases handled?
-- Are there potential bugs or logical errors?
-
-**2. Code Quality:**
-- Is it readable and maintainable?
-- Does it follow SOLID principles?
-- Are naming conventions clear and consistent?
-- Is there unnecessary complexity?
-
-**3. Testing:**
-- Are there adequate unit tests?
-- Do tests cover edge cases?
-- Are integration points tested?
-
-**4. Performance & Security:**
-- Are there potential performance bottlenecks?
-- Are security best practices followed?
-- Are SQL queries optimized?
-- Is sensitive data properly handled?
-
-**5. Architecture & Design:**
-- Does it align with existing patterns?
-- Is it properly modularized?
-- Are dependencies managed well?
+**What I Review:**
+- Functionality, edge cases, and RxJS subscription cleanup
+- Alignment with team patterns (Nx library boundaries, OnPush where appropriate)
+- Test coverage — especially on shared library code where one bug affects every consumer
+- Performance implications (bundle impact, unnecessary re-renders)
 
 **Communication Style:**
-I follow these principles:
-
-**Positive Framing:**
-❌ "This code is wrong"
-✅ "Consider this approach because..."
-
-**Ask Questions:**
-❌ "Change this"
-✅ "What if we tried...? What do you think?"
-
-**Explain Reasoning:**
-❌ "Use async/await"
-✅ "Async/await would improve readability here and handle errors better. Here's a resource: [link]"
-
-**Acknowledge Good Work:**
-- I always highlight good solutions and creative approaches
-- Example: "Great use of caching here! This will significantly improve performance."
-
-**Categorize Feedback:**
-- 🔴 **Blocking:** Must be fixed (bugs, security issues)
-- 🟡 **Important:** Should be fixed (code quality, performance)
-- 🟢 **Nit:** Nice to have (style preferences, minor improvements)
+- Ask questions: *"What if we used takeUntilDestroyed here?"* instead of demanding changes
+- Categorize feedback: 🔴 blocking (bugs, security) · 🟡 important (maintainability) · 🟢 nit (style)
+- Always acknowledge good solutions
 
 **Real Example:**
-Recently reviewed a PR where a developer implemented a complex caching mechanism. While functional, it was difficult to test and maintain. Instead of rejecting it, I:
-1. Praised the performance optimization thinking
-2. Shared concerns about maintainability
-3. Pair-programmed a simpler solution
-4. Explained the trade-offs
+At Shipment Company, a developer implemented a complex caching layer for a data grid. It worked but was hard to test. I praised the performance thinking, shared maintainability concerns, and **pair-programmed a simpler approach** with clear trade-offs documented. The developer learned a durable pattern, and we shipped cleaner code.
 
-Result: The developer learned a valuable lesson about simplicity vs. complexity, and we ended up with better code.
-
-**Time Management:**
-- Small PRs (<400 lines): 15-30 minutes
-- Large PRs: Split review into multiple sessions or suggest breaking down the PR
-- I prioritize reviews to not block team members
-
-**Follow-up:**
-- I'm available to discuss feedback
-- I verify fixes and approve promptly
-- I track patterns to suggest team-wide improvements
-
-The goal isn't perfection—it's continuous improvement and knowledge sharing."
+**Time Management:** Small PRs get 15–30 minutes; large PRs get split reviews or a suggestion to break the PR down. I don't let reviews block the team."
 
 [⬆ Back to Table of Contents](#table-of-contents)
 
@@ -289,57 +222,29 @@ The goal isn't perfection—it's continuous improvement and knowledge sharing."
 - Demonstrate practical application, not just theoretical knowledge
 - Show selectivity—you can't learn everything
 
-**Sample Answer:**
+**Personalized Answer (Oleh Pliuta):**
 
-"In a field that evolves as rapidly as software development, continuous learning is essential. I have a structured approach to staying current:
+"Continuous learning is essential in frontend — especially with Angular's rapid evolution. I stay current with a practical, selective approach:
 
-**Daily Learning (30-45 minutes):**
-- **Technical Newsletters:** I subscribe to JavaScript Weekly, Node Weekly, and my language-specific newsletters
-- **RSS Feeds:** I follow key engineering blogs from companies like Netflix, Uber, and Airbnb
-- **Twitter/LinkedIn:** I follow industry leaders and engage with the tech community
+**Daily / Weekly:**
+- **Angular Weekly**, **JavaScript Weekly**, and official Angular blog/changelog for signals, standalone components, and new APIs
+- Review documentation when upgrading — recently deep-dived **Angular Signals** and **standalone component migration** during the iFit refactor
+- Friday team knowledge sharing when available
 
-**Weekly Deep Dives:**
-- **Technical Articles:** I read 2-3 in-depth technical articles on platforms like Medium, Dev.to, or company engineering blogs
-- **Documentation:** I regularly review official documentation for tools I use—recently spent time with Angular's new signals feature
-- **Team Knowledge Sharing:** We have Friday tech talks where team members present new learnings
+**Applied Learning (recent examples):**
+- **iFit:** Migrated core modules to standalone architecture, applied lazy loading across 12 feature modules, integrated **LLM-based API** with streaming UI in React 19
+- **Shipment Company:** Led **Angular 14 → 17 migration** across 80+ components; evaluated **Module Federation** patterns for micro-frontend readiness
+- **Ergonized:** Introduced **Playwright E2E** and unit testing standards from near-zero to 55% coverage
 
-**Monthly Practices:**
-- **Online Courses:** I maintain active subscriptions to platforms like Frontend Masters, Pluralsight, or Udemy
-- **Side Projects:** I experiment with new technologies through small projects. Recently built a real-time chat app to learn WebSocket patterns
-- **Open Source:** I contribute to open source projects, which exposes me to different codebases and practices
-- **Meetups/Conferences:** I attend local meetups (virtual or in-person) and 1-2 conferences per year
+**How I Filter What to Learn:**
+1. **Relevance** — Will this help my current or next project?
+2. **Adoption** — Is the industry moving here? (standalone components, signals, Nx monorepos)
+3. **Fundamentals** — Does it deepen core understanding? (change detection, RxJS vs signals)
+4. **Interest** — Am I genuinely curious?
 
-**Quarterly Reviews:**
-- **Technology Radar:** I review the ThoughtWorks Technology Radar to understand emerging trends
-- **Skill Assessment:** I evaluate which technologies are becoming industry-standard vs. which are hype
-- **Learning Plan Update:** I adjust my learning goals based on industry trends and personal interests
+**What I Don't Do:** Chase every new library, adopt tools without a spike, or abandon fundamentals for hype.
 
-**How I Decide What to Learn:**
-I use a filtering system:
-
-1. **Relevance:** Will this be useful in my current or near-future work?
-2. **Adoption:** Is the industry moving toward this? (e.g., TypeScript, containerization)
-3. **Fundamentals:** Does this deepen my understanding of core concepts?
-4. **Interest:** Am I genuinely curious about this?
-
-**Recent Examples:**
-- **Learned:** Migrated from Webpack to Vite after researching build tool performance improvements
-- **Experimenting:** Testing out AI-assisted coding tools like GitHub Copilot to understand their impact on developer workflow
-- **Deep Dive:** Studied distributed systems patterns to better architect microservices
-
-**Practical Application:**
-Learning isn't just consuming content—I ensure I apply it:
-- Write blog posts to solidify understanding
-- Share learnings with my team through documentation or presentations
-- Implement new practices in work projects (when appropriate)
-- Mentor others on topics I've mastered
-
-**What I Don't Do:**
-- Jump on every new framework or library
-- Learn technologies just because they're trending
-- Abandon fundamentals for shiny new tools
-
-The key is being strategic about learning—focusing on technologies that either strengthen fundamentals or provide clear value to my work and career growth."
+I learn by **applying** — spikes, migrations, team presentations — not just consuming content."
 
 [⬆ Back to Table of Contents](#table-of-contents)
 
@@ -356,106 +261,36 @@ The key is being strategic about learning—focusing on technologies that either
 - Be honest about difficulties
 - Show what you learned
 
-**Sample Answer:**
+**Personalized Answer (Oleh Pliuta):**
 
 **Situation:**
-At my previous company, we had a legacy monolithic e-commerce platform built 8 years ago that was becoming a bottleneck. Deployment took 45 minutes, a small bug fix required deploying the entire system, and adding new features was increasingly difficult. The business was losing opportunities because we couldn't move fast enough.
+At **iFit**, the fitness platform serves **1M+ registered users** across web and mobile. The Angular app had grown organically — large initial bundle (**3.2MB**), slow dashboard load (**Lighthouse performance score of 61**), and **0% test coverage** on newer modules. Feature development couldn't pause; users open the app daily for workouts.
 
 **Task:**
-I was asked to lead the migration to a microservices architecture while maintaining 99.9% uptime and continuing to deliver new features. The team consisted of 8 developers, and we had a 9-month timeline. The challenge was we couldn't halt feature development during the migration.
+Improve performance and maintainability while continuing to ship features — including AI-powered workout recommendations and mobile releases.
 
-**Challenges Faced:**
+**Challenges:**
+- Migrating to **standalone component architecture** without breaking existing NgModule-based code
+- Coordinating **web (Angular 19) and mobile (Ionic 7/Capacitor)** releases with iOS/Android teams
+- Balancing performance work with AI feature delivery in **React 19**
 
-1. **Technical Complexity:**
-   - Untangling 8 years of coupled code
-   - No clear service boundaries
-   - Shared database with complex relationships
-   - No comprehensive test coverage (about 40%)
+**Actions:**
+1. **Incremental migration:** Moved core modules to standalone components module-by-module, reducing bootstrap time by **18%**
+2. **Lazy loading:** Introduced lazy loading across **12 feature modules** — initial bundle **3.2MB → 2.1MB** (**34% reduction**)
+3. **Performance pass:** OnPush change detection, bundle analysis, Lighthouse-driven fixes — score **61 → 84**
+4. **Testing foundation:** Grew unit test coverage on new modules from **0% to 70%+** with Jest
+5. **Cross-team coordination:** Shipped **3 App Store / Google Play releases** while performance work ran in parallel
 
-2. **Team Concerns:**
-   - Some developers were skeptical about microservices
-   - Fear of increased complexity
-   - Uncertainty about new technologies (Docker, Kubernetes)
-
-3. **Business Pressure:**
-   - Couldn't stop feature development
-   - Had to maintain stability
-   - Tight timeline with high stakes
-
-**Actions Taken:**
-
-**Phase 1: Planning & Preparation (Month 1-2)**
-- Conducted a thorough system analysis and created a service decomposition strategy
-- Identified bounded contexts using Domain-Driven Design principles
-- Created a strangler fig migration pattern to gradually replace the monolith
-- Developed a comprehensive test suite to ensure behavior preservation
-- Set up monitoring and observability infrastructure first
-
-**Phase 2: Team Alignment (Month 1-2)**
-- Held workshops to explain microservices pros/cons honestly
-- Addressed concerns through open discussions
-- Created a learning plan with training sessions on Docker, Kubernetes, and distributed systems
-- Established clear team roles and responsibilities
-
-**Phase 3: Incremental Migration (Month 3-8)**
-- Started with the least coupled service (notification service) as a pilot
-- Used API Gateway pattern to route traffic between old and new systems
-- Implemented feature flags to safely rollout changes
-- Extracted one service every 3-4 weeks
-- Maintained continuous delivery of business features through parallel work streams
-
-**Phase 4: Critical Obstacles & Solutions:**
-
-**Obstacle 1: Database Dependencies**
-- **Problem:** Services were sharing database tables
-- **Solution:** Implemented the Database-per-Service pattern gradually, first duplicating data, then using event-driven communication (RabbitMQ) to sync, then cutting over
-
-**Obstacle 2: Performance Degradation**
-- **Problem:** Initial network latency between services caused slowdowns
-- **Solution:** Implemented caching strategies, optimized service communication patterns, and used async messaging where appropriate
-
-**Obstacle 3: Team Burnout Risk**
-- **Problem:** Team was working on migration plus new features
-- **Solution:** I negotiated with management to reduce feature commitments by 30%, hired two contract developers, and instituted strict work-life balance policies
-
-**Obstacle 4: Production Incident**
-- **Problem:** Week 5, a critical bug in the payment service during checkout
-- **Solution:** Quick rollback using feature flags, implemented better testing protocols, added circuit breakers for resilience
+**Critical Obstacle — Stale grid data:**
+A performance optimization on a live data grid caused **stale status display** under burst updates in staging. I rolled back via feature flag, root-caused the batching issue, and added a regression test — **no production impact**.
 
 **Results:**
+- **34% smaller initial bundle**, **18% faster bootstrap**, Lighthouse **61 → 84**
+- **70%+ test coverage** on new modules
+- **3 successful mobile releases** during the optimization period
+- Team gained confidence in incremental Angular migrations
 
-**Technical Improvements:**
-- ✅ Deployment time reduced from 45 minutes to 5-8 minutes
-- ✅ Could deploy individual services independently (30+ deploys per week vs. 2-3)
-- ✅ System uptime improved to 99.95%
-- ✅ New feature development time reduced by 40%
-- ✅ Successfully extracted 12 microservices
-
-**Business Impact:**
-- ✅ Enabled faster time-to-market for new features
-- ✅ Reduced infrastructure costs by 25% through better resource utilization
-- ✅ Improved developer satisfaction scores (internal survey)
-
-**Team Growth:**
-- ✅ 6 developers became proficient in containerization and orchestration
-- ✅ Team confidence increased significantly
-- ✅ Zero attrition during the project
-
-**Key Learnings:**
-
-1. **Communication is Critical:** I held weekly all-hands updates and daily standups to ensure alignment
-2. **Start Small:** The pilot service validated our approach and built team confidence
-3. **Incremental is Better:** The strangler fig pattern allowed us to maintain stability
-4. **Monitor Everything:** Comprehensive observability saved us multiple times
-5. **People Over Process:** Addressing team concerns early prevented issues later
-6. **Flexibility:** Original timeline was 9 months; we finished in 10 months, which was acceptable given the scope adjustments
-
-**What I'd Do Differently:**
-- Invest even more in automated testing upfront
-- Allocate more buffer time for unexpected issues
-- Start the performance optimization work earlier
-
-This project taught me that technical challenges are often easier to solve than people and process challenges. Success required balancing technical excellence with team well-being and business needs."
+**Key Learning:** Large Angular improvements succeed through **incremental, measurable steps** — not big-bang rewrites — with feature flags and regression tests as safety nets."
 
 [⬆ Back to Table of Contents](#table-of-contents)
 
@@ -472,137 +307,32 @@ This project taught me that technical challenges are often easier to solve than 
 - Mention tools and techniques
 - Show flexibility and adaptability
 
-**Sample Answer:**
+**Personalized Answer (Oleh Pliuta):**
 
-"As a senior developer, I'm often juggling multiple projects, mentoring responsibilities, and unexpected urgent issues. I use a systematic approach to prioritization:
+"As a senior developer, I juggle feature delivery, architecture work, code reviews, and mentoring. I prioritize by **user impact and risk**:
 
-**My Prioritization Framework:**
+**My Framework:**
+1. **Must be correct** — auth, payments, data integrity (e.g., Stripe flows on Ergonized insurance platform)
+2. **Must ship** — core user path; negotiate scope with PM early
+3. **Nice to have** — polish, secondary views
 
-**1. Eisenhower Matrix (Urgent vs. Important):**
+I also use **Eisenhower Matrix** thinking: production bugs and blocking issues first, then high-impact architecture, then tech debt.
 
-I categorize tasks into four quadrants:
-- **Q1 (Urgent + Important):** Production bugs, security issues, blocking issues
-- **Q2 (Important, Not Urgent):** Architecture planning, refactoring, mentoring, learning
-- **Q3 (Urgent, Not Important):** Some meetings, interruptions—I try to delegate or minimize
-- **Q4 (Neither):** I eliminate these
-
-**2. Impact vs. Effort Analysis:**
-For tasks in Q1 and Q2, I evaluate:
-- **High Impact, Low Effort:** Do these first (quick wins)
-- **High Impact, High Effort:** Schedule dedicated time blocks
-- **Low Impact, Low Effort:** Batch these together
-- **Low Impact, High Effort:** Question if these should be done at all
-
-**3. Stakeholder Impact:**
-- How many users are affected?
-- What's the business cost of delay?
-- Are team members blocked on this?
-- What are the contractual or deadline commitments?
-
-**Practical Application:**
-
-**Daily Routine:**
-- **Morning (8-9 AM):** Review priorities, check for overnight production issues, respond to blockers
-- **Deep Work (9-12 PM):** High-impact, high-complexity tasks requiring focus
-- **Collaboration (12-3 PM):** Meetings, code reviews, mentoring, pair programming
-- **Wrap-up (3-5 PM):** Smaller tasks, documentation, planning for next day
-
-**Weekly Planning:**
-Every Monday, I:
-1. Review all active projects and their deadlines
-2. Identify key deliverables for the week
-3. Block calendar time for deep work on priority items
-4. Communicate my availability and priorities to stakeholders
-5. Build in buffer time (20%) for unexpected issues
-
-**Real Example - Typical Week:**
-
-**Monday Morning Situation:**
-- Project A: Feature due Friday (Important, Deadline-driven)
-- Project B: Architecture review needed (Important, Can wait)
-- Production bug in Project C (Urgent + Important)
-- Junior developer needs code review (Blocking others)
-- Tech debt in Project D (Important, Not Urgent)
-
-**My Prioritization:**
-1. **Immediate (30 mins):** Production bug in Project C—hotfix and deploy
-2. **Block Team Member (45 mins):** Code review for junior developer
-3. **High Priority (3-4 hours):** Project A feature development
-4. **Schedule (Set meeting):** Architecture review for Project B on Wednesday
-5. **Queue for Later:** Tech debt in Project D—added to sprint backlog
-
-**Communication Strategy:**
-
-**Transparency:**
-I communicate my priorities clearly:
-- "I'm prioritizing the production bug first, then your code review. I'll have feedback by 2 PM."
-- "I can't start Project B until Wednesday due to Project A's deadline. Is that acceptable?"
-
-**Managing Expectations:**
-- I give realistic estimates, not optimistic ones
-- I communicate delays early
-- I suggest alternatives when I can't meet a request
-
-**Saying No (or Not Now):**
-When overloaded, I:
-- Explain current commitments
-- Provide alternatives: "I can't do this this week, but I can next week, or [colleague] might be available"
-- Escalate to management if needed for priority decisions
-
-**Tools I Use:**
-
-1. **Task Management:** JIRA for project tasks, Notion for personal task tracking
-2. **Calendar Blocking:** I block focus time on my calendar
-3. **Daily Notes:** I maintain a daily log of what I worked on and why
-4. **Decision Log:** For significant priority decisions, I document the rationale
-
-**Handling Interruptions:**
-
-**Expected Interruptions:**
-- I schedule "office hours" for team questions (specific times daily)
-- I check Slack every 2 hours rather than constantly
-- I turn off non-critical notifications during deep work
-
-**Unexpected Urgent Issues:**
-I assess: Is this truly urgent? Can someone else handle it?
-If yes to urgent and no to someone else: I address it immediately and reschedule less urgent work
-
-**Red Flags - When to Escalate:**
-
-I escalate to management when:
-- Multiple high-priority items conflict and I need help deciding
-- Consistently working overtime to meet demands
-- Quality is being compromised due to time pressure
-- Dependencies on other teams are causing delays
-
-**Example of Tough Prioritization:**
-
-Last quarter, I had three simultaneous demands:
-1. Critical client bug (C-level visibility)
-2. Deadline for new feature launch
-3. Team member's career-development project needing review
+**Real Example — Logistics module mid-sprint:**
+Delivering a new module at Shipment Company with NestJS backend, QA, PM, and mobile team — **API contracts changed mid-sprint**.
 
 **What I Did:**
-- **Fixed the critical bug immediately** (2 hours)
-- **Negotiated a 2-day extension** for the feature launch with product owner
-- **Paired with the team member** on their project to provide faster feedback (1 hour)
-- **Communicated proactively** with all stakeholders about the plan
+- Fixed any production blockers immediately
+- Daily 15-min sync with backend; same-day notes on API changes
+- Sliced frontend into shippable increments
+- Flagged risk early with **scope vs timeline options** for PM
+- Communicated **green/yellow/red** status daily
 
-**Result:**
-- Client bug resolved within SLA
-- Feature shipped with high quality (slight delay was acceptable)
-- Team member felt supported and completed their project
+**Result:** Shipped on time, zero P1 bugs.
 
-**Key Principles:**
+**Communication:** I give realistic estimates, communicate delays early, and escalate when multiple high-priority items conflict. Surprises are worse than bad news delivered on time.
 
-1. **Protect Deep Work Time:** Complex problems require uninterrupted focus
-2. **Bias Toward Action:** When priorities are equal, start with what moves projects forward
-3. **Communicate Early and Often:** Surprises are worse than delays
-4. **Regular Review:** Priorities change—I reassess daily
-5. **Know When to Delegate:** I'm not the only person who can do things
-6. **Maintain Balance:** Constant urgency indicates systemic problems that need addressing
-
-The goal isn't to do everything—it's to do the right things at the right time."
+**Tools:** JIRA for sprint tasks, calendar blocking for deep work, Nx affected commands to focus CI on what changed."
 
 [⬆ Back to Table of Contents](#table-of-contents)
 
@@ -619,160 +349,26 @@ The goal isn't to do everything—it's to do the right things at the right time.
 - Discuss adaptations based on team needs
 - Mention both successes and challenges
 
-**Sample Answer:**
+**Personalized Answer (Oleh Pliuta):**
 
-"I have extensive experience with agile methodologies, having worked in Scrum and Kanban environments for over 6 years. I've been both a team member and a technical lead in agile teams.
+"I've worked in **Scrum and Kanban** environments across Ergonized, Shipment Company, and iFit for **10+ years** — always as a hands-on senior contributor, not just a process follower.
 
-**Scrum Experience (4 years):**
+**Scrum in Practice (Ergonized, Shipment Company, iFit):**
+- **2-week sprints** with planning, daily standups, reviews, and retrospectives
+- Broke down user stories into technical tasks; provided estimates using planning poker
+- Demonstrated features in sprint reviews — e.g., insurance quoting flows, logistics dashboards, fitness app modules
+- Used retros to improve process — introduced Playwright E2E at Ergonized after recurring production bugs on critical paths
 
-**Team Structure:**
-- Teams of 5-8 developers
-- Worked with dedicated Scrum Masters and Product Owners
-- 2-week sprints
+**Agile Engineering Practices I Champion:**
+- **CI/CD** with lint, unit tests, and bundle budgets on PRs (Nx monorepo at Shipment Company)
+- **Incremental delivery** — Angular migrations module-by-module at iFit, not big-bang rewrites
+- **Feature flags** for safe rollouts (used during performance optimization rollback)
+- **Code reviews** as continuous knowledge sharing
 
-**Ceremonies I've Participated In:**
+**Real Example — API change mid-sprint:**
+At Shipment Company, backend API contracts changed during a logistics module sprint. Instead of hiding in code, I ran **daily 15-min syncs**, documented changes same-day, and sliced frontend into shippable increments. Shipped on time with zero P1 bugs.
 
-**1. Sprint Planning:**
-- Collaborated with Product Owner to understand user stories
-- Broke down stories into technical tasks
-- Provided effort estimates using planning poker
-- Helped define acceptance criteria from a technical perspective
-
-**2. Daily Standups:**
-- Kept updates concise and focused on: what I did, what I'm doing, blockers
-- Used it to identify collaboration opportunities
-- As a senior, I often helped resolve blockers for junior developers
-
-**3. Sprint Reviews/Demos:**
-- Demonstrated completed features to stakeholders
-- Gathered feedback for iteration
-- Explained technical achievements and constraints
-
-**4. Sprint Retrospectives:**
-- Actively contributed to team improvement discussions
-- Led initiatives to improve code review processes and deployment automation
-- Implemented action items from retros
-
-**My Contributions as Senior Developer:**
-
-**Story Refinement:**
-- Helped Product Owner break down large features into manageable stories
-- Identified technical dependencies and risks early
-- Ensured stories were testable and had clear acceptance criteria
-
-**Technical Leadership:**
-- Defined "Definition of Done" including code review, testing, and documentation requirements
-- Established team coding standards and best practices
-- Mentored junior developers on agile technical practices
-
-**Example Initiative:**
-In one team, our velocity was unpredictable due to unexpected bugs. I introduced:
-- Spike stories for technical research
-- Bug gardening sessions every sprint
-- Improved test coverage as part of DoD
-
-Result: Velocity stabilized, and team confidence improved.
-
-**Kanban Experience (2 years):**
-
-Worked on a platform team where continuous flow was more appropriate than sprints:
-- Visualized workflow with WIP limits
-- Focused on lead time and cycle time metrics
-- Implemented explicit policies for each workflow stage
-- Conducted regular replenishment meetings
-
-**Advantages I Found:**
-- More flexible for interrupt-driven work (support, critical bugs)
-- Better for continuous delivery
-- Less overhead than Scrum ceremonies
-
-**Agile Engineering Practices:**
-
-Beyond ceremonies, I value these technical practices:
-
-**1. Test-Driven Development (TDD):**
-- Write tests before implementation
-- Ensures code is testable and well-designed
-- Used particularly for complex business logic
-
-**2. Continuous Integration/Continuous Deployment (CI/CD):**
-- Implemented automated build and deployment pipelines
-- Enabled multiple deployments per day
-- Fast feedback on code quality
-
-**3. Pair Programming:**
-- Regular pairing, especially for complex features or knowledge transfer
-- Improved code quality and shared understanding
-
-**4. Refactoring:**
-- Continuous code improvement
-- Addressed technical debt incrementally
-- Made refactoring part of every sprint
-
-**5. Collective Code Ownership:**
-- No "code owners"—anyone can modify any code
-- Promotes knowledge sharing and reduces bottlenecks
-
-**Challenges and Adaptations:**
-
-**Challenge 1: Agile Theater**
-In one organization, they did Scrum ceremonies but not agile principles:
-- Long-term fixed scope projects
-- No real Product Owner engagement
-- Limited team autonomy
-
-**My Response:**
-- Raised concerns with management
-- Demonstrated value through small experiments (A/B testing, user feedback loops)
-- Gradually shifted culture toward more genuine agility
-
-**Challenge 2: Remote Teams**
-During COVID, transitioning to fully remote agile:
-- Used Miro for sprint planning and retros
-- Implemented more asynchronous communication
-- Over-communicated to maintain team cohesion
-
-**Outcome:** Team adapted successfully and even improved some practices.
-
-**Challenge 3: Scaling Agile**
-Worked in an organization adopting SAFe (Scaled Agile Framework):
-- Coordinated with 4 other teams
-- Program Increment (PI) planning sessions
-- Managing dependencies across teams
-
-**Learning:** Scaling adds complexity but is necessary for large organizations. Clear communication and interface contracts between teams are critical.
-
-**My Agile Philosophy:**
-
-I believe agile is about principles, not rigid adherence to frameworks:
-
-**Core Principles I Value:**
-1. **Individuals and interactions** over processes and tools
-2. **Working software** over comprehensive documentation
-3. **Customer collaboration** over contract negotiation
-4. **Responding to change** over following a plan
-
-**Practical Application:**
-- I advocate for pragmatic agile—adapt ceremonies to team needs
-- If a ceremony isn't providing value, I suggest changing or eliminating it
-- I focus on outcomes (delivering value) not outputs (story points completed)
-
-**Continuous Improvement:**
-- Agile should enable us to learn and improve constantly
-- I regularly question our processes: "Is this still serving us?"
-- I encourage experimentation with new practices
-
-**Balance:**
-- Agile needs structure to avoid chaos but shouldn't be bureaucratic
-- I help teams find the right balance for their context
-
-**Current Preference:**
-I prefer a hybrid approach:
-- Scrum's structure for feature teams with clear product roadmaps
-- Kanban's flexibility for platform/infrastructure teams
-- Always incorporating agile engineering practices regardless of framework
-
-The key is not which methodology but whether the team is truly collaborating, delivering value incrementally, and continuously improving."
+**My Philosophy:** Agile is about **delivering value incrementally** and **responding to change** — not ceremony theater. If a meeting doesn't help the team ship better software, I question it. I prefer Scrum's structure for feature teams and Kanban flexibility for platform work."
 
 [⬆ Back to Table of Contents](#table-of-contents)
 
@@ -789,280 +385,42 @@ The key is not which methodology but whether the team is truly collaborating, de
 - Provide specific practices and tools
 - Demonstrate long-term thinking
 
-**Sample Answer:**
+**Personalized Answer (Oleh Pliuta):**
 
-"Code quality and maintainability are fundamental to long-term project success. I use a multi-layered approach:
+"Code quality and maintainability are fundamental — especially in **shared libraries** where one bug affects every team. I use a multi-layered approach:
 
 **1. Automated Quality Gates:**
+- **ESLint + Prettier + TypeScript strict mode** — enforced in CI, not optional
+- **Pre-commit hooks** and PR checks that block merges on lint/test failures
+- **Bundle budgets** in CI at Shipment Company — prevented performance regressions
 
-**Linting and Formatting:**
-- **ESLint/TSLint:** Enforce coding standards automatically
-- **Prettier:** Consistent code formatting
-- **Pre-commit Hooks:** Using Husky to run checks before commits
-- **CI Pipeline:** Block merges if quality standards aren't met
+**2. Testing Strategy (by role):**
+- **Ergonized:** Established unit testing standards (Jasmine/Karma, **0% → 55%** coverage on core modules); introduced **Playwright E2E** on critical insurance quoting and payment flows
+- **iFit:** Grew Jest coverage on new Angular modules from **0% → 70%+**
+- **Shipment Company:** Higher coverage requirements on **shared Nx library code** — highest leverage in a monorepo
 
-**Static Analysis:**
-- **SonarQube:** Detect code smells, security vulnerabilities, bugs
-- **CodeClimate:** Track technical debt and complexity metrics
-- **Type Checking:** TypeScript's strict mode to catch type errors
+**Testing mix:** Unit tests for services/RxJS logic · component tests for forms and error states · selective E2E on business-critical paths · regression tests on every bug fix
 
-**Example Configuration:**
-```javascript
-// .eslintrc.js
-module.exports = {
-  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
-  rules: {
-    'complexity': ['error', 10],
-    'max-lines-per-function': ['warn', 50],
-    'no-duplicate-imports': 'error'
-  }
-}
-```
+**3. Modular Architecture:**
+- **Nx monorepo** with feature / UI / data-access libs and **boundary tags** at Shipment Company
+- **Standalone components** migration at iFit — simpler module graph, better tree-shaking
+- Shared libraries treated as **products**: clear APIs, tests first, docs where needed
 
-**2. Comprehensive Testing:**
+**4. Code Reviews:**
+- Every PR reviewed; shared lib PRs need extra scrutiny
+- Reviews teach patterns (RxJS cleanup, OnPush, defensive error states) — not just gatekeep
 
-**Testing Pyramid:**
-- **Unit Tests (70%):** Fast, isolated tests for business logic
-- **Integration Tests (20%):** Test component interactions
-- **E2E Tests (10%):** Critical user journeys
+**5. Technical Debt Management:**
+- Boy Scout Rule on every PR
+- **~20% sprint capacity** for improvements when possible
+- ADRs for significant choices (state management, testing tools, migration strategy)
 
-**Coverage Standards:**
-- Minimum 80% code coverage for new code
-- 100% coverage for critical business logic
-- Focus on meaningful tests, not just coverage numbers
+**Real Impact:**
+- Ergonized review/refactoring culture contributed to **~20% fewer production bugs**
+- iFit: measurable quality gains alongside **Lighthouse 61 → 84** performance work
+- Shipment Company: shared grid RFC reached **~80% adoption** — consistency at scale
 
-**Test Quality:**
-- Follow AAA pattern (Arrange, Act, Assert)
-- Descriptive test names that serve as documentation
-- Use test builders/factories for complex test data
-- Mock external dependencies appropriately
-
-**Example Test:**
-```typescript
-describe('PaymentService', () => {
-  describe('processPayment', () => {
-    it('should successfully process payment and return transaction ID', async () => {
-      // Arrange
-      const mockGateway = createMockPaymentGateway();
-      const service = new PaymentService(mockGateway);
-      const paymentData = createValidPaymentData();
-      
-      // Act
-      const result = await service.processPayment(paymentData);
-      
-      // Assert
-      expect(result.status).toBe('success');
-      expect(result.transactionId).toBeDefined();
-      expect(mockGateway.charge).toHaveBeenCalledWith(paymentData);
-    });
-  });
-});
-```
-
-**3. Code Review Process:**
-
-**Requirements:**
-- Every PR requires at least one approval from a senior developer
-- Automated checks must pass before human review
-- Review checklist covering functionality, tests, documentation, performance
-
-**What I Look For:**
-- Adherence to SOLID principles
-- Proper error handling
-- Security considerations
-- Performance implications
-- Readability and maintainability
-
-**4. Design Principles and Patterns:**
-
-**SOLID Principles:**
-- **S**ingle Responsibility: Each class/function has one reason to change
-- **O**pen/Closed: Open for extension, closed for modification
-- **L**iskov Substitution: Subtypes must be substitutable for base types
-- **I**nterface Segregation: Many specific interfaces > one general interface
-- **D**ependency Inversion: Depend on abstractions, not concretions
-
-**Clean Code Practices:**
-- Meaningful names that reveal intent
-- Functions should be small and do one thing
-- DRY (Don't Repeat Yourself) but not at the cost of clarity
-- Proper abstractions—not too early, not too late
-
-**5. Architecture Standards:**
-
-**Layered Architecture:**
-- Clear separation: Presentation → Business Logic → Data Access
-- Each layer only depends on the layer below
-- Prevents mixing concerns
-
-**Modularity:**
-- Organize code by feature/domain, not by technical role
-- Loose coupling, high cohesion
-- Clear boundaries between modules
-
-**Example Structure:**
-```
-src/
-  features/
-    payments/
-      components/
-      services/
-      models/
-      payments.module.ts
-    orders/
-      components/
-      services/
-      models/
-      orders.module.ts
-  shared/
-    utils/
-    guards/
-  core/
-    api/
-    auth/
-```
-
-**6. Documentation:**
-
-**Code Documentation:**
-- Self-documenting code through clear naming
-- JSDoc comments for public APIs
-- Complex algorithms get explanatory comments
-- README for each major module
-
-**Example:**
-```typescript
-/**
- * Calculates the discounted price based on user tier and promotion codes.
- * 
- * @param originalPrice - The original price before discounts
- * @param userTier - The user's membership tier (bronze, silver, gold)
- * @param promoCodes - Array of promotion codes to apply
- * @returns The final discounted price
- * @throws {InvalidPromoCodeError} If any promo code is invalid or expired
- */
-async function calculateDiscountedPrice(
-  originalPrice: number,
-  userTier: UserTier,
-  promoCodes: string[]
-): Promise<number> {
-  // Implementation
-}
-```
-
-**Architecture Documentation:**
-- Architecture Decision Records (ADRs) for significant decisions
-- System diagrams for complex interactions
-- API documentation (Swagger/OpenAPI)
-
-**7. Refactoring and Technical Debt Management:**
-
-**Regular Refactoring:**
-- "Boy Scout Rule": Leave code better than you found it
-- Allocate 20% of sprint capacity to technical improvements
-- Regular technical debt grooming sessions
-
-**When to Refactor:**
-- Rule of Three: First time, do it; second time, note it; third time, refactor it
-- When adding features becomes increasingly difficult
-- When bug density increases in a module
-
-**Technical Debt Tracking:**
-- Use TODO comments with ticket references for known issues
-- Maintain a technical debt backlog
-- Prioritize debt that impacts velocity or stability
-
-**8. Performance and Security:**
-
-**Performance:**
-- Profile before optimizing
-- Set performance budgets
-- Monitor key metrics (load time, API response time)
-- Use lazy loading and code splitting
-
-**Security:**
-- Security-focused code reviews
-- Regular dependency audits (npm audit)
-- Input validation and sanitization
-- Principle of least privilege
-- Security headers and HTTPS
-
-**9. Continuous Improvement:**
-
-**Metrics I Track:**
-- **Code Quality:** SonarQube metrics, code coverage
-- **Build Health:** Build success rate, build time
-- **Deployment Frequency:** How often we deploy
-- **Lead Time:** Time from commit to production
-- **MTTR (Mean Time To Recovery):** How fast we fix issues
-
-**Regular Reviews:**
-- Monthly code quality review sessions
-- Identify trends and areas for improvement
-- Share best practices across the team
-
-**10. Team Standards and Guidelines:**
-
-**Coding Standards Document:**
-- Established team conventions
-- Preferred patterns and anti-patterns
-- Examples of good and bad code
-- Living document that evolves
-
-**Onboarding:**
-- New developers receive training on standards
-- Pair programming for first few tasks
-- Mentorship program
-
-**Knowledge Sharing:**
-- Tech talks on new patterns or tools
-- Brown bag lunches
-- Internal blog or wiki
-
-**Real Example:**
-
-In my previous role, I inherited a codebase with:
-- 45% test coverage
-- 2000+ linter errors
-- No CI/CD
-- Inconsistent coding styles
-
-**My Improvement Plan:**
-
-**Month 1-2:**
-- Set up ESLint and Prettier
-- Added pre-commit hooks
-- Established CI pipeline with basic checks
-
-**Month 3-4:**
-- Increased test coverage requirement to 70% for new code
-- Implemented SonarQube
-- Created coding standards document
-
-**Month 5-6:**
-- Conducted refactoring sprints for worst areas
-- Achieved 75% overall coverage
-- Reduced linter errors to zero
-
-**Result:**
-- Bug rate decreased by 40%
-- Deployment confidence increased
-- Developer satisfaction improved
-- New features could be added faster
-
-**Balance and Pragmatism:**
-
-**Quality vs. Speed:**
-- High quality enables speed in the long run
-- Sometimes "good enough" is appropriate for experiments or prototypes
-- Always meet minimum standards even when rushing
-
-**Over-engineering:**
-- Avoid unnecessary abstractions
-- YAGNI (You Aren't Gonna Need It) principle
-- Start simple, refactor when needed
-
-**The goal is sustainable development velocity—quality enables speed, not prevents it."**
+**Philosophy:** Quality enables speed in the long run. I never skip tests or reviews on auth, payments, or shared library code — even under deadline pressure."
 
 [⬆ Back to Table of Contents](#table-of-contents)
 
@@ -1079,239 +437,42 @@ In my previous role, I inherited a codebase with:
 - Discuss the outcome and learnings
 - Be honest about uncertainties
 
-**Sample Answer:**
+**Personalized Answer (Oleh Pliuta):**
 
-"In my previous role, I faced a critical decision about our frontend architecture that would impact the team for years.
+"At **Shipment Company**, I faced a technical decision that would affect every squad on our enterprise logistics platform.
 
 **Context:**
-
-Our company was building a customer-facing dashboard with these requirements:
-- Complex data visualizations
-- Real-time updates
-- Mobile responsiveness
-- Would be maintained by a team of 8 developers (varying skill levels)
-- Needed to launch MVP in 4 months, but product would evolve for years
-
-**The Decision:**
-
-Choosing between:
-1. **React** (most popular, large talent pool)
-2. **Angular** (our backend team's preference, full framework)
-3. **Vue** (growing popularity, gentler learning curve)
+We were mid-delivery on a new logistics module. A colleague proposed introducing a **new state management library** while the team was already productive with **RxJS + services**. The disagreement was affecting sprint planning — one path meant migration cost and learning curve; the other risked missing modern patterns.
 
 **Why It Was Difficult:**
+- Both sides had valid technical arguments
+- We couldn't afford weeks of debate — **1000+ daily users** depended on on-time delivery
+- Wrong choice would create **two patterns for the same problem** across the Nx monorepo
 
-- **High Stakes:** Wrong choice would impact productivity and hiring for years
-- **Team Division:** Backend team preferred Angular, frontend team preferred React
-- **No Clear Winner:** Each had valid arguments
-- **Time Pressure:** Needed to decide quickly to start development
-- **My Responsibility:** As technical lead, this was my decision
+**My Decision Process:**
+1. **Defined criteria:** bundle size impact, test complexity, team familiarity, migration cost, time to productivity
+2. **Proposed a time-boxed two-day spike** — both options built against the same user story
+3. **Measured objectively:** lines of code, test setup effort, developer feedback
+4. **Documented in an ADR** regardless of outcome
 
-**My Decision-Making Process:**
-
-**Step 1: Defined Decision Criteria**
-
-I created a weighted scoring matrix:
-- **Learning Curve** (15%): How fast can team become productive?
-- **Ecosystem & Libraries** (20%): Availability of tools and solutions
-- **Performance** (15%): Rendering speed, bundle size
-- **Long-term Maintainability** (20%): Will this still be supported in 5 years?
-- **Team Expertise** (10%): Current team knowledge
-- **Hiring Pool** (10%): Ease of finding developers
-- **Community Support** (10%): Documentation, tutorials, help available
-
-**Step 2: Technical Evaluation**
-
-I spent one week building the same feature prototype in all three frameworks:
-- Authentication flow
-- Real-time data table with filters
-- Interactive chart
-- Mobile responsive layout
-
-**Measured:**
-- Development time for each
-- Bundle sizes
-- Performance metrics
-- Code complexity
-
-**Step 3: Team Input**
-
-- Conducted a workshop where team members tried all three
-- Gathered feedback through anonymous survey
-- Held 1-on-1s with key stakeholders
-
-**Step 4: Analysis**
-
-**React Pros:**
-- ✅ Largest ecosystem and community
-- ✅ Most hiring options
-- ✅ Team had most experience (4/8 developers)
-- ✅ Excellent performance
-- ✅ Flexible—choose your own tools
-
-**React Cons:**
-- ❌ Decision fatigue (too many options)
-- ❌ Rapidly changing best practices
-- ❌ Need to assemble ecosystem (routing, state management, forms)
-
-**Angular Pros:**
-- ✅ Complete solution (batteries included)
-- ✅ Strong TypeScript support
-- ✅ Backend team familiar
-- ✅ Clear conventions
-- ✅ Great for large applications
-
-**Angular Cons:**
-- ❌ Steeper learning curve
-- ❌ Smaller hiring pool
-- ❌ More opinionated
-- ❌ Larger initial bundle size
-
-**Vue Pros:**
-- ✅ Easiest learning curve
-- ✅ Good documentation
-- ✅ Progressive framework
-- ✅ Growing ecosystem
-
-**Vue Cons:**
-- ❌ Smallest community of three
-- ❌ No team experience
-- ❌ Less corporate backing
-- ❌ Fewer job candidates
-
-**The Difficult Part:**
-
-The scores were close:
-- React: 7.8/10
-- Angular: 7.5/10
-- Vue: 6.9/10
-
-**Additional Complications:**
-- Backend lead strongly advocated for Angular (team synergy)
-- Our most senior frontend developer threatened to leave if we chose Angular
-- CTO preferred React (his personal experience)
-- Two junior developers were learning Vue on their own
-
-**My Decision: React**
+**Decision: Stay with RxJS + services**
 
 **Rationale:**
+- Team was already productive; migration cost outweighed benefits for our use case
+- Enterprise ops UI — not a greenfield app needing a new paradigm
+- Clear path to **Angular Signals** for local state later without a full rewrite
 
-1. **Team Skill Alignment:** 4/8 already knew React; retraining would be minimal
-2. **Hiring Advantage:** Easiest to find React developers in our market
-3. **Ecosystem Maturity:** For our specific needs (data viz, real-time), React had the best libraries
-4. **Performance:** Our prototype showed React meeting our performance budgets
-5. **Risk Mitigation:** Most established track record for large-scale apps
+**How I Brought the Team Along:**
+- Shared spike results transparently — both options presented fairly
+- Gave the advocate ownership of the ADR and future signals evaluation
+- Set a checkpoint to reassess in 6 months
 
-**Addressing Concerns:**
+**Outcome:**
+- Team moved on without lingering tension
+- One consistent pattern across squads
+- Reusable decision process for future disagreements
 
-**For Angular Advocates:**
-- Proposed using TypeScript with React (strong typing like Angular)
-- Established conventions document to address "too flexible" concern
-- Selected opinionated tool stack upfront (Redux, React Router, Material-UI)
-
-**For Vue Enthusiasts:**
-- Allowed Vue for internal tools/admin panels as learning opportunity
-- Promised to reassess in 2 years if Vue ecosystem matured
-
-**For Senior Developer:**
-- 1-on-1 conversation acknowledging his concerns
-- Gave him ownership of architecture decisions within React
-- He stayed and became a React advocate
-
-**How I Communicated The Decision:**
-
-I didn't just announce it; I:
-1. Shared my evaluation matrix and scoring
-2. Presented all three options fairly
-3. Explained my reasoning transparently
-4. Acknowledged the subjectivity and uncertainty
-5. Remained open to feedback
-6. Set a checkpoint (6 months) to review the decision
-
-**Documentation:**
-
-Created an Architecture Decision Record (ADR):
-```markdown
-# ADR 001: Frontend Framework Selection
-
-## Status: Accepted
-
-## Context: [detailed context]
-
-## Decision: React with TypeScript
-
-## Consequences:
-Positive:
-- Fastest team onboarding
-- Best hiring pool
-- Strong ecosystem
-
-Negative:
-- Need to establish conventions
-- Requires more setup than Angular
-- Some team members need training
-
-## Alternatives Considered: [Angular and Vue analysis]
-```
-
-**Outcome (6 months later):**
-
-**Positive Results:**
-- ✅ MVP delivered on time
-- ✅ Team velocity was higher than estimated
-- ✅ Hired 2 new React developers easily
-- ✅ No team attrition related to the decision
-- ✅ Performance metrics met targets
-
-**Challenges:**
-- ❌ Spent time establishing conventions (expected)
-- ❌ Some inconsistency in state management approaches initially
-- ❌ Junior developers needed more guidance with tooling choices
-
-**Mitigations:**
-- Created starter templates
-- Established team-wide patterns
-- Increased code review focus on architecture
-
-**Long-term (2 years later):**
-- The decision held up well
-- No regrets from the team
-- Product scaled successfully to 50K users
-- We were able to hire and onboard developers smoothly
-
-**What I Learned:**
-
-1. **No Perfect Decision:** There rarely is one. It's about making the best decision with available information.
-
-2. **Process Matters:** A transparent, inclusive process got buy-in even from those who disagreed.
-
-3. **Document Decisions:** The ADR was invaluable when new team members asked "Why React?"
-
-4. **Acknowledge Uncertainty:** I was upfront that I might be wrong. This humility helped.
-
-5. **Review Decisions:** Setting a checkpoint to reassess showed we were open to change.
-
-6. **Balance Data and Intuition:** I used metrics but also trusted my experience.
-
-7. **Stakeholder Management:** Technical decisions have people implications—address them.
-
-**What I'd Do Differently:**
-
-- Involve the team even earlier in the prototype phase
-- Set clearer timebox for the decision (took too long)
-- Consider running a pilot project before committing fully
-
-**Key Takeaway:**
-
-Difficult technical decisions require:
-- Clear criteria
-- Objective evaluation
-- Stakeholder input
-- Transparent communication
-- Willingness to be wrong
-- Documentation for future reference
-
-The decision itself matters less than making it thoughtfully and bringing the team along."
+**What I Learned:** Difficult decisions need **data and timeboxes**, not opinion battles. Document decisions (ADRs) so future developers understand the *why*."
 
 [⬆ Back to Table of Contents](#table-of-contents)
 
@@ -1328,247 +489,35 @@ The decision itself matters less than making it thoughtfully and bringing the te
 - Provide specific examples
 - Show you know your limits
 
-**Sample Answer:**
+**Personalized Answer (Oleh Pliuta):**
 
-"Tight deadlines and pressure are inevitable in software development. I've developed strategies to handle them effectively while maintaining quality and team morale.
+"Tight deadlines are inevitable — especially with **mobile release cycles** and enterprise delivery. I handle pressure through **ruthless prioritization** and **early communication**, not sustained overtime.
 
-**My Approach Under Pressure:**
+**My Approach:**
 
-**1. Assess the Situation Objectively**
+**1. MoSCoW prioritization:**
+- **Must have:** Auth, payments, data integrity (Stripe on Ergonized insurance platform)
+- **Must ship:** Core user path — negotiate scope with PM early
+- **Could have:** Polish, secondary views — explicitly cut under pressure
 
-First, I determine if the deadline is:
-- **Realistic:** Can it actually be done?
-- **Flexible:** Is there room for negotiation?
-- **Critical:** What's the real cost of missing it?
+**2. Communicate green/yellow/red daily** when pressure rises. Surprises are worse than bad news delivered early.
 
-I ask questions:
-- "What's the minimum viable solution?"
-- "What are the must-haves vs. nice-to-haves?"
-- "What happens if we deliver on [later date]?"
+**3. Never cut:** Tests and reviews on auth, payments, or shared library code — even under deadline.
 
-**2. Communicate Early and Often**
+**Real Example — iFit mobile release + performance work:**
+We had parallel pressure: ship **3 Ionic/Capacitor releases** to App Store/Google Play while running a **bundle optimization pass** (3.2MB → 2.1MB) and **standalone component migration**.
 
-**With Stakeholders:**
-- Provide honest assessments, not optimistic ones
-- Present options with trade-offs
-- Set realistic expectations
-- Update regularly on progress
+**What I Did:**
+- Scoped performance work to **highest-traffic modules first** — dashboard Lighthouse **61 → 84**
+- Used **feature flags** so optimization could roll back safely (learned from a staging incident with stale grid data)
+- Negotiated with PM: AI workout UI ships on schedule; secondary views deferred one sprint
+- Coordinated daily with iOS/Android teams on release blockers
 
-**With Team:**
-- Transparent about pressure and constraints
-- Clear about priorities
-- Check in on stress levels
-- Celebrate small wins
+**Result:** All 3 mobile releases shipped; **34% bundle reduction** and **70%+ test coverage** on new modules delivered without production incidents.
 
-**3. Ruthless Prioritization**
+**What I Avoid:** Sustained overtime, skipping code review, or creating tech debt on critical paths without a follow-up ticket.
 
-I use the MoSCoW method:
-- **Must Have:** Non-negotiable features
-- **Should Have:** Important but can be deferred
-- **Could Have:** Nice to have
-- **Won't Have (this time):** Explicitly cut
-
-**4. Simplify and Cut Scope**
-
-Under pressure, I:
-- Identify the MVP that delivers core value
-- Cut features, not quality
-- Propose phased releases
-- Focus on user outcomes, not feature lists
-
-**5. Increase Focus, Not Just Hours**
-
-**Instead of longer hours:**
-- Eliminate distractions and meetings
-- Block deep work time
-- Defer non-critical tasks
-- Protect team from interruptions
-
-**I avoid:**
-- Sustained overtime (leads to burnout and mistakes)
-- Cutting testing or code reviews (creates future problems)
-- Taking shortcuts that create technical debt
-
-**6. Leverage Team Effectively**
-
-- Delegate appropriately
-- Pair on critical items
-- Have experienced developers on high-risk work
-- Shield junior developers from excessive pressure
-
-**Real Example 1: Product Launch Deadline**
-
-**Situation:**
-Two weeks before a major product launch for a key client, we discovered a critical performance issue. The app was taking 8-10 seconds to load, far exceeding our 2-second target. The client had announced the launch publicly.
-
-**Pressure Points:**
-- Fixed launch date (contract penalty for delay)
-- Client's reputation on the line
-- Team already working hard
-- Complex performance problem
-
-**My Response:**
-
-**Day 1: Diagnosis**
-- Spent 4 hours profiling to understand the issue
-- Identified 3 major bottlenecks: unoptimized queries, large bundle size, N+1 queries
-- Created a prioritized list of fixes
-
-**Day 1-2: Strategy**
-- Met with stakeholders, presented findings
-- Proposed a two-phase approach:
-  - Phase 1 (1 week): Critical fixes to hit 3-second load (acceptable)
-  - Phase 2 (2 weeks post-launch): Optimize to 2 seconds
-- Got buy-in by showing metrics and trade-offs
-
-**Week 1: Execution**
-- Split team into 3 pairs, one per bottleneck
-- Daily 15-minute syncs at start and end of day
-- I took the most complex issue (database optimization)
-- Cut all non-critical meetings
-- Implemented feature flag for new optimizations
-
-**Communication:**
-- Daily updates to stakeholders
-- Transparent about progress and risks
-- Prepared contingency plans
-
-**Outcome:**
-- Achieved 2.8-second load time by launch day
-- Launch went smoothly
-- Post-launch optimizations brought it to 1.8 seconds
-- No team burnout—we took comp days after launch
-- Client extremely satisfied
-
-**What I Did Right:**
-- Stayed calm and systematic
-- Negotiated realistic expectations
-- Focused the team on clear objectives
-- Maintained quality standards
-- Protected team well-being
-
-**Real Example 2: Critical Bug Before Holiday**
-
-**Situation:**
-Friday afternoon before Christmas break, a critical security vulnerability was reported in a dependency we used. Needed to patch and deploy before break.
-
-**Pressure:**
-- Time sensitive (potential exploit)
-- Team already mentally checked out
-- Would require testing entire auth system
-- Could break production if done wrong
-
-**My Response:**
-
-**Immediate:**
-- Assessed severity (high—real risk)
-- Checked if we could delay (no—security issue)
-- Asked who was available (only 3 people including me)
-
-**Action Plan:**
-- Told team: "This is unavoidable, but let's minimize impact"
-- Proposed working 3-4 hours that evening
-- Ordered dinner for the team
-- Distributed tasks: upgrade, test, monitor
-
-**Execution:**
-- I handled the upgrade and deployment
-- One person ran full test suite
-- One person prepared rollback plan
-- Careful, deliberate process—no rushing
-- Deployed to staging first
-- Monitored for 30 minutes before production
-
-**Outcome:**
-- Fixed in 3.5 hours
-- No incidents
-- Everyone enjoyed their holidays
-- Team appreciated the calm leadership
-
-**When to Push Back:**
-
-I have pushed back on deadlines when:
-
-**Example: Unrealistic Expectations**
-PM wanted a 3-month feature in 3 weeks.
-
-**My Response:**
-- Broke down the work in detail
-- Showed it was physically impossible
-- Proposed MVP version for 3 weeks
-- Full version in 8 weeks
-- PM appreciated the honesty
-
-**Example: Constant Fire Drills**
-Everything was "urgent," leading to burnout.
-
-**My Response:**
-- Collected data on "urgent" requests
-- Showed that 60% weren't truly urgent
-- Proposed urgent vs. important framework
-- Helped prioritize properly
-
-**Managing Team Pressure:**
-
-**Warning Signs I Watch For:**
-- Team working excessive hours
-- Quality declining
-- Increased irritability
-- Sick days increasing
-
-**My Actions:**
-- 1-on-1 check-ins
-- Encourage breaks and time off
-- Shield team from unrealistic demands
-- Escalate if pressure is unsustainable
-
-**Stress Management Techniques:**
-
-**For Myself:**
-- Exercise regularly (keeps mental clarity)
-- Take short breaks to reset
-- Maintain perspective (rarely life-or-death)
-- Talk through problems with peers
-
-**For Team:**
-- Create a calm environment even when stressed
-- Use humor to diffuse tension
-- Celebrate progress, not just completion
-- Post-mortem to prevent recurring pressure
-
-**What I Don't Do:**
-
-❌ Panic or spread anxiety
-❌ Sacrifice quality for speed (creates more problems)
-❌ Blame team members
-❌ Promise what I can't deliver
-❌ Work team to exhaustion
-❌ Skip planning to "save time"
-
-**Key Principles:**
-
-1. **Pressure Reveals Process:** If deadlines are always tight, fix the process, not just the current crisis.
-
-2. **Calm Leadership:** As a senior, my stress affects the team. I stay composed.
-
-3. **Quality Non-Negotiable:** Some corners can be cut; quality isn't one of them.
-
-4. **Sustainable Pace:** Short sprints are okay; marathons at sprint pace cause injury.
-
-5. **Learn from Pressure:** After high-pressure situations, conduct retros to prevent recurrence.
-
-**Balance:**
-
-I can handle significant pressure when needed, but I also recognize:
-- Constant pressure indicates organizational problems
-- My responsibility includes protecting team sustainability
-- It's okay to say "this isn't achievable"
-
-**Philosophy:**
-
-Deadlines drive focus, but pressure should be the exception, not the norm. When it is necessary, handle it professionally, transparently, and humanely.
-
-The best developers aren't those who work the longest hours under pressure—they're those who work smartly, communicate honestly, and keep their teams healthy and productive."
+**Philosophy:** Pressure should drive **focus and scope negotiation**, not panic or quality shortcuts."
 
 [⬆ Back to Table of Contents](#table-of-contents)
 
@@ -1585,189 +534,34 @@ The best developers aren't those who work the longest hours under pressure—the
 - Provide examples of managing it
 - Show business awareness
 
-**Sample Answer:**
+**Personalized Answer (Oleh Pliuta):**
 
-"Technical debt is a reality of software development, and managing it effectively is crucial for long-term project health. I view it as a tool, not just a problem—sometimes taking on debt is the right decision.
+"Technical debt is inevitable — I treat it like financial debt: sometimes strategic, but always visible and managed.
 
-**Understanding Technical Debt:**
+**Intentional debt I've taken:**
+- Shipping AI workout UI at iFit before full test coverage — documented follow-up to reach **70%+** on new modules
+- Running NgModule and standalone components in parallel during migration — paid down module-by-module
 
-Technical debt includes:
-- Quick fixes that need proper solutions later
-- Outdated dependencies
-- Missing tests or documentation
-- Suboptimal architecture decisions
-- Code duplication
-- Performance issues not yet critical
+**How I manage it:**
 
-**My Approach:**
+**1. Prevent unnecessary debt:** ESLint/Prettier/TypeScript strict in CI; code reviews; ADRs for big choices
 
-**1. Prevent Unnecessary Debt:**
-- Maintain coding standards
-- Require adequate testing
-- Conduct thorough code reviews
-- Plan architecture carefully
-- "Do it right" when the cost is low
+**2. Make it visible:** TODO comments with ticket refs; tech debt items on sprint board; quarterly health discussions
 
-**2. Intentional vs. Unintentional Debt:**
+**3. Pay incrementally:** Boy Scout Rule on every PR; **~20% sprint capacity** for improvements when possible
 
-**Intentional (Strategic) Debt:**
-Sometimes taking on debt is correct:
-- MVP to validate market fit
-- Meeting critical deadline
-- Experiment that might be thrown away
+**4. Communicate in business terms:**
+- ❌ *"We need to refactor the auth module"*
+- ✅ *"This Angular 14 codebase adds 2 days to every feature. A 6-week migration to Angular 17 — which I led across 80+ components at Shipment Company — will speed delivery and reduce bugs."*
 
-**Key: Document it!**
-```typescript
-// TODO [TECH-DEBT-123]: Replace with proper error handling
-// Quick fix for launch - revisit in Sprint 15
-// Context: Need to ship for customer demo
-```
+**Real Examples:**
+- **Shipment Company:** Introduced **Nx monorepo** to consolidate web/mobile codebases — **~30% less duplicated code** across 3 apps; led **Angular 14 → 17 migration** in 6 weeks without halting features
+- **Ergonized:** Grew test coverage from near-zero to **55%**; Playwright E2E on critical insurance/Stripe flows — contributed to **~20% fewer production bugs**
+- **iFit:** Paid down bundle debt (**3.2MB → 2.1MB**) alongside feature delivery
 
-**Unintentional (Accidental) Debt:**
-Caused by:
-- Lack of knowledge
-- Rushed work
-- Changing requirements
-- Technology evolution
+**Red lines — never accept debt on:** security vulnerabilities, payment/data integrity, auth flows
 
-**3. Identify and Track:**
-
-**Code Reviews:**
-- Tag debt items during review
-- Assess severity and impact
-
-**Regular Audits:**
-- Monthly code quality reviews
-- Dependency security audits
-- Performance profiling
-
-**Metrics:**
-- SonarQube technical debt ratio
-- Test coverage trends
-- Build time increases
-- Deployment frequency decreases
-
-**Debt Register:**
-I maintain a technical debt backlog with:
-- Description and location
-- Business impact (velocity reduction, bug risk)
-- Effort to fix
-- Priority rating
-
-**4. Prioritize:**
-
-I use an impact/effort matrix:
-
-**High Impact, Low Effort:** Fix immediately
-- Example: Update deprecated API that's causing warnings
-
-**High Impact, High Effort:** Schedule dedicated time
-- Example: Refactor core module with poor architecture
-
-**Low Impact, Low Effort:** Fix when touching the code
-- Example: Rename variables for clarity
-
-**Low Impact, High Effort:** Consider if worth doing
-- Example: Rewrite working but messy utility functions
-
-**5. Allocate Time:**
-
-**The 20% Rule:**
-- Reserve 20% of each sprint for technical improvements
-- Some teams do "Tech Debt Fridays"
-- Balance feature work with sustainability
-
-**Dedicated Refactoring Sprints:**
-- Every 4-6 feature sprints, spend one sprint on debt
-- Focus on high-impact items
-- Measurable improvements
-
-**Real Example:**
-
-**Situation:**
-Inherited a project with significant debt:
-- 45% test coverage
-- 18-month-old dependencies
-- Complex 3000-line service file
-- 45-second build time
-
-**My Plan:**
-
-**Month 1: Assessment**
-- Catalogued all debt items
-- Prioritized by impact on velocity and bugs
-- Presented to stakeholders with business impact
-
-**Month 2-4: Quick Wins**
-- Updated dependencies (security + performance)
-- Added tests to critical paths
-- Reduced build time to 25 seconds
-- Measurable velocity improvement
-
-**Month 5-6: Structural Improvements**
-- Broke monolithic service into smaller modules
-- Improved test coverage to 70%
-- Reduced bug count by 35%
-
-**Result:**
-- Feature velocity increased 40%
-- Developer satisfaction improved
-- Onboarding time reduced
-- Technical wins supported business goals
-
-**6. Communicate with Stakeholders:**
-
-**Business Language:**
-❌ "We need to refactor for better SOLID principles"
-✅ "This refactoring will reduce bug rate and speed up new features by ~30%"
-
-**Metrics That Matter:**
-- Time saved on future features
-- Reduced bug count
-- Faster deployment
-- Developer productivity
-
-**Trade-offs:**
-When stakeholders want to defer debt:
-"We can do that, but here are the consequences: [specific impacts]. I recommend [alternative]."
-
-**7. When to Accept Debt:**
-
-I accept technical debt when:
-- **Time-Critical:** Must hit deadline (with plan to fix)
-- **Experimentation:** Building MVP or prototype
-- **Learning:** New technology, will improve later
-- **Low Traffic:** Feature with minimal usage
-
-**Red Lines (Never Accept):**
-- Security vulnerabilities
-- Data integrity issues
-- Critical performance problems
-- Violations of legal/compliance requirements
-
-**8. Make Debt Visible:**
-
-**Team Practices:**
-- Debt items visible on sprint board
-- Regular debt discussion in retros
-- Celebrate debt reduction
-
-**Management Visibility:**
-- Quarterly tech health reports
-- Include in planning discussions
-- Show velocity impact
-
-**Key Principles:**
-
-1. **Debt is Not Always Bad:** Strategic debt can be valuable
-2. **Make It Visible:** Hidden debt compounds
-3. **Pay Interest:** Every day with debt costs velocity
-4. **Prevent Bankruptcy:** Too much debt stops progress
-5. **Continuous Attention:** Small, regular payments better than rare large ones
-
-**Philosophy:**
-
-"Perfect code is not the goal—sustainable velocity is. Some debt is acceptable if managed consciously. The key is making informed decisions, documenting them, and regularly paying down debt to maintain healthy codebase."
+**Philosophy:** Sustainable velocity beats perfect code. Document trade-offs, pay interest regularly, and never let debt become invisible."
 
 [⬆ Back to Table of Contents](#table-of-contents)
 
@@ -1784,205 +578,32 @@ I accept technical debt when:
 - Demonstrate business awareness
 - Show patience and adaptability
 
-**Sample Answer:**
+**Personalized Answer (Oleh Pliuta):**
 
-"Effective communication with non-technical stakeholders is essential for project success. I've developed several strategies to explain technical concepts clearly.
+"Most of my stakeholders are PMs, operations managers, and business owners — not engineers. I translate technical work into **business impact**.
 
-**My Communication Principles:**
-
-**1. Know Your Audience:**
-- **C-Level:** Focus on business impact, ROI, risk
-- **Product Managers:** Emphasize timelines, trade-offs, possibilities
-- **Sales/Marketing:** Highlight customer benefits, competitive advantages
-- **End Users:** Demonstrate practical value
-
-**2. Use Analogies and Metaphors:**
-
-Technical concepts become clearer with familiar comparisons:
-
-**API:**
-"An API is like a waiter at a restaurant. You don't go into the kitchen to cook your own food. You tell the waiter what you want, and they bring it to you. The API takes requests and brings back the information you need."
-
-**Caching:**
-"Caching is like keeping frequently used items on your desk instead of in the filing cabinet. It takes longer the first time you get something, but subsequent times are much faster."
-
-**Technical Debt:**
-"Technical debt is like home maintenance. If you don't fix small problems (leaky faucet), they become big expensive problems (water damage). Sometimes you skip fixes to save time short-term, but you'll pay more later."
-
-**Microservices vs. Monolith:**
-"A monolith is like a Swiss Army knife—everything in one tool. Microservices are like a toolbox with specialized tools. The toolbox is more complex to manage but much more flexible."
-
-**3. Focus on Business Impact:**
-
-Transform technical details into business language:
-
-**Technical:** "We need to implement Redis caching"
-**Business:** "This will reduce page load time by 60%, improving user experience and likely increasing conversion rates by 10-15%"
-
-**Technical:** "The API has 500ms latency"
-**Business:** "Users wait half a second for responses, which might feel slow. Reducing this could improve user satisfaction scores"
-
-**Technical:** "We should refactor this module"
-**Business:** "This refactoring will make adding new features 40% faster and reduce bugs"
-
-**4. Use Visuals:**
-
-**Diagrams:**
-- System architecture (simplified boxes and arrows)
-- User flow charts
-- Before/after comparisons
-- Timeline charts
-
-**Demos:**
-- Show, don't just tell
-- Live demonstrations of features
-- Screen recordings for async communication
-
-**Prototypes:**
-- Clickable mockups
-- Proof of concepts
-- Interactive examples
-
-**5. Avoid Jargon:**
-
-**Instead of:** "We'll use OAuth 2.0 for authentication"
-**Say:** "We'll use secure login similar to 'Sign in with Google'"
-
-**Instead of:** "The database query needs optimization"
-**Say:** "We need to make the system find information faster"
-
-**Instead of:** "We need to upgrade the tech stack"
-**Say:** "Some of our tools are outdated and limiting what we can build"
-
-**6. Structure Complex Explanations:**
-
-**The Layered Approach:**
-
-**Layer 1 (Executive Summary):**
-"The system is slow because the database isn't optimized. Fixing it will take 2 weeks and improve performance by 70%."
-
-**Layer 2 (More Detail if Asked):**
-"We're running inefficient queries that search through too much data. We'll add indexes—think of them like a book's index that helps you find information quickly."
-
-**Layer 3 (Technical Details):**
-"We have N+1 query problems and missing composite indexes on frequently joined tables..."
+**Principles:**
+1. **Know the audience** — executives want ROI/risk; PMs want timelines/trade-offs
+2. **Use analogies** — lazy loading is like *only loading the kitchen equipment you need for today's menu, not the entire restaurant*
+3. **Lead with outcomes, not implementation**
 
 **Real Examples:**
 
-**Example 1: Explaining a Delay**
+**Bundle size / performance (iFit):**
+- ❌ *"We need lazy loading and standalone components"*
+- ✅ *"Users wait too long on first open. We can cut load size by **34%** and improve the performance score from **61 to 84** — that means faster workouts and fewer drop-offs. It takes ~2 sprints alongside feature work."*
 
-**Situation:** Project delayed by 2 weeks due to unexpected technical complexity.
+**Payment flows (Ergonized insurance platform):**
+- ❌ *"We need idempotent Stripe API calls with server-side reconciliation"*
+- ✅ *"If a user clicks Pay twice, we must never charge twice. The UI shows clear loading states; the server is the source of truth — same care I'd apply to wallet flows in regulated products."*
 
-**Bad Communication:**
-"We encountered issues with the event-driven architecture and asynchronous message processing patterns."
+**Migration timeline (Shipment Company):**
+- ❌ *"Angular 14 → 17 across 80 components"*
+- ✅ *"Our framework is 3 versions behind, which slows every new feature. A **6-week phased migration** lets us keep shipping while reducing future delivery time and security risk."*
 
-**Good Communication:**
-"We discovered that making different parts of the system talk to each other reliably is more complex than initially estimated. To ensure data isn't lost and everything stays in sync, we need an additional 2 weeks. This is similar to coordinating multiple teams—more complex than it seems at first."
+**When explaining delays:** I give the iceberg analogy — visible UI is ~20%; the rest is testing, edge cases, API contracts, and operational readiness.
 
-**Example 2: Explaining Security Needs**
-
-**Situation:** Need to invest time in security improvements.
-
-**Bad Communication:**
-"We need to implement OWASP top 10 mitigations and add CSP headers."
-
-**Good Communication:**
-"Our system has some security gaps that could let hackers access customer data. Think of it like having a house with weak locks. We need to invest time strengthening these 'locks' to protect our customers and avoid potential data breaches, which could cost us significantly in reputation and legal fees."
-
-**Example 3: Technical Decision Trade-offs**
-
-**Situation:** Choosing between two technical approaches.
-
-**Presentation to Stakeholders:**
-
-"We have two options:
-
-**Option A: Faster to build (3 weeks)**
-- Gets us to market quicker
-- Less flexible for future changes
-- Like building with pre-fab parts
-
-**Option B: Better long-term (5 weeks)**
-- Takes longer initially
-- Much easier to modify later
-- Like building custom from the ground up
-
-Given our goal to [validate market fit quickly], I recommend Option A with a plan to rebuild if successful."
-
-**7. Listen Actively:**
-
-**Ask Questions:**
-- "Does that make sense?"
-- "What specific aspects would you like to understand better?"
-- "How does this align with your concerns?"
-
-**Check Understanding:**
-- "To make sure I explained clearly, could you tell me what you understood?"
-- Adjust explanation based on feedback
-
-**8. Regular Updates:**
-
-**Status Reports:**
-- Non-technical language
-- Highlight risks and blockers early
-- Focus on "what" and "why," less on "how"
-
-**Format:**
-```
-✅ Completed: User authentication flow
-🚧 In Progress: Payment integration (on track for Friday)
-⚠️ Blocker: Waiting for API keys from partner (requested Tuesday)
-📅 Next: Shopping cart functionality
-```
-
-**9. Document Decisions:**
-
-**Architecture Decision Records (Simplified):**
-- **What:** What we decided
-- **Why:** Business reason
-- **Trade-offs:** What we gained/gave up
-- **Impact:** How it affects timelines/features
-
-**10. Build Trust:**
-
-**Be Honest:**
-- Don't oversimplify to the point of inaccuracy
-- Admit when you don't know something
-- Present realistic timelines
-
-**Show Value:**
-- Connect technical work to business goals
-- Demonstrate how technical investments pay off
-- Share wins and improvements
-
-**Be Patient:**
-- Not everyone thinks in systems and logic
-- Repeat explanations differently if needed
-- Welcome "basic" questions
-
-**Common Scenarios:**
-
-**"Why does this take so long?"**
-"Software is like an iceberg—what you see (the UI) is only 20% of the work. The other 80% is the behind-the-scenes work: security, data handling, error cases, testing, and making sure it works reliably."
-
-**"Can't you just...?"**
-"That sounds simple on the surface, but there are dependencies and implications. Let me break down what's involved: [explanation]. It's similar to asking a builder to 'just add a window'—they need to ensure structural integrity, electrical, insulation, etc."
-
-**"Why do we need to upgrade?"**
-"Think of it like upgrading your phone. Old software stops getting security updates and can't run new apps. Our system is similar—we need to stay current to remain secure and have access to modern capabilities."
-
-**Key Takeaways:**
-
-1. **Empathy:** Understand their perspective and concerns
-2. **Simplify:** Make it accessible without being condescending
-3. **Connect:** Link technical decisions to business outcomes
-4. **Visual:** Use diagrams, demos, and examples
-5. **Verify:** Check understanding and adjust
-6. **Patience:** Give time for concepts to sink in
-
-**Philosophy:**
-
-"Great developers don't just write good code—they help the entire organization understand and make informed technical decisions. The goal isn't to make everyone technical, but to ensure technical considerations are properly understood in business context."
+**I always check:** *"Does that make sense? What would you like me to clarify?"*"
 
 [⬆ Back to Table of Contents](#table-of-contents)
 
@@ -1999,297 +620,49 @@ Given our goal to [validate market fit quickly], I recommend Option A with a pla
 - Provide concrete examples
 - Demonstrate ability to match architecture to business needs
 
-**Sample Answer:**
+**Personalized Answer (Oleh Pliuta):**
 
-"I have extensive experience designing systems from scratch and evolving existing architectures. My approach focuses on matching architectural complexity to business needs.
+"I design **frontend architecture** that matches team size and product complexity — not every app needs micro-frontends on day one.
 
-**Architectural Patterns I've Implemented:**
+**1. Nx Monorepo — Shipment Company (primary example)**
 
-**1. Microservices Architecture:**
-
-**Project:** E-commerce platform serving 100K+ users
+**Situation:** Enterprise vessel logistics platform — web + Android — **1000+ daily users**. Teams duplicated UI between surfaces.
 
 **Design:**
-- Separated services: Auth, Product Catalog, Orders, Payments, Notifications
-- API Gateway (Kong) for routing and authentication
-- Message queue (RabbitMQ) for async communication
-- Service mesh for observability
-- PostgreSQL per service, Redis for caching
+- **Nx monorepo** with **feature / UI / data-access libraries**
+- **Boundary tags** enforcing dependency rules between libs
+- **Adapters** for web vs mobile — same data model, different presentation shells
+- **NestJS REST APIs** with typed DTOs and defensive error states
+- Lazy routes, buildable libs, **bundle budgets in CI**
 
-**Key Decisions:**
-- Used event-driven architecture for order processing
-- Implemented saga pattern for distributed transactions
-- Circuit breakers for resilience
+**Results:** **~30% less duplicated code** across 3 apps; **14% faster TTI**; shared library adopted across squads
 
-**Results:**
-- Independent deployment of services (30+ deploys/week)
-- Services scaled independently based on load
-- 99.95% uptime
+**2. Modular Angular + State — Ergonized**
 
-**2. Monolithic Modular Architecture:**
+- **NgRx** for complex B2B insurance quoting flows (multi-step wizard, dynamic underwriting rules)
+- **Stripe** payment integration with idempotent UI states and E2E tests on critical paths
+- Supply chain dashboard: **WebSockets** for live map updates with throttled/batched rendering
 
-**Project:** Internal CRM for 50-person company
+**3. Performance & Scale — iFit**
 
-**Design:**
-- Single application with clear module boundaries
-- Layered architecture: API → Business Logic → Data Access
-- Shared database with proper transaction management
-- Feature flags for gradual rollout
+- **Standalone component** migration reducing bootstrap time **18%**
+- Lazy loading across **12 feature modules** — bundle **3.2MB → 2.1MB**
+- Platform serving **1M+ users** — OnPush, virtual scroll, realistic-data performance testing
 
-**Why Monolith:**
-- Small team (4 developers)
-- Moderate traffic
-- Faster development velocity
-- Simpler deployment and debugging
-- Could evolve to microservices if needed
+**4. Multi-surface / Multi-brand patterns**
 
-**Key Insight:** Not everything needs microservices. Match architecture to team size and complexity.
+- Web + mobile from shared libs (Shipment Company, iFit Ionic/Capacitor)
+- Same pattern applies to **multi-brand theming** — one codebase, multiple operator skins
 
-**3. Event-Driven Architecture:**
+**Design Principles:**
+- **Match complexity to need** — monorepo before micro-frontends unless teams truly deploy independently
+- **Clear contracts** between UI, state, and API layers
+- **Measure with real data** — not empty-state Lighthouse
+- **ADRs** for significant choices (state lib, migration strategy, library boundaries)
 
-**Project:** Real-time analytics platform
+**Aware of (not deepest experience):** Module Federation / micro-frontends — same boundary discipline; eager to apply where teams deploy independently
 
-**Design:**
-- Event streaming with Kafka
-- Multiple consumers processing events for different purposes
-- Event sourcing for audit trail
-- CQRS pattern (separate read/write models)
-
-**Benefits:**
-- Decoupled systems
-- Multiple teams consuming same events
-- Complete audit history
-- Real-time and batch processing from same source
-
-**Design Principles I Follow:**
-
-**1. Scalability:**
-
-**Horizontal Scaling:**
-- Stateless services that can be replicated
-- Load balancing across instances
-- Database read replicas
-
-**Caching Strategy:**
-- Multi-layer caching (CDN, application, database)
-- Cache invalidation strategies
-- Redis for distributed caching
-
-**Database Design:**
-- Proper indexing
-- Query optimization
-- Sharding for large datasets
-- Read/write splitting
-
-**2. Reliability:**
-
-**Fault Tolerance:**
-- Graceful degradation
-- Circuit breakers (Hystrix pattern)
-- Retry logic with exponential backoff
-- Bulkhead pattern to isolate failures
-
-**Example:**
-```typescript
-// Circuit breaker pattern
-class PaymentService {
-  private circuitBreaker = new CircuitBreaker({
-    failureThreshold: 5,
-    timeout: 3000,
-    resetTimeout: 30000
-  });
-
-  async processPayment(data: PaymentData) {
-    return this.circuitBreaker.execute(() => {
-      return this.paymentGateway.charge(data);
-    });
-  }
-}
-```
-
-**Observability:**
-- Structured logging
-- Distributed tracing (Jaeger)
-- Metrics (Prometheus + Grafana)
-- Alerting for critical issues
-
-**3. Security:**
-
-**Defense in Depth:**
-- Authentication (OAuth 2.0/JWT)
-- Authorization (RBAC)
-- Input validation
-- Rate limiting
-- SQL injection prevention
-- XSS protection
-- HTTPS everywhere
-
-**4. Maintainability:**
-
-**Clean Architecture:**
-- Clear separation of concerns
-- Dependency inversion
-- Domain-driven design principles
-- Bounded contexts
-
-**Documentation:**
-- Architecture diagrams (C4 model)
-- API documentation (OpenAPI/Swagger)
-- Runbooks for operations
-- Architecture Decision Records (ADRs)
-
-**Design Process:**
-
-**1. Requirements Gathering:**
-- Functional requirements
-- Non-functional requirements (performance, scalability, security)
-- Constraints (budget, timeline, team size)
-- Expected growth
-
-**2. Identify Key Scenarios:**
-- Happy path user flows
-- Edge cases
-- Failure scenarios
-- High-load situations
-
-**3. Back-of-the-Envelope Calculations:**
-- Estimated traffic (requests/second, concurrent users)
-- Data volume (storage needs, growth rate)
-- Bandwidth requirements
-- Cost estimates
-
-**Example:**
-```
-100K daily active users
-Avg 20 requests/user/day = 2M requests/day
-2M / 86,400 seconds ≈ 23 requests/second average
-Peak (3x average) ≈ 70 requests/second
-Plan capacity for 2x peak = 140 req/sec
-```
-
-**4. Component Design:**
-- Identify major components
-- Define interfaces/contracts
-- Choose technologies
-- Plan data flow
-
-**5. Evaluate Trade-offs:**
-
-Every architectural decision has trade-offs:
-
-**Microservices:**
-✅ Scalability, independence, technology flexibility
-❌ Complexity, network overhead, distributed challenges
-
-**Monolith:**
-✅ Simplicity, easier debugging, transactions
-❌ Scaling limitations, deployment coupling
-
-**SQL Database:**
-✅ ACID guarantees, mature tooling, complex queries
-❌ Vertical scaling limits, schema rigidity
-
-**NoSQL Database:**
-✅ Horizontal scalability, schema flexibility
-❌ Eventual consistency, limited query capabilities
-
-**6. Validate Design:**
-- Architecture review with team
-- Proof of concepts for risky components
-- Load testing plans
-- Security review
-
-**Real Architecture Example:**
-
-**Project:** Content management system for news organization
-
-**Requirements:**
-- 500K daily readers (peak: 5K concurrent)
-- Editors publish 100-200 articles/day
-- Rich media (images, videos)
-- SEO critical
-- 99.9% uptime requirement
-
-**My Design:**
-
-**Frontend:**
-- React SPA for editor interface
-- Server-side rendered Next.js for public site (SEO)
-- CDN (CloudFront) for static assets
-
-**Backend:**
-- Node.js API server (Express)
-- PostgreSQL for content storage
-- S3 for media files
-- Redis for caching
-- Elasticsearch for search
-
-**Architecture Highlights:**
-
-1. **Caching Strategy:**
-   - Articles cached for 5 minutes in Redis
-   - CDN caching for 1 hour
-   - Invalidate cache on article updates
-
-2. **Media Handling:**
-   - Upload to S3
-   - Automatic image optimization (multiple sizes)
-   - Lazy loading on frontend
-
-3. **Search:**
-   - Elasticsearch index updated via webhook
-   - Faceted search by category, date, author
-
-4. **Deployment:**
-   - Docker containers
-   - ECS for orchestration
-   - Blue-green deployment
-   - Database migrations automated
-
-**Performance:**
-- Page load time: < 2 seconds
-- API response: < 200ms (p95)
-- Handled peak traffic of 8K concurrent users
-- 99.95% uptime achieved
-
-**Lessons Learned from Past Projects:**
-
-**1. Start Simple:**
-I once over-engineered a system with microservices when a monolith would suffice. Learned to match complexity to actual needs.
-
-**2. Plan for Monitoring:**
-Deployed a system without proper observability. Debugging production issues was nightmare. Now, monitoring is day-one priority.
-
-**3. Consider Operations:**
-Built elegant system that was hard to deploy. Now I consider DevOps from the start.
-
-**4. Security by Design:**
-Retrofitting security is hard. Now it's part of initial design.
-
-**5. Document Decisions:**
-Future developers (including future me) appreciate understanding why decisions were made.
-
-**Technologies I've Worked With:**
-
-**Languages:** JavaScript/TypeScript, Python, Java, Go
-**Frameworks:** Node.js, Express, NestJS, React, Angular
-**Databases:** PostgreSQL, MySQL, MongoDB, Redis
-**Message Queues:** RabbitMQ, Kafka, AWS SQS
-**Cloud:** AWS (EC2, S3, RDS, Lambda), Azure, GCP
-**Containers:** Docker, Kubernetes
-**API:** REST, GraphQL, gRPC
-**CI/CD:** Jenkins, GitHub Actions, GitLab CI
-
-**Current Learning:**
-
-- Serverless architectures (AWS Lambda)
-- Event sourcing patterns
-- Kubernetes advanced features
-- GraphQL federation
-
-**Philosophy:**
-
-"Good architecture is not about using the latest technology—it's about solving business problems effectively while considering maintainability, scalability, and cost. The best architecture is the simplest one that meets requirements while allowing for future growth."
+**Philosophy:** Good architecture solves business problems with the **simplest structure that scales** — shared libraries, typed APIs, testable boundaries, and performance budgets users actually feel."
 
 [⬆ Back to Table of Contents](#table-of-contents)
 
@@ -2297,33 +670,125 @@ Future developers (including future me) appreciate understanding why decisions w
 
 ### **Question 16: What is your greatest strength as a senior developer?**
 
-[Answer for Question 16](#answer-16)
+**Purpose:** Highlights your unique value proposition and self-awareness.
+
+**How to Answer:**
+- Choose 1-2 strengths with concrete evidence
+- Connect to the role requirements
+- Be confident but not arrogant
+- Provide measurable examples
+
+**Personalized Answer (Oleh Pliuta):**
+
+"My greatest strength is **platform thinking** — I don't just ship features; I build **shared libraries, modular architecture, and standards** that make the whole team faster.
+
+**Evidence:**
+- **Shipment Company:** Nx monorepo with feature/UI/data-access libs — **~30% less duplicated code**, **14% faster TTI**, shared grid RFC with **~80% squad adoption**
+- **Ergonized:** Testing standards and review culture — **~20% fewer production bugs**
+- **iFit:** Standalone migration + lazy loading — **34% bundle reduction**, Lighthouse **61 → 84**
+
+**Secondary strength:** **Calm delivery under complexity** — enterprise B2B flows (insurance quoting, logistics ops), real-time WebSocket dashboards, and high-stakes Stripe payments. I debug cross-stack issues because I understand both **Angular frontends and NestJS APIs**.
+
+These map directly to senior frontend roles: architecture, REST integration, performance, and raising the team's baseline."
 
 ---
 
 ### **Question 17: What areas are you looking to improve or develop further?**
 
-[Answer for Question 17](#answer-17)
+**Purpose:** Tests self-awareness, growth mindset, and honesty.
+
+**How to Answer:**
+- Choose a real area — not a humble brag
+- Show what you're doing to improve
+- Keep it relevant to senior level
+- Don't undermine your candidacy
+
+**Personalized Answer (Oleh Pliuta):**
+
+"I sometimes **invest too long in root-cause analysis** when a pragmatic workaround would unblock the team faster — especially on tricky RxJS or performance issues where I want to understand *why*, not just *what*.
+
+**How I'm improving:**
+- **Timeboxing investigations** — e.g., 2 hours max before presenting options to the team
+- **Communicating trade-offs early** — 'Here are three paths: quick fix now, proper fix next sprint, or spike to decide'
+- **Delegating follow-up** when the immediate unblock matters more than the deep dive
+
+I've gotten better at this — the grid performance rollback at Shipment Company was caught quickly because I had feature flags and a regression test mindset, not because I spent days in isolation."
 
 ---
 
 ### **Question 18: How do you handle disagreements with management or product owners?**
 
-[Answer for Question 18](#answer-18)
+**Purpose:** Evaluates diplomacy, communication, and ability to influence without authority.
+
+**How to Answer:**
+- Show respect for business priorities
+- Use data and options, not emotion
+- Describe a specific example
+- Demonstrate willingness to commit once decided
+
+**Personalized Answer (Oleh Pliuta):**
+
+"I assume good intent and lead with **data and options**, not blocking or passive-agreement.
+
+**Example — Scope vs timeline:**
+PM wanted a full logistics module plus performance overhaul in one sprint. I didn't say no — I presented three options with trade-offs:
+
+| Option | Scope | Timeline | Risk |
+|---|---|---|---|
+| A | Full module + perf | 3 weeks | Quality risk on payments path |
+| B | Core module now, perf next sprint | 2 weeks | Acceptable — my recommendation |
+| C | MVP module only | 1.5 weeks | Missing reporting views |
+
+We agreed on **Option B**. I committed fully once decided — no revisiting the decision in standups.
+
+**Example — Technical disagreement:**
+When a colleague wanted a new state library mid-project, I proposed a **time-boxed spike** with criteria (bundle size, test complexity, team familiarity). We documented the outcome in an **ADR** and moved on.
+
+**Principles:** Disagree constructively in private/design sessions; **disagree and commit** in public; escalate only when risk is genuinely high (data integrity, security, auth)."
 
 ---
 
 ### **Question 19: Where do you see yourself in 3-5 years?**
 
-[Answer for Question 19](#answer-19)
+**Purpose:** Assesses ambition, retention potential, and alignment with company growth paths.
+
+**How to Answer:**
+- Align with realistic paths at the company (staff IC vs tech lead)
+- Show continued hands-on technical depth
+- Mention mentoring and broader impact
+- Avoid titles that don't exist at the company
+
+**Personalized Answer (Oleh Pliuta):**
+
+"In **3–5 years**, I see myself still building **high-impact frontend systems** — either as a **staff-level IC** shaping architecture, shared libraries, and performance standards, or as a **tech lead** balancing hands-on coding with mentoring.
+
+I want depth in **product-minded Angular engineering** — the kind of work I've done at iFit, Shipment Company, and Ergonized — and to be someone who makes the **team and codebase** better, not just ships tickets.
+
+Concretely: leading larger **Nx/monorepo** initiatives, mentoring mid-level developers into seniors, and contributing to **frontend standards** that outlast any single feature. I'm not looking to move into pure management — I want to stay close to the code while multiplying impact through the team."
 
 ---
 
 ### **Question 20: Do you have any questions for us?**
 
-[Answer for Question 20](#answer-20)
+**Purpose:** Shows preparation, genuine interest, and senior-level thinking. "No questions" is a red flag.
 
----
+**How to Answer:**
+- Prepare 4–5 questions before every interview
+- Mix role, team, tech, and culture
+- Ask questions you actually care about
+- Avoid questions easily answered by the website
+
+**Personalized Answer (Oleh Pliuta) — pick 3–4 per interview:**
+
+1. *"What product or client project would I join first — greenfield Angular app or evolving an existing platform?"*
+2. *"How is the frontend team structured — headcount, lead, relationship to backend squads?"*
+3. *"Does the team use a **monorepo**, **micro-frontends**, or a mix — and how mature is the shared library layer?"*
+4. *"What does success look like in the first **6 months** for this senior role?"*
+5. *"What are the **next interview steps** after this call?"*
+6. *"How does the team balance **new features vs technical debt** — is there explicit sprint capacity for platform work?"*
+7. *"What's the biggest **frontend technical challenge** the team faces that you'd hope a senior hire could help solve?"*
+8. *"How does the team approach **testing and CI/CD** on the frontend — unit, component, E2E, bundle budgets?"*
+
+**Tip:** End with *"Based on what we discussed, is there anything about my background you'd like me to clarify?"* — shows confidence and closes gaps.
 
 [⬆ Back to Table of Contents](#table-of-contents)
-
